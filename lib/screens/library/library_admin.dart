@@ -1,3 +1,4 @@
+import 'package:campus_ease/screens/library/library_in_out_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -49,6 +50,11 @@ class _LibraryAdminState extends State<LibraryAdmin> {
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => ViewIssuedBook())),
           ),
+          DashBoardItem(
+              text: 'View In-Out Log',
+              image: 'library',
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LibraryInOutLog()))),
         ],
       )),
     );

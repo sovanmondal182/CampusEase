@@ -114,7 +114,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                                                 0.01,
                                       ),
                                       Text(
-                                          "Date Issued: ${DateFormat("d MMM yyyy hh:mm aa").format(_books[i].issueDate)}"),
+                                          "Date Issued: ${DateFormat("d MMM yyyy hh:mm aa").format(_suggestionList[i].issueDate)}"),
                                       if (authNotifier.userDetails!.role ==
                                           'admin')
                                         Column(

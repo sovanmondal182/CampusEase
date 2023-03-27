@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/book.dart';
+import '../../models/library_in_out_model.dart';
 import '../../notifiers/authNotifier.dart';
 
 class LibraryInOutLog extends StatefulWidget {
@@ -16,7 +17,7 @@ class LibraryInOutLog extends StatefulWidget {
 }
 
 class _LibraryInOutLogState extends State<LibraryInOutLog> {
-  List<Book> _books = <Book>[];
+  List<LibraryInOut> _inOut = <LibraryInOut>[];
   String name = '';
 
   @override
@@ -25,7 +26,7 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('View Issued Books'),
+        title: const Text('Library In Out Log'),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
@@ -43,43 +44,30 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
               ),
             ),
             StreamBuilder<QuerySnapshot>(
-              stream: (authNotifier.userDetails!.role == 'admin')
-                  ? FirebaseFirestore.instance
-                      .collection('libraryInOut')
-                      .snapshots()
-                  : FirebaseFirestore.instance
-                      .collection('libraryInOut')
-                      .where('enroll_no',
-                          isEqualTo: authNotifier.userDetails!.enrollNo)
-                      .snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('libraryInOut')
+                  .orderBy('in_time', descending: true)
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData && snapshot.data!.docs.length > 0) {
-                  _books = <Book>[];
+                  _inOut = <LibraryInOut>[];
                   snapshot.data!.docs.forEach((item) {
-                    _books.add(Book(
-                      bookId: item['book_id'],
-                      bookName: item['book_name'],
-                      issueDate: DateTime.parse(item['date_issued'].toString()),
+                    _inOut.add(LibraryInOut(
+                      inTime: item['in_time'],
+                      outTime: item['out_time'],
                       enrollNo: item['enroll_no'],
                     ));
                   });
-                  List<Book> _suggestionList = (name == '' || name == null)
-                      ? _books
-                      : _books
-                          .where((element) =>
-                              element.bookName
-                                  .toLowerCase()
-                                  .contains(name.toLowerCase()) ||
-                              element.bookId
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(name.toLowerCase()) ||
-                              element.enrollNo
+                  List<LibraryInOut> _suggestionList =
+                      (name == '' || name == null)
+                          ? _inOut
+                          : _inOut
+                              .where((element) => element.enrollNo
                                   .toString()
                                   .toLowerCase()
                                   .contains(name.toLowerCase()))
-                          .toList();
+                              .toList();
                   if (_suggestionList.length > 0) {
                     return Container(
                       margin: EdgeInsets.only(top: 10.0),
@@ -100,35 +88,23 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          "Book Name: ${_suggestionList[i].bookName}"),
+                                          "Enroll No: ${_suggestionList[i].enrollNo}"),
                                       SizedBox(
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.01,
                                       ),
                                       Text(
-                                          "Book ID: ${_suggestionList[i].bookId}"),
+                                          "In Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].inTime))}"),
                                       SizedBox(
                                         height:
                                             MediaQuery.of(context).size.height *
                                                 0.01,
                                       ),
-                                      Text(
-                                          "Date Issued: ${DateFormat("d MMM yyyy hh:mm aa").format(_books[i].issueDate)}"),
-                                      if (authNotifier.userDetails!.role ==
-                                          'admin')
-                                        Column(
-                                          children: [
-                                            SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.01,
-                                            ),
-                                            Text(
-                                                "Issued to: ${_suggestionList[i].enrollNo}"),
-                                          ],
-                                        ),
+                                      _suggestionList[i].outTime == "null"
+                                          ? const Text("Out Time: -")
+                                          : Text(
+                                              "Out Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].outTime))}"),
                                     ],
                                   ),
                                 ],
