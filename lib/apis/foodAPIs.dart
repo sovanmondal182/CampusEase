@@ -571,3 +571,22 @@ orderReceived(String id, BuildContext context) async {
   Navigator.pop(context);
   toast("Order received successfully!");
 }
+
+profileUpdate(u.User user) async {
+  bool userDataUploadVar = false;
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
+  CollectionReference userRef = FirebaseFirestore.instance.collection('users');
+
+  user.uuid = currentUser!.uid;
+  if (userDataUploadVar != true) {
+    await userRef
+        .doc(currentUser.uid)
+        .set(user.toMap())
+        .catchError((e) => print(e))
+        .then((value) => userDataUploadVar = true);
+  } else {
+    print('already uploaded user data');
+  }
+  print('user data uploaded successfully');
+}

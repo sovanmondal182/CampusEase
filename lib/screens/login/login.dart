@@ -266,9 +266,9 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     padding: EdgeInsets.only(top: 60),
                     child: Text(
-                      'Cassia',
+                      'CampusEase',
                       style: TextStyle(
-                        fontSize: 60,
+                        fontSize: 50,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontFamily: 'MuseoModerno',

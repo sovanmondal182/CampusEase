@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 List<Food> _suggestionList = (name == '' || name == null)
                     ? _foodItems
                     : _foodItems
-                        .where((element) => element.itemName
+                        .where((element) => element.itemName!
                             .toLowerCase()
                             .contains(name.toLowerCase()))
                         .toList();

@@ -9,6 +9,10 @@ class User {
   double? balance;
   String? phone;
   int? enrollNo;
+  String? photoUrl;
+  String? admissionYear;
+  String? branch;
+  String? course;
 
   User({
     this.displayName,
@@ -19,6 +23,10 @@ class User {
     this.balance,
     this.phone,
     this.enrollNo,
+    this.photoUrl,
+    this.admissionYear,
+    this.branch,
+    this.course,
   });
 
   User.fromMap(Map<String, dynamic> data)
@@ -29,7 +37,11 @@ class User {
         role = data['role'],
         balance = data['balance'],
         phone = data['phone'],
-        enrollNo = data['enroll_no'];
+        enrollNo = data['enroll_no'],
+        photoUrl = data['photo_url'],
+        admissionYear = data['admission_year'],
+        branch = data['branch'],
+        course = data['course'];
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,6 +53,10 @@ class User {
       'balance': balance,
       'phone': phone,
       'enroll_no': enrollNo,
+      'photo_url': photoUrl,
+      'admission_year': admissionYear,
+      'branch': branch,
+      'course': course,
     };
   }
 }

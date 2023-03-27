@@ -1,24 +1,24 @@
 class Food {
-  String itemName;
-  int totalQty;
-  int price;
-  String id;
+  String? itemName;
+  int? totalQty;
+  int? price;
+  String? id;
 
   Food(this.id, this.itemName, this.totalQty, this.price);
 
-  // Food.fromMap(Map<String, dynamic> data) {
-  //   displayName = data['displayName'];
-  //   email = data['email'];
-  //   password = data['password'];
-  //   uuid = data['uuid'];
-  //   role = data['role'];
-  //   balance = data['balance'];
-  // }
+  Food.fromMap(Map<String, dynamic> data) {
+    itemName = data['item_name'];
+    totalQty = data['total_qty'];
+    price = data['price'];
+    id = data['item_id'];
+  }
 
   Map<String, dynamic> toMapForCart() {
-    Map<String, dynamic> map = {};
-    map['item_id'] = id;
-    map['count'] = 1;
-    return map;
+    return {
+      'item_name': itemName,
+      'total_qty': totalQty,
+      'price': price,
+      'item_id': id,
+    };
   }
 }

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:campus_ease/models/food.dart';
 import 'package:provider/provider.dart';
 
+import 'admin_order_history.dart';
+
 class AdminHomePage extends StatefulWidget {
   @override
   _AdminHomePageState createState() => _AdminHomePageState();
@@ -40,16 +42,15 @@ class _AdminHomePageState extends State<AdminHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Cassia'),
-        actions: <Widget>[
+        actions: [
           IconButton(
-            icon: Icon(
-              Icons.exit_to_app,
-              color: Colors.white,
-            ),
+            icon: Icon(Icons.person_2_rounded),
             onPressed: () {
-              signOutUser();
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return AdminOrderDetailsPage();
+              }));
             },
-          )
+          ),
         ],
       ),
       // ignore: unrelated_type_equality_checks
@@ -111,7 +112,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 List<Food> _suggestionList = (name == '' || name == null)
                     ? _foodItems
                     : _foodItems
-                        .where((element) => element.itemName
+                        .where((element) => element.itemName!
                             .toLowerCase()
                             .contains(name.toLowerCase()))
                         .toList();
@@ -300,8 +301,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
   }
 
   Widget popupEditForm(context, Food data) {
-    String itemName = data.itemName;
-    int totalQty = data.totalQty, price = data.price;
+    String itemName = data.itemName!;
+    int totalQty = data.totalQty!, price = data.price!;
     return AlertDialog(
         content: Stack(
       // overflow: Overflow.visible,
@@ -417,7 +418,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   onTap: () {
                     if (_formKeyEdit.currentState!.validate()) {
                       _formKeyEdit.currentState!.save();
-                      editItem(itemName, price, totalQty, context, data.id);
+                      editItem(itemName, price, totalQty, context, data.id!);
                     }
                   },
                   child: CustomRaisedButton(buttonText: 'Edit Item'),
@@ -442,7 +443,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               padding: EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () {
-                  deleteItem(data.id, context);
+                  deleteItem(data.id!, context);
                 },
                 child: CustomRaisedButton(buttonText: 'Delete Item'),
               ),
@@ -451,7 +452,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               padding: EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () {
-                  editItem(data.itemName, data.price, 0, context, data.id);
+                  editItem(data.itemName!, data.price!, 0, context, data.id!);
                 },
                 child: CustomRaisedButton(buttonText: 'Empty Item'),
               ),

@@ -67,7 +67,7 @@ class _CartPageState extends State<CartPage> {
                     context, authNotifier.userDetails!.uuid!, foodIds, count);
               } else {
                 return Container(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: EdgeInsets.all(20),
                   width: MediaQuery.of(context).size.width * 0.6,
                   child: Text("No Items to display"),
                 );

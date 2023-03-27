@@ -37,7 +37,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
         },
         items: <Widget>[
           Icon(
-            Icons.account_circle,
+            Icons.wallet_rounded,
             size: 26,
             color: Colors.white,
           ),

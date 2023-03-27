@@ -1,10 +1,14 @@
+import 'dart:io';
 
 import 'package:campus_ease/apis/foodAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/canteen/orderDetails.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -19,6 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   Razorpay? _razorpay;
   int money = 0;
+  bool uploading = false;
 
   signOutUser() {
     AuthNotifier authNotifier =
@@ -46,24 +51,51 @@ class _ProfilePageState extends State<ProfilePage> {
     _razorpay!.clear();
   }
 
+  Future<void> updateProfileImage() async {
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
+    setState(() {
+      uploading = true;
+    });
+    String firebaseId = authNotifier.userDetails!.uuid!;
+
+    await pickImageFromGallery().then((pickedFile) async {
+      if (pickedFile == null) return;
+      try {
+        Reference storage =
+            FirebaseStorage.instance.ref().child('profiles/$firebaseId');
+        UploadTask uploadTask = storage.putFile(File(pickedFile.path));
+        String imgUrl = await (await uploadTask).ref.getDownloadURL();
+        print(imgUrl);
+        authNotifier.userDetails!.photoUrl = imgUrl;
+        profileUpdate(authNotifier.userDetails!);
+        setState(() {
+          uploading = true;
+        });
+      } catch (e) {
+        print("ERROR " + e.toString());
+      }
+    });
+  }
+
+  Future<XFile?> pickImageFromGallery() async {
+    return await ImagePicker().pickImage(source: ImageSource.gallery);
+  }
+
+  Future<CroppedFile?> cropSelectedImage(String filePath) async {
+    return await ImageCropper().cropImage(
+      sourcePath: filePath,
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.exit_to_app,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              signOutUser();
-            },
-          )
-        ],
+        title: Text('Wallet'),
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -77,18 +109,30 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-            Container(
-              alignment: Alignment.center,
-              decoration: new BoxDecoration(
-                color: Colors.grey.withOpacity(0.3),
-                shape: BoxShape.circle,
-              ),
-              width: 100,
-              child: Icon(
-                Icons.person,
-                size: 70,
-              ),
-            ),
+            (authNotifier.userDetails!.photoUrl != null)
+                ? GestureDetector(
+                    onTap: () async {
+                      updateProfileImage();
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 40,
+                      backgroundImage:
+                          NetworkImage(authNotifier.userDetails!.photoUrl!),
+                    ))
+                : GestureDetector(
+                    onTap: () async {
+                      updateProfileImage();
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey.withOpacity(0.3),
+                      radius: 40,
+                      child: Icon(
+                        Icons.person,
+                        size: 70,
+                      ),
+                    ),
+                  ),
             SizedBox(
               height: 20,
             ),

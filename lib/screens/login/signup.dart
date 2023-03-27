@@ -89,7 +89,7 @@ class _SignupPageState extends State<SignupPage> {
             cursorColor: Color.fromRGBO(255, 63, 111, 1),
             decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: 'User name',
+              hintText: 'Full Name',
               hintStyle: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Color.fromRGBO(255, 63, 111, 1),
@@ -164,6 +164,43 @@ class _SignupPageState extends State<SignupPage> {
               ),
               icon: Icon(
                 Icons.phone,
+                color: Color.fromRGBO(255, 63, 111, 1),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        // Enrollment Number Field
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 40),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: TextFormField(
+            validator: (String? value) {
+              if (value!.length != 14) {
+                return "Enrollment number must be 14 digits";
+              }
+              return null;
+            },
+            onSaved: (String? value) {
+              _user.enrollNo = int.parse(value!);
+            },
+            keyboardType: TextInputType.phone,
+            cursorColor: Color.fromRGBO(255, 63, 111, 1),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: 'Enrollment Number',
+              hintStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(255, 63, 111, 1),
+              ),
+              icon: Icon(
+                Icons.numbers_rounded,
                 color: Color.fromRGBO(255, 63, 111, 1),
               ),
             ),
@@ -350,9 +387,9 @@ class _SignupPageState extends State<SignupPage> {
                   child: Container(
                     padding: EdgeInsets.only(top: 60),
                     child: Text(
-                      'Cassia',
+                      'CampusEase',
                       style: TextStyle(
-                        fontSize: 60,
+                        fontSize: 50,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontFamily: 'MuseoModerno',
