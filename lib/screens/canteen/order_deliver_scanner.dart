@@ -82,7 +82,7 @@ class _OrderDeliverScannerState extends State<OrderDeliverScanner> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Library In-Out'),
+                            title: const Text('Order Delivery'),
                             content: const Text('Are you sure?'),
                             actions: [
                               TextButton(
@@ -95,13 +95,23 @@ class _OrderDeliverScannerState extends State<OrderDeliverScanner> {
                                 onPressed: () {
                                   orderReceived(widget.orderdata.id, context);
                                   Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                 },
                                 child: const Text('Yes'),
                               ),
                             ],
                           );
                         });
-                    print("Library In-Out Successful");
+                    print("Order Delivered Successful");
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: "Invalid QR Code",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                   }
                 }
               },

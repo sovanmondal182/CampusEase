@@ -26,17 +26,19 @@ class OrderItem {
 class Order {
   bool? isDelivered;
   String? placedAt;
+  String? deliveryAt;
   String? placedBy;
   double? totalAmount;
   List<OrderItem>? items;
   String? paymentId;
 
   Order(this.items, this.totalAmount, this.paymentId, this.placedAt,
-      this.placedBy, this.isDelivered);
+      this.deliveryAt, this.placedBy, this.isDelivered);
 
   Order.fromMap(Map<String, dynamic> map) {
     isDelivered = map['is_delivered'];
     placedAt = map['placed_at'];
+    deliveryAt = map['delivery_at'];
     placedBy = map['placed_by'];
     totalAmount = map['total'];
     items = List<OrderItem>.from(
@@ -48,6 +50,7 @@ class Order {
     return {
       'is_delivered': isDelivered,
       'placed_at': placedAt,
+      'delivery_at': deliveryAt,
       'placed_by': placedBy,
       'total': totalAmount,
       'items': items?.map((e) => e.toMap()).toList(),

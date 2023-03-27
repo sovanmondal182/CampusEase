@@ -523,7 +523,8 @@ placeOrder(BuildContext context, double total) async {
         "items": _cartItems,
         "is_delivered": false,
         "total": total,
-        "placed_at": DateTime.now(),
+        "placed_at": DateTime.now().toLocal().toString(),
+        "delivery_at": "null",
         "placed_by": currentUser.uid
       });
 
@@ -559,17 +560,20 @@ orderReceived(String id, BuildContext context) async {
         FirebaseFirestore.instance.collection('orders');
     await ordersRef
         .doc(id)
-        .update({'is_delivered': true})
+        .update({
+          'is_delivered': true,
+          'delivery_at': DateTime.now().toLocal().toString()
+        })
         .catchError((e) => print(e))
         .then((value) => print("Success"));
   } catch (error) {
-    toast("Failed to mark as received!");
+    toast("Failed to mark as delivered!");
     print(error);
     return;
   }
 
   Navigator.pop(context);
-  toast("Order received successfully!");
+  toast("Order delivered successfully!");
 }
 
 profileUpdate(u.User user) async {

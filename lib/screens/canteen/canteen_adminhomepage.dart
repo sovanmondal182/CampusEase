@@ -19,14 +19,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
   List<Food> _foodItems = <Food>[];
   String name = '';
 
-  signOutUser() {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
-    if (authNotifier.user != null) {
-      signOut(authNotifier, context);
-    }
-  }
-
   @override
   void initState() {
     AuthNotifier authNotifier =

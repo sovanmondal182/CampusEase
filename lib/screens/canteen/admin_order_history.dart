@@ -26,6 +26,14 @@ class _AdminOrderDetailsPageState extends State<AdminOrderDetailsPage> {
     super.initState();
   }
 
+  signOutUser() {
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
+    if (authNotifier.user != null) {
+      signOut(authNotifier, context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier =
@@ -33,6 +41,17 @@ class _AdminOrderDetailsPageState extends State<AdminOrderDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Order Details'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.logout_rounded,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              signOutUser();
+            },
+          )
+        ],
       ),
       body: SafeArea(
         child: StreamBuilder<QuerySnapshot>(
