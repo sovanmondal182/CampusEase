@@ -1,13 +1,16 @@
 import 'package:campus_ease/apis/foodAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
-import 'package:campus_ease/screens/canteen/adminHome.dart';
+import 'package:campus_ease/screens/canteen/canteen_adminhomepage.dart';
+
 import 'package:campus_ease/screens/login/login.dart';
-import 'package:campus_ease/screens/canteen/navigationBar.dart';
+import 'package:campus_ease/screens/canteen/canteen_navigationBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../dashboard/admin_dashboard.dart';
+
 import '../dashboard/student_dashboard_screen.dart';
+
 // import 'package:foodlab/api/food_api.dart';
 // import 'package:foodlab/screens/login_signup_page.dart';
 // import 'package:foodlab/notifier/auth_notifier.dart';
@@ -52,14 +55,14 @@ class _LandingPageState extends State<LandingPage>
                             ? Navigator.pushReplacement(context,
                                 MaterialPageRoute(
                                 builder: (BuildContext context) {
-                                  return AdminHomePage();
+                                  return AdminDashboardScreen();
                                 },
                               ))
                             : (authNotifier.userDetails!.role == 'worker')
                                 ? Navigator.pushReplacement(context,
                                     MaterialPageRoute(
                                     builder: (BuildContext context) {
-                                      return AdminHomePage();
+                                      return AdminDashboardScreen();
                                     },
                                   ))
                                 : (authNotifier.userDetails!.role == 'canteen')

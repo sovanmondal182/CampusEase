@@ -1,9 +1,11 @@
+import 'package:campus_ease/screens/canteen/canteen_profilePage.dart';
+import 'package:campus_ease/screens/profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../widgets/dashboard_item.dart';
-import '../canteen/navigationBar.dart';
+import '../canteen/canteen_navigationBar.dart';
 import '../library/library_student.dart';
 import '../library/library_admin.dart';
 
@@ -22,6 +24,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserProfileScreen()));
+              },
+              icon: const Icon(Icons.account_circle)),
+        ],
       ),
       body: SafeArea(
         child: GridView(

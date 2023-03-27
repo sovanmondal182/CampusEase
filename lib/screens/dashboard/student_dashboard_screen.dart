@@ -3,7 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../widgets/dashboard_item.dart';
-import '../canteen/navigationBar.dart';
+import '../canteen/canteen_navigationBar.dart';
+import '../canteen/canteen_profilePage.dart';
 import '../library/library_student.dart';
 
 class StudentDashBoardScreen extends StatefulWidget {
@@ -21,6 +22,14 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student Dashboard'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()));
+              },
+              icon: const Icon(Icons.account_circle)),
+        ],
       ),
       body: SafeArea(
         child: GridView(

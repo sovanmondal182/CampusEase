@@ -1,14 +1,15 @@
 import 'package:campus_ease/models/food.dart';
 import 'package:campus_ease/models/user.dart' as u;
 import 'package:campus_ease/notifiers/authNotifier.dart';
-import 'package:campus_ease/screens/canteen/adminHome.dart';
 import 'package:campus_ease/screens/login/login.dart';
-import 'package:campus_ease/screens/canteen/navigationBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../screens/canteen/canteen_adminhomepage.dart';
+import '../screens/canteen/canteen_navigationBar.dart';
 
 void toast(String data) {
   Fluttertoast.showToast(

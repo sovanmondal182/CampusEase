@@ -1,8 +1,9 @@
 import 'package:campus_ease/screens/canteen/cartPage.dart';
-import 'package:campus_ease/screens/canteen/homePage.dart';
-import 'package:campus_ease/screens/canteen/profilePage.dart';
+import 'package:campus_ease/screens/canteen/canteen_homePage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+
+import 'canteen_profilePage.dart';
 
 // ignore: must_be_immutable
 class NavigationBarPage extends StatefulWidget {
