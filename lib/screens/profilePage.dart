@@ -282,7 +282,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Provider.of<AuthNotifier>(context, listen: false);
     money = amount;
     var options = {
-      'key': 'rzp_test_D5ZAPbZuM494Pw',
+      'key': 'rzp_test_rpAQaSlgUesRkn',
       'amount': money * 100,
       'name': authNotifier.userDetails!.displayName,
       'description': "${authNotifier.userDetails!.uuid} - ${DateTime.now()}",

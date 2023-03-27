@@ -1,8 +1,8 @@
 import 'package:campus_ease/models/food.dart';
 import 'package:campus_ease/models/user.dart' as u;
 import 'package:campus_ease/notifiers/authNotifier.dart';
-import 'package:campus_ease/screens/adminHome.dart';
-import 'package:campus_ease/screens/login.dart';
+import 'package:campus_ease/screens/canteen/adminHome.dart';
+import 'package:campus_ease/screens/login/login.dart';
 import 'package:campus_ease/screens/navigationBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -247,6 +247,42 @@ addNewItem(
   toast("New Item added successfully!");
 }
 
+issueBook(
+    String? bookName, int? bookId, int? enrollNo, BuildContext context) async {
+  try {
+    bool isBookAvailable = false;
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('books');
+    await itemRef.where("book_id", isEqualTo: bookId).get().then((value) => {
+          if (value.docs.isEmpty)
+            {
+              isBookAvailable = true,
+            }
+        });
+
+    if (isBookAvailable) {
+      await itemRef
+          .doc()
+          .set({
+            "book_name": bookName,
+            "book_id": bookId,
+            "enroll_no": enrollNo,
+            "date_issued": DateTime.now().toLocal().toString()
+          })
+          .catchError((e) => print(e))
+          .then((value) => toast("Book issued successfully!"));
+    } else {
+      toast("Book is already issued!");
+    }
+  } catch (error) {
+    toast("Failed to add to new item!");
+    print(error);
+    return;
+  }
+
+  Navigator.pop(context);
+}
+
 editItem(String itemName, int price, int totalQty, BuildContext context,
     String id) async {
   try {
@@ -277,13 +313,84 @@ deleteItem(String id, BuildContext context) async {
         .catchError((e) => print(e))
         .then((value) => print("Success"));
   } catch (error) {
-    toast("Failed to edit item!");
+    toast("Failed to delete item!");
     print(error);
     return;
   }
 
   Navigator.pop(context);
-  toast("Item edited successfully!");
+  toast("Item deleted successfully!");
+}
+
+returnBook(String id, BuildContext context) async {
+  try {
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('books');
+    await itemRef
+        .where("book_id", isEqualTo: int.parse(id))
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              itemRef
+                  .doc(element.id)
+                  .delete()
+                  .catchError((e) => print(e))
+                  .then((value) => print("Success"));
+              ;
+            }));
+  } catch (error) {
+    toast("Failed to return book!");
+    print(error);
+    return;
+  }
+
+  Navigator.pop(context);
+  toast("Book returned successfully!");
+}
+
+libraryInOut(int? enrollNo, BuildContext context) async {
+  try {
+    bool dataFound = true;
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('libraryInOut');
+    await itemRef
+        .where("enroll_no", isEqualTo: enrollNo)
+        .where("out_time", isEqualTo: "null")
+        .get()
+        .then((value) async => {
+              if (value.docs.isEmpty)
+                {
+                  await itemRef
+                      .doc()
+                      .set({
+                        "in_time": DateTime.now().toLocal().toString(),
+                        "out_time": "null",
+                        "enroll_no": enrollNo,
+                      })
+                      .catchError((e) => print(e))
+                      .then((value) {
+                        // Navigator.pop(context);
+                        toast("Book issued successfully!");
+                      }),
+                }
+              else
+                {
+                  await itemRef
+                      .doc(value.docs[0].id)
+                      .update({
+                        "out_time": DateTime.now().toLocal().toString(),
+                      })
+                      .catchError((e) => print(e))
+                      .then((value) {
+                        // Navigator.pop(context);
+                        toast("Book updated successfully!");
+                      }),
+                }
+            });
+  } catch (error) {
+    toast("Failed to add to new item!");
+    print(error);
+    return;
+  }
 }
 
 editCartItem(String itemId, int count, BuildContext context) async {

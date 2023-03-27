@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class User {
   String? displayName;
   String? email;
@@ -6,6 +8,7 @@ class User {
   String? role;
   double? balance;
   String? phone;
+  int? enrollNo;
 
   User({
     this.displayName,
@@ -15,6 +18,7 @@ class User {
     this.role,
     this.balance,
     this.phone,
+    this.enrollNo,
   });
 
   User.fromMap(Map<String, dynamic> data)
@@ -24,7 +28,8 @@ class User {
         uuid = data['uuid'],
         role = data['role'],
         balance = data['balance'],
-        phone = data['phone'];
+        phone = data['phone'],
+        enrollNo = data['enroll_no'];
 
   Map<String, dynamic> toMap() {
     return {
@@ -35,6 +40,7 @@ class User {
       'role': role,
       'balance': balance,
       'phone': phone,
+      'enroll_no': enrollNo,
     };
   }
 }

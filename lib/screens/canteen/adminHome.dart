@@ -59,7 +59,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               width: MediaQuery.of(context).size.width * 0.6,
               child: Text("No Items to display"),
             )
-          : (authNotifier.userDetails!.role == 'admin')
+          : (authNotifier.userDetails!.role == 'canteen')
               ? adminHome(context)
               : Container(
                   padding: EdgeInsets.symmetric(vertical: 20),
