@@ -1,4 +1,4 @@
-import 'package:campus_ease/screens/students/library_in_out.dart';
+import 'package:campus_ease/screens/library/library_in_out.dart';
 import 'package:campus_ease/widgets/dashboard_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';

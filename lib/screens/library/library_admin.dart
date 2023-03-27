@@ -3,7 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../widgets/dashboard_item.dart';
-import '../students/view_issued_book.dart';
+import 'view_issued_book.dart';
 import 'issue_book.dart';
 import 'return_book.dart';
 

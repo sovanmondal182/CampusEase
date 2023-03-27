@@ -3,7 +3,7 @@ import 'package:campus_ease/models/user.dart' as u;
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/canteen/adminHome.dart';
 import 'package:campus_ease/screens/login/login.dart';
-import 'package:campus_ease/screens/navigationBar.dart';
+import 'package:campus_ease/screens/canteen/navigationBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

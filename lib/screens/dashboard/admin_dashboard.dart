@@ -3,24 +3,25 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../widgets/dashboard_item.dart';
-import '../navigationBar.dart';
-import 'library_student.dart';
+import '../canteen/navigationBar.dart';
+import '../library/library_student.dart';
+import '../library/library_admin.dart';
 
-class StudentDashBoardScreen extends StatefulWidget {
-  const StudentDashBoardScreen({super.key});
+class AdminDashboardScreen extends StatefulWidget {
+  const AdminDashboardScreen({super.key});
 
   @override
-  State<StudentDashBoardScreen> createState() => _StudentDashBoardScreenState();
+  State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
 }
 
-class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
+class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Student Dashboard'),
+        title: const Text('Admin Dashboard'),
       ),
       body: SafeArea(
         child: GridView(
@@ -37,7 +38,7 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                   image: 'library',
                   onTap: () => Navigator.push(context, MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return LibraryStudentScreen();
+                          return LibraryAdmin();
                         },
                       ))),
               const DashBoardItem(

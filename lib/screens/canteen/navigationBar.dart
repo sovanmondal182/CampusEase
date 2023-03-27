@@ -1,6 +1,6 @@
-import 'package:campus_ease/screens/cartPage.dart';
-import 'package:campus_ease/screens/homePage.dart';
-import 'package:campus_ease/screens/profilePage.dart';
+import 'package:campus_ease/screens/canteen/cartPage.dart';
+import 'package:campus_ease/screens/canteen/homePage.dart';
+import 'package:campus_ease/screens/canteen/profilePage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 

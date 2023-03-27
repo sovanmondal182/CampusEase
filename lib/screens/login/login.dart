@@ -1,6 +1,6 @@
 import 'package:campus_ease/apis/foodAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
-import 'package:campus_ease/screens/forgotPassword.dart';
+import 'package:campus_ease/screens/login/forgotPassword.dart';
 import 'package:campus_ease/screens/login/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

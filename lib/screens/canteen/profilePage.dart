@@ -1,6 +1,6 @@
 import 'package:campus_ease/apis/foodAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
-import 'package:campus_ease/screens/orderDetails.dart';
+import 'package:campus_ease/screens/canteen/orderDetails.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
