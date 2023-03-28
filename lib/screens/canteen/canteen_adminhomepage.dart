@@ -78,71 +78,81 @@ class _AdminHomePageState extends State<AdminHomePage> {
     // AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     return SingleChildScrollView(
       physics: ScrollPhysics(),
-      child: Column(
-        children: <Widget>[
-          Card(
-            child: TextField(
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search), hintText: 'Search...'),
-              onChanged: (val) {
-                setState(() {
-                  name = val;
-                });
-              },
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: <Widget>[
+            Card(
+              child: TextField(
+                decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+                onChanged: (val) {
+                  setState(() {
+                    name = val;
+                  });
+                },
+              ),
             ),
-          ),
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('items').snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasData && snapshot.data!.docs.length > 0) {
-                _foodItems = <Food>[];
-                snapshot.data!.docs.forEach((item) {
-                  _foodItems.add(Food(item.id, item['item_name'],
-                      item['total_qty'], item['price']));
-                });
-                List<Food> _suggestionList = (name == '' || name == null)
-                    ? _foodItems
-                    : _foodItems
-                        .where((element) => element.itemName!
-                            .toLowerCase()
-                            .contains(name.toLowerCase()))
-                        .toList();
-                if (_suggestionList.length > 0) {
-                  return Container(
-                    margin: EdgeInsets.only(top: 10.0),
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _suggestionList.length,
-                        itemBuilder: (context, int i) {
-                          return ListTile(
-                            title: Text(_suggestionList[i].itemName ?? ''),
-                            subtitle: Text(
-                                'cost: ${_suggestionList[i].price.toString()}'),
-                            trailing: Text(
-                                'Total Quantity: ${_suggestionList[i].totalQty.toString()}'),
-                            onLongPress: () {
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return popupDeleteOrEmpty(
-                                        context, _suggestionList[i]);
-                                  });
-                            },
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return popupEditForm(
-                                        context, _suggestionList[i]);
-                                  });
-                            },
-                          );
-                        }),
-                  );
+            StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection('items').snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+                  _foodItems = <Food>[];
+                  snapshot.data!.docs.forEach((item) {
+                    _foodItems.add(Food(item.id, item['item_name'],
+                        item['total_qty'], item['price']));
+                  });
+                  List<Food> _suggestionList = (name == '' || name == null)
+                      ? _foodItems
+                      : _foodItems
+                          .where((element) => element.itemName!
+                              .toLowerCase()
+                              .contains(name.toLowerCase()))
+                          .toList();
+                  if (_suggestionList.length > 0) {
+                    return Container(
+                      margin: EdgeInsets.only(top: 10.0),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _suggestionList.length,
+                          itemBuilder: (context, int i) {
+                            return ListTile(
+                              title: Text(_suggestionList[i].itemName ?? ''),
+                              subtitle: Text(
+                                  'cost: ${_suggestionList[i].price.toString()}'),
+                              trailing: Text(
+                                  'Total Quantity: ${_suggestionList[i].totalQty.toString()}'),
+                              onLongPress: () {
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return popupDeleteOrEmpty(
+                                          context, _suggestionList[i]);
+                                    });
+                              },
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return popupEditForm(
+                                          context, _suggestionList[i]);
+                                    });
+                              },
+                            );
+                          }),
+                    );
+                  } else {
+                    return Container(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Text("No Items to display"),
+                    );
+                  }
                 } else {
                   return Container(
                     padding: EdgeInsets.symmetric(vertical: 20),
@@ -150,16 +160,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     child: Text("No Items to display"),
                   );
                 }
-              } else {
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: Text("No Items to display"),
-                );
-              }
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

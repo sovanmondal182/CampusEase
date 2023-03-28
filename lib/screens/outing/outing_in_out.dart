@@ -12,14 +12,14 @@ import 'package:provider/provider.dart';
 import '../../apis/foodAPIs.dart';
 import '../../notifiers/authNotifier.dart';
 
-class LibraryInOut extends StatefulWidget {
-  const LibraryInOut({super.key});
+class OutingInOut extends StatefulWidget {
+  const OutingInOut({super.key});
 
   @override
-  State<LibraryInOut> createState() => _LibraryInOutState();
+  State<OutingInOut> createState() => _OutingInOutState();
 }
 
-class _LibraryInOutState extends State<LibraryInOut> {
+class _OutingInOutState extends State<OutingInOut> {
   mobile_scanner.MobileScannerController cameraController =
       mobile_scanner.MobileScannerController();
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -30,14 +30,14 @@ class _LibraryInOutState extends State<LibraryInOut> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Library Entry'),
+          title: const Text('Outing Window'),
           actions: [
             IconButton(
               color: Colors.white,
               icon: ValueListenableBuilder(
                 valueListenable: cameraController.torchState,
                 builder: (context, state, child) {
-                  switch (state as mobile_scanner.TorchState) {
+                  switch (state) {
                     case mobile_scanner.TorchState.off:
                       return const Icon(Icons.flash_off, color: Colors.grey);
                     case mobile_scanner.TorchState.on:
@@ -53,7 +53,7 @@ class _LibraryInOutState extends State<LibraryInOut> {
               icon: ValueListenableBuilder(
                 valueListenable: cameraController.cameraFacingState,
                 builder: (context, state, child) {
-                  switch (state as mobile_scanner.CameraFacing) {
+                  switch (state) {
                     case mobile_scanner.CameraFacing.front:
                       return const Icon(Icons.camera_front);
                     case mobile_scanner.CameraFacing.back:
@@ -76,12 +76,12 @@ class _LibraryInOutState extends State<LibraryInOut> {
                 for (final barcode in barcodes) {
                   Navigator.pop(context);
                   print('Barcode found! ${barcode.rawValue}');
-                  if (barcode.rawValue == "Library") {
+                  if (barcode.rawValue == "Outing") {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Library In-Out'),
+                            title: const Text('Outing'),
                             content: const Text('Are you sure?'),
                             actions: [
                               TextButton(
@@ -92,7 +92,7 @@ class _LibraryInOutState extends State<LibraryInOut> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  libraryInOut(
+                                  outingInOut(
                                       authNotifier.userDetails!.enrollNo,
                                       context);
                                   Navigator.of(context).pop();
@@ -102,7 +102,7 @@ class _LibraryInOutState extends State<LibraryInOut> {
                             ],
                           );
                         });
-                    print("Library In-Out Successful");
+                    print("Entry Successful");
                   }
                 }
               },

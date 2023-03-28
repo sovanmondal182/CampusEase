@@ -1,4 +1,5 @@
 import 'package:campus_ease/notifiers/authNotifier.dart';
+import 'package:campus_ease/screens/outing/outing_in_out.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -60,9 +61,14 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                           return LibraryStudentScreen();
                         },
                       ))),
-              const DashBoardItem(
+              DashBoardItem(
                 text: 'Outing',
                 image: 'outing',
+                onTap: () => Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return OutingInOut();
+                  },
+                )),
               ),
               const DashBoardItem(
                 text: 'Mess',
