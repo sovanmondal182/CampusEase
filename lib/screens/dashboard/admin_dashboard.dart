@@ -1,14 +1,18 @@
 import 'package:campus_ease/screens/canteen/canteen_profilePage.dart';
+import 'package:campus_ease/screens/mess/mess_admin_screen.dart';
 import 'package:campus_ease/screens/outing/outing_admin.dart';
 import 'package:campus_ease/screens/profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:provider/provider.dart';
 
+import '../../notifiers/authNotifier.dart';
 import '../../widgets/dashboard_item.dart';
 import '../canteen/canteen_navigationBar.dart';
 import '../library/library_student.dart';
 import '../library/library_admin.dart';
+import '../mess/mess_student_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -20,6 +24,8 @@ class AdminDashboardScreen extends StatefulWidget {
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   Widget build(BuildContext context) {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
+
     final hight = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -33,7 +39,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     MaterialPageRoute(
                         builder: (context) => UserProfileScreen()));
               },
-              icon: const Icon(Icons.account_circle)),
+              icon: (authNotifier.userDetails!.photoUrl != null)
+                  ? CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(authNotifier.userDetails!.photoUrl!),
+                    )
+                  : const Icon(Icons.account_circle)),
         ],
       ),
       body: SafeArea(
@@ -63,9 +74,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   },
                 )),
               ),
-              const DashBoardItem(
+              DashBoardItem(
                 text: 'Mess',
                 image: 'mess',
+                onTap: () => Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return MessAdminScreen();
+                  },
+                )),
               ),
               DashBoardItem(
                 text: 'Canteen',

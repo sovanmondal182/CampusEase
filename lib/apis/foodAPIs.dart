@@ -501,6 +501,32 @@ editCartItem(String itemId, int count, BuildContext context) async {
   toast("Cart updated successfully!");
 }
 
+messReview(String? review, String? mealTyle, int? enrollNo, String? comment,
+    BuildContext context) async {
+  try {
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('mess_review');
+
+    await itemRef
+        .doc()
+        .set({
+          "review": review,
+          "meal_type": mealTyle,
+          "enroll_no": enrollNo,
+          "comment": comment,
+          "date": DateTime.now().toLocal().toString()
+        })
+        .catchError((e) => print(e))
+        .then((value) => toast("Review added successfully!"));
+  } catch (error) {
+    toast("Failed to add to new item!");
+    print(error);
+    return;
+  }
+
+  Navigator.pop(context);
+}
+
 addMoney(int amount, BuildContext context, String id) async {
   try {
     CollectionReference userRef =
