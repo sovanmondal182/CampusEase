@@ -1,23 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/book.dart';
-import '../../models/library_in_out_model.dart';
+import '../../models/outing_in_out_model.dart';
 import '../../notifiers/authNotifier.dart';
 
-class LibraryInOutLog extends StatefulWidget {
-  const LibraryInOutLog({super.key});
+class OutingInOutLog extends StatefulWidget {
+  const OutingInOutLog({super.key});
 
   @override
-  State<LibraryInOutLog> createState() => _LibraryInOutLogState();
+  State<OutingInOutLog> createState() => _OutingInOutLogState();
 }
 
-class _LibraryInOutLogState extends State<LibraryInOutLog> {
-  List<LibraryInOut> _inOut = <LibraryInOut>[];
+class _OutingInOutLogState extends State<OutingInOutLog> {
+  List<OutingInOutModel> _inOut = <OutingInOutModel>[];
   String name = '';
 
   @override
@@ -26,7 +24,7 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Library In Out Log'),
+        title: const Text('Outing Log'),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
@@ -47,28 +45,38 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
               ),
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('libraryInOut')
+                    .collection('outingInOut')
                     .orderBy('in_time', descending: true)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData && snapshot.data!.docs.length > 0) {
-                    _inOut = <LibraryInOut>[];
+                    _inOut = <OutingInOutModel>[];
                     snapshot.data!.docs.forEach((item) {
-                      _inOut.add(LibraryInOut(
+                      _inOut.add(OutingInOutModel(
                         inTime: item['in_time'],
                         outTime: item['out_time'],
                         enrollNo: item['enroll_no'],
+                        late: item['late'],
                       ));
                     });
-                    List<LibraryInOut> _suggestionList =
+                    List<OutingInOutModel> _suggestionList =
                         (name == '' || name == null)
                             ? _inOut
                             : _inOut
-                                .where((element) => element.enrollNo
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(name.toLowerCase()))
+                                .where((element) =>
+                                    element.enrollNo
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(name.toLowerCase()) ||
+                                    element.late
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(name.toLowerCase()) ||
+                                    element.outTime
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(name.toLowerCase()))
                                 .toList();
                     if (_suggestionList.length > 0) {
                       return Container(
@@ -98,17 +106,38 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
                                               0.01,
                                         ),
                                         Text(
-                                            "In Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].inTime))}"),
+                                            "Out Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].outTime))}"),
                                         SizedBox(
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
                                               0.01,
                                         ),
-                                        _suggestionList[i].outTime == "null"
-                                            ? const Text("Out Time: -")
+                                        _suggestionList[i].inTime == "null"
+                                            ? const Text("In Time: -")
                                             : Text(
-                                                "Out Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].outTime))}"),
+                                                "In Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].inTime))}"),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                        ),
+                                        Text(
+                                            "Status: ${_suggestionList[i].inTime == "null" ? "Out" : "In"}"),
+                                        SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                        ),
+                                        _suggestionList[i].late == true
+                                            ? Text(
+                                                "Late: Yes",
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              )
+                                            : Container(),
                                       ],
                                     ),
                                   ],

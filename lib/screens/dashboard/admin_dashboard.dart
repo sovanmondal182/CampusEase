@@ -1,4 +1,5 @@
 import 'package:campus_ease/screens/canteen/canteen_profilePage.dart';
+import 'package:campus_ease/screens/outing/outing_admin.dart';
 import 'package:campus_ease/screens/profile/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -53,9 +54,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           return LibraryAdmin();
                         },
                       ))),
-              const DashBoardItem(
+              DashBoardItem(
                 text: 'Outing',
                 image: 'outing',
+                onTap: () => Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return OutingAdmin();
+                  },
+                )),
               ),
               const DashBoardItem(
                 text: 'Mess',

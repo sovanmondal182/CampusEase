@@ -5,7 +5,6 @@ import 'package:campus_ease/screens/login/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../screens/canteen/canteen_adminhomepage.dart';
@@ -370,7 +369,7 @@ libraryInOut(int? enrollNo, BuildContext context) async {
                       .catchError((e) => print(e))
                       .then((value) {
                         // Navigator.pop(context);
-                        toast("Book issued successfully!");
+                        toast("Entry successfull!");
                       }),
                 }
               else
@@ -383,12 +382,89 @@ libraryInOut(int? enrollNo, BuildContext context) async {
                       .catchError((e) => print(e))
                       .then((value) {
                         // Navigator.pop(context);
-                        toast("Book updated successfully!");
+                        toast("Entry successfull!");
                       }),
                 }
             });
   } catch (error) {
-    toast("Failed to add to new item!");
+    toast("Failed to entry!");
+    print(error);
+    return;
+  }
+}
+
+outingInOut(int? enrollNo, BuildContext context) async {
+  try {
+    bool late = false;
+    String? timeOutWeekdays;
+    String? timeOutWeekends;
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('outingInOut');
+    await FirebaseFirestore.instance
+        .collection('outing_setting')
+        .where('timeInWeekdays', isNotEqualTo: null)
+        .get()
+        .then((value) async {
+      for (var element in value.docs) {
+        timeOutWeekdays = element['timeOutWeekdays'];
+        timeOutWeekends = element['timeOutWeekends'];
+      }
+    });
+    await itemRef
+        .where("enroll_no", isEqualTo: enrollNo)
+        .where("in_time", isEqualTo: "null")
+        .get()
+        .then((value) async => {
+              if (value.docs.isEmpty)
+                {
+                  await itemRef
+                      .doc()
+                      .set({
+                        "out_time": DateTime.now().toLocal().toString(),
+                        "in_time": "null",
+                        "enroll_no": enrollNo,
+                        "late": false,
+                      })
+                      .catchError((e) => print(e))
+                      .then((value) {
+                        // Navigator.pop(context);
+                        toast("Entry successfull!");
+                      }),
+                }
+              else
+                {
+                  await itemRef
+                      .doc(value.docs[0].id)
+                      .update({
+                        "in_time": DateTime.now().toLocal().toString(),
+                        "late": (((DateTime.now().hour <=
+                                        (int.parse(
+                                            timeOutWeekends!.split(":")[0]))) &&
+                                    (DateTime.now().minute <=
+                                        (int.parse(
+                                            timeOutWeekends!.split(":")[1]))) &&
+                                    (DateTime.now().weekday == 6 ||
+                                        DateTime.now().weekday == 7)) ||
+                                (DateTime.now().hour <=
+                                        (int.parse(
+                                            timeOutWeekdays!.split(":")[0]))) &&
+                                    (DateTime.now().minute <=
+                                        (int.parse(
+                                            timeOutWeekdays!.split(":")[1]))) &&
+                                    (DateTime.now().weekday != 6 &&
+                                        DateTime.now().weekday != 7))
+                            ? false
+                            : true,
+                      })
+                      .catchError((e) => print(e))
+                      .then((value) {
+                        // Navigator.pop(context);
+                        toast("Entry successfull!");
+                      }),
+                }
+            });
+  } catch (error) {
+    toast("Failed to Entry!");
     print(error);
     return;
   }
