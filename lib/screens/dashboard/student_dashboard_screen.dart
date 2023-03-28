@@ -9,6 +9,7 @@ import '../../widgets/dashboard_item.dart';
 import '../canteen/canteen_navigationBar.dart';
 import '../canteen/canteen_profilePage.dart';
 import '../library/library_student.dart';
+import '../mess/mess_student_screen.dart';
 import '../profile/user_profile.dart';
 
 class StudentDashBoardScreen extends StatefulWidget {
@@ -70,9 +71,14 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                   },
                 )),
               ),
-              const DashBoardItem(
+              DashBoardItem(
                 text: 'Mess',
                 image: 'mess',
+                onTap: () => Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return MessStudentScreen();
+                  },
+                )),
               ),
               DashBoardItem(
                 text: 'Canteen',
