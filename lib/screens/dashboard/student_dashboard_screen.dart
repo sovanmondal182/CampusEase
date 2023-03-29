@@ -12,6 +12,7 @@ import '../faculty_details/faculty_details_table.dart';
 import '../library/library_student.dart';
 import '../mess/mess_student_screen.dart';
 import '../profile/user_profile.dart';
+import '../service/service_student.dart';
 
 class StudentDashBoardScreen extends StatefulWidget {
   const StudentDashBoardScreen({super.key});
@@ -107,9 +108,14 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                   },
                 )),
               ),
-              const DashBoardItem(
+              DashBoardItem(
                 text: 'Services',
                 image: 'services',
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ServiceStudentScreen(),
+                    )),
               ),
               const DashBoardItem(
                 text: 'Calendar',

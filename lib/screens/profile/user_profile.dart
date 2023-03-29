@@ -31,6 +31,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   bool admissionYearUpdate = false;
   bool branchUpdate = false;
   bool courseUpdate = false;
+  bool hostelNameUpdate = false;
+  bool roomNoUpdate = false;
   bool uploading = false;
   double rating = 3.0;
   String? feedback;
@@ -44,6 +46,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       TextEditingController();
   final TextEditingController _controllerBranch = TextEditingController();
   final TextEditingController _controllerCourse = TextEditingController();
+  final TextEditingController _controllerHostelName = TextEditingController();
+  final TextEditingController _controllerRoomNo = TextEditingController();
 
   int money = 0;
 
@@ -70,6 +74,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         authNotifier.userDetails?.admissionYear ?? "";
     _controllerBranch.text = authNotifier.userDetails?.branch ?? "";
     _controllerCourse.text = authNotifier.userDetails?.course ?? "";
+    _controllerHostelName.text = authNotifier.userDetails?.hostelName ?? "";
+    _controllerRoomNo.text = authNotifier.userDetails?.roomNo ?? "";
     super.initState();
   }
 
@@ -523,6 +529,94 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         } else {
                           setState(() {
                             branchUpdate = true;
+                          });
+                        }
+                      } else {}
+                    },
+                  ),
+                  ProfileInfoListTile(
+                    leading: 'Hostel Name',
+                    label: _controllerHostelName.text,
+                    controller: _controllerHostelName,
+                    iconData: (authNotifier.userDetails!.role == "admin" ||
+                            authNotifier.userDetails!.hostelName == null)
+                        ? (hostelNameUpdate == false)
+                            ? Icon(Icons.edit)
+                            : const Text(
+                                "Update",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500),
+                              )
+                        : const Icon(
+                            null,
+                          ),
+                    isEditable: hostelNameUpdate,
+                    validator: (val) {
+                      return val != "" ? null : "Invalid Branch";
+                    },
+                    keyboardType: TextInputType.text,
+                    onIconTap: () async {
+                      if ((authNotifier.userDetails!.role == "admin" ||
+                              authNotifier.userDetails!.hostelName == null) &&
+                          _formKey.currentState!.validate()) {
+                        if (hostelNameUpdate == true) {
+                          authNotifier.userDetails!.hostelName =
+                              _controllerHostelName.text;
+                          await profileUpdate(authNotifier.userDetails!);
+                          print("update");
+                          setState(() {
+                            hostelNameUpdate = false;
+                          });
+                        } else {
+                          setState(() {
+                            hostelNameUpdate = true;
+                          });
+                        }
+                      } else {}
+                    },
+                  ),
+                  ProfileInfoListTile(
+                    leading: 'Room No',
+                    label: _controllerRoomNo.text,
+                    controller: _controllerRoomNo,
+                    iconData: (authNotifier.userDetails!.role == "admin" ||
+                            authNotifier.userDetails!.roomNo == null)
+                        ? (roomNoUpdate == false)
+                            ? Icon(Icons.edit)
+                            : const Text(
+                                "Update",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500),
+                              )
+                        : const Icon(
+                            null,
+                          ),
+                    isEditable: roomNoUpdate,
+                    validator: (val) {
+                      return val != "" ? null : "Invalid Branch";
+                    },
+                    keyboardType: TextInputType.text,
+                    onIconTap: () async {
+                      if ((authNotifier.userDetails!.role == "admin" ||
+                              authNotifier.userDetails!.roomNo == null) &&
+                          _formKey.currentState!.validate()) {
+                        if (roomNoUpdate == true) {
+                          authNotifier.userDetails!.roomNo =
+                              _controllerRoomNo.text;
+                          await profileUpdate(authNotifier.userDetails!);
+                          print("update");
+                          setState(() {
+                            roomNoUpdate = false;
+                          });
+                        } else {
+                          setState(() {
+                            roomNoUpdate = true;
                           });
                         }
                       } else {}
