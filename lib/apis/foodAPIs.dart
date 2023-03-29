@@ -396,8 +396,8 @@ libraryInOut(int? enrollNo, BuildContext context) async {
 outingInOut(int? enrollNo, BuildContext context) async {
   try {
     bool late = false;
-    String? timeOutWeekdays;
-    String? timeOutWeekends;
+    String? timeInWeekdays;
+    String? timeInWeekends;
     CollectionReference itemRef =
         FirebaseFirestore.instance.collection('outingInOut');
     await FirebaseFirestore.instance
@@ -406,8 +406,8 @@ outingInOut(int? enrollNo, BuildContext context) async {
         .get()
         .then((value) async {
       for (var element in value.docs) {
-        timeOutWeekdays = element['timeOutWeekdays'];
-        timeOutWeekends = element['timeOutWeekends'];
+        timeInWeekdays = element['timeInWeekdays'];
+        timeInWeekends = element['timeInWeekends'];
       }
     });
     await itemRef
@@ -439,18 +439,18 @@ outingInOut(int? enrollNo, BuildContext context) async {
                         "in_time": DateTime.now().toLocal().toString(),
                         "late": (((DateTime.now().hour <=
                                         (int.parse(
-                                            timeOutWeekends!.split(":")[0]))) &&
+                                            timeInWeekends!.split(":")[0]))) &&
                                     (DateTime.now().minute <=
                                         (int.parse(
-                                            timeOutWeekends!.split(":")[1]))) &&
+                                            timeInWeekends!.split(":")[1]))) &&
                                     (DateTime.now().weekday == 6 ||
                                         DateTime.now().weekday == 7)) ||
                                 (DateTime.now().hour <=
                                         (int.parse(
-                                            timeOutWeekdays!.split(":")[0]))) &&
+                                            timeInWeekdays!.split(":")[0]))) &&
                                     (DateTime.now().minute <=
                                         (int.parse(
-                                            timeOutWeekdays!.split(":")[1]))) &&
+                                            timeInWeekdays!.split(":")[1]))) &&
                                     (DateTime.now().weekday != 6 &&
                                         DateTime.now().weekday != 7))
                             ? false
