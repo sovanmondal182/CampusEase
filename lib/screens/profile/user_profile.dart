@@ -1,11 +1,7 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +9,6 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../apis/foodAPIs.dart';
 import '../../notifiers/authNotifier.dart';
-import '../../widgets/customRaisedButton.dart';
-import '../canteen/orderDetails.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -118,7 +112,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Future<CroppedFile?> cropSelectedImage(String filePath) async {
     return await ImageCropper().cropImage(
       sourcePath: filePath,
-      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+      aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
     );
   }
 
@@ -128,10 +122,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.qr_code_rounded,
               color: Colors.white,
             ),
@@ -140,7 +134,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Center(child: Text("Scan Me")),
+                      title: const Center(child: Text("Scan Me")),
                       content: Container(
                         decoration: BoxDecoration(
                           boxShadow: [
@@ -166,11 +160,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               semanticsLabel: 'Scan Me',
                               data:
                                   authNotifier.userDetails!.enrollNo.toString(),
-                              dataModuleStyle: QrDataModuleStyle(
+                              dataModuleStyle: const QrDataModuleStyle(
                                 dataModuleShape: QrDataModuleShape.circle,
                                 color: Colors.black,
                               ),
-                              eyeStyle: QrEyeStyle(
+                              eyeStyle: const QrEyeStyle(
                                 eyeShape: QrEyeShape.circle,
                                 color: Colors.black,
                               ),
@@ -183,7 +177,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text("Close"),
+                          child: const Text("Close"),
                         ),
                       ],
                     );
@@ -193,8 +187,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-        physics: BouncingScrollPhysics(),
+        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: <Widget>[
             (authNotifier.userDetails!.photoUrl != null)
@@ -215,7 +209,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: CircleAvatar(
                       backgroundColor: Colors.grey.withOpacity(0.3),
                       radius: 40,
-                      child: Icon(
+                      child: const Icon(
                         Icons.person,
                         size: 70,
                       ),
@@ -235,7 +229,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     controller: _controllerName,
                     iconData: (authNotifier.userDetails!.role == "admin")
                         ? (nameUpdate == false)
-                            ? Icon(Icons.edit)
+                            ? const Icon(Icons.edit)
                             : const Text(
                                 "Update",
                                 textAlign: TextAlign.left,
@@ -279,7 +273,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     controller: _controllerEmail,
                     iconData: (authNotifier.userDetails!.role == "admin")
                         ? (emailUpdate == false)
-                            ? Icon(Icons.edit)
+                            ? const Icon(Icons.edit)
                             : const Text(
                                 "Update",
                                 textAlign: TextAlign.left,
@@ -321,7 +315,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     label: _controllerPhone.text,
                     controller: _controllerPhone,
                     iconData: (phoneUpdate == false)
-                        ? Icon(Icons.edit)
+                        ? const Icon(Icons.edit)
                         : const Text(
                             "Update",
                             textAlign: TextAlign.left,
@@ -363,7 +357,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     controller: _controllerEnrollNo,
                     iconData: (authNotifier.userDetails!.role == "admin")
                         ? (enrollNoUpdate == false)
-                            ? Icon(Icons.edit)
+                            ? const Icon(Icons.edit)
                             : const Text(
                                 "Update",
                                 textAlign: TextAlign.left,
@@ -408,7 +402,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     iconData: (authNotifier.userDetails!.role == "admin" ||
                             authNotifier.userDetails!.admissionYear == null)
                         ? (admissionYearUpdate == false)
-                            ? Icon(Icons.edit)
+                            ? const Icon(Icons.edit)
                             : const Text(
                                 "Update",
                                 textAlign: TextAlign.left,
@@ -453,7 +447,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     iconData: (authNotifier.userDetails!.role == "admin" ||
                             authNotifier.userDetails!.course == null)
                         ? (courseUpdate == false)
-                            ? Icon(Icons.edit)
+                            ? const Icon(Icons.edit)
                             : const Text(
                                 "Update",
                                 textAlign: TextAlign.left,
@@ -497,7 +491,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     iconData: (authNotifier.userDetails!.role == "admin" ||
                             authNotifier.userDetails!.branch == null)
                         ? (branchUpdate == false)
-                            ? Icon(Icons.edit)
+                            ? const Icon(Icons.edit)
                             : const Text(
                                 "Update",
                                 textAlign: TextAlign.left,
@@ -539,9 +533,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     label: _controllerHostelName.text,
                     controller: _controllerHostelName,
                     iconData: (authNotifier.userDetails!.role == "admin" ||
-                            authNotifier.userDetails!.hostelName == null)
+                            authNotifier.userDetails!.hostelName == null ||
+                            authNotifier.userDetails!.hostelName == "")
                         ? (hostelNameUpdate == false)
-                            ? Icon(Icons.edit)
+                            ? const Icon(Icons.edit)
                             : const Text(
                                 "Update",
                                 textAlign: TextAlign.left,
@@ -554,13 +549,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             null,
                           ),
                     isEditable: hostelNameUpdate,
-                    validator: (val) {
-                      return val != "" ? null : "Invalid Branch";
-                    },
                     keyboardType: TextInputType.text,
                     onIconTap: () async {
                       if ((authNotifier.userDetails!.role == "admin" ||
-                              authNotifier.userDetails!.hostelName == null) &&
+                              authNotifier.userDetails!.hostelName == null ||
+                              authNotifier.userDetails!.hostelName == "") &&
                           _formKey.currentState!.validate()) {
                         if (hostelNameUpdate == true) {
                           authNotifier.userDetails!.hostelName =
@@ -583,9 +576,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     label: _controllerRoomNo.text,
                     controller: _controllerRoomNo,
                     iconData: (authNotifier.userDetails!.role == "admin" ||
-                            authNotifier.userDetails!.roomNo == null)
+                            authNotifier.userDetails!.roomNo == null ||
+                            authNotifier.userDetails!.roomNo == "")
                         ? (roomNoUpdate == false)
-                            ? Icon(Icons.edit)
+                            ? const Icon(Icons.edit)
                             : const Text(
                                 "Update",
                                 textAlign: TextAlign.left,
@@ -598,13 +592,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             null,
                           ),
                     isEditable: roomNoUpdate,
-                    validator: (val) {
-                      return val != "" ? null : "Invalid Branch";
-                    },
                     keyboardType: TextInputType.text,
                     onIconTap: () async {
                       if ((authNotifier.userDetails!.role == "admin" ||
-                              authNotifier.userDetails!.roomNo == null) &&
+                              authNotifier.userDetails!.roomNo == null ||
+                              authNotifier.userDetails!.roomNo == "") &&
                           _formKey.currentState!.validate()) {
                         if (roomNoUpdate == true) {
                           authNotifier.userDetails!.roomNo =
@@ -627,7 +619,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       signOutUser();
                     },
                     contentPadding: EdgeInsets.zero,
-                    title: Text(
+                    title: const Text(
                       'Log Out',
                       style: TextStyle(
                           fontSize: 14,

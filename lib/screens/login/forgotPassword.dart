@@ -1,10 +1,10 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
-import 'package:campus_ease/notifiers/authNotifier.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:campus_ease/models/user.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
+import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/models/user.dart';
+import 'package:campus_ease/notifiers/authNotifier.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  final User _user = new User();
+  final User _user = User();
 
   @override
   void initState() {
@@ -40,8 +40,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     _formkey.currentState!.save();
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
-    RegExp regExp = new RegExp(
-        r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$');
+    RegExp regExp =
+        RegExp(r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$');
     if (!regExp.hasMatch(_user.email!)) {
       toast("Enter a valid Email ID");
     } else {
@@ -53,13 +53,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget _buildForgotPasswordForm() {
     return Column(
       children: <Widget>[
-        SizedBox(
+        const SizedBox(
           height: 120,
         ),
         // Email Text Field
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 40),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(40),
@@ -72,8 +72,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             onSaved: (String? value) {
               _user.email = value!;
             },
-            cursorColor: Color.fromRGBO(255, 63, 111, 1),
-            decoration: InputDecoration(
+            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Email',
               hintStyle: TextStyle(
@@ -87,7 +87,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 50,
         ),
         //Reset Password BUTTON
@@ -96,12 +96,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             _submitForm();
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
             ),
-            child: Text(
+            child: const Text(
               "Reset Password",
               style: TextStyle(
                 fontSize: 20,
@@ -110,7 +110,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 60,
         ),
       ],
@@ -123,7 +123,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color.fromRGBO(255, 138, 120, 1),
@@ -143,9 +143,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               children: <Widget>[
                 GestureDetector(
                   child: Container(
-                    padding: EdgeInsets.only(top: 60),
-                    child: Text(
-                      'Cassia',
+                    padding: const EdgeInsets.only(top: 60),
+                    child: const Text(
+                      'CampusEase',
                       style: TextStyle(
                         fontSize: 60,
                         fontWeight: FontWeight.bold,
@@ -155,7 +155,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   '',
                   style: TextStyle(
                     fontStyle: FontStyle.italic,
