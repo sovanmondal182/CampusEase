@@ -33,10 +33,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cassia'),
+        title: const Text('CampusEase'),
         actions: [
           IconButton(
-            icon: Icon(Icons.person_2_rounded),
+            icon: const Icon(Icons.person_2_rounded),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return AdminOrderDetailsPage();
@@ -48,16 +48,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
       // ignore: unrelated_type_equality_checks
       body: (authNotifier.userDetails == null)
           ? Container(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               width: MediaQuery.of(context).size.width * 0.6,
-              child: Text("No Items to display"),
+              child: const Text("No Items to display"),
             )
           : (authNotifier.userDetails!.role == 'canteen')
               ? adminHome(context)
               : Container(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   width: MediaQuery.of(context).size.width * 0.6,
-                  child: Text("No Items to display"),
+                  child: const Text("No Items to display"),
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -68,8 +68,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 return popupForm(context);
               });
         },
-        child: Icon(Icons.add),
-        backgroundColor: Color.fromRGBO(255, 63, 111, 1),
+        backgroundColor: const Color.fromRGBO(255, 63, 111, 1),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -77,14 +77,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
   Widget adminHome(context) {
     // AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     return SingleChildScrollView(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
             Card(
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search), hintText: 'Search...'),
                 onChanged: (val) {
                   setState(() {
@@ -98,40 +98,40 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   FirebaseFirestore.instance.collection('items').snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+                if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                   _foodItems = <Food>[];
-                  snapshot.data!.docs.forEach((item) {
+                  for (var item in snapshot.data!.docs) {
                     _foodItems.add(Food(item.id, item['item_name'],
                         item['total_qty'], item['price']));
-                  });
-                  List<Food> _suggestionList = (name == '' || name == null)
+                  }
+                  List<Food> suggestionList = (name == '')
                       ? _foodItems
                       : _foodItems
                           .where((element) => element.itemName!
                               .toLowerCase()
                               .contains(name.toLowerCase()))
                           .toList();
-                  if (_suggestionList.length > 0) {
+                  if (suggestionList.isNotEmpty) {
                     return Container(
-                      margin: EdgeInsets.only(top: 10.0),
+                      margin: const EdgeInsets.only(top: 10.0),
                       child: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _suggestionList.length,
+                          itemCount: suggestionList.length,
                           itemBuilder: (context, int i) {
                             return ListTile(
-                              title: Text(_suggestionList[i].itemName ?? ''),
+                              title: Text(suggestionList[i].itemName ?? ''),
                               subtitle: Text(
-                                  'cost: ${_suggestionList[i].price.toString()}'),
+                                  'cost: ${suggestionList[i].price.toString()}'),
                               trailing: Text(
-                                  'Total Quantity: ${_suggestionList[i].totalQty.toString()}'),
+                                  'Total Quantity: ${suggestionList[i].totalQty.toString()}'),
                               onLongPress: () {
                                 showDialog(
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (BuildContext context) {
                                       return popupDeleteOrEmpty(
-                                          context, _suggestionList[i]);
+                                          context, suggestionList[i]);
                                     });
                               },
                               onTap: () {
@@ -140,7 +140,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                     barrierDismissible: false,
                                     builder: (BuildContext context) {
                                       return popupEditForm(
-                                          context, _suggestionList[i]);
+                                          context, suggestionList[i]);
                                     });
                               },
                             );
@@ -148,16 +148,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     );
                   } else {
                     return Container(
-                      padding: EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       width: MediaQuery.of(context).size.width * 0.6,
-                      child: Text("No Items to display"),
+                      child: const Text("No Items to display"),
                     );
                   }
                 } else {
                   return Container(
-                    padding: EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     width: MediaQuery.of(context).size.width * 0.6,
-                    child: Text("No Items to display"),
+                    child: const Text("No Items to display"),
                   );
                 }
               },
@@ -181,7 +181,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   "New Food Item",
@@ -193,20 +193,21 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   validator: (String? value) {
-                    if (value!.length < 3)
+                    if (value!.length < 3) {
                       return "Not a valid name";
-                    else
+                    } else {
                       return null;
+                    }
                   },
                   keyboardType: TextInputType.text,
                   onSaved: (String? value) {
                     itemName = value!;
                   },
-                  cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                  decoration: InputDecoration(
+                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  decoration: const InputDecoration(
                     hintText: 'Food Name',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -220,22 +221,23 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   validator: (String? value) {
-                    if (value!.length > 3)
+                    if (value!.length > 3) {
                       return "Not a valid price";
-                    else if (int.tryParse(value) == null)
+                    } else if (int.tryParse(value) == null) {
                       return "Not a valid integer";
-                    else
+                    } else {
                       return null;
+                    }
                   },
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: const TextInputType.numberWithOptions(),
                   onSaved: (String? value) {
                     price = int.parse(value!);
                   },
-                  cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                  decoration: InputDecoration(
+                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  decoration: const InputDecoration(
                     hintText: 'Price in INR',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -249,22 +251,23 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   validator: (String? value) {
-                    if (value!.length > 4)
+                    if (value!.length > 4) {
                       return "QTY cannot be above 4 digits";
-                    else if (int.tryParse(value) == null)
+                    } else if (int.tryParse(value) == null) {
                       return "Not a valid integer";
-                    else
+                    } else {
                       return null;
+                    }
                   },
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: const TextInputType.numberWithOptions(),
                   onSaved: (String? value) {
                     totalQty = int.parse(value!);
                   },
-                  cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                  decoration: InputDecoration(
+                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  decoration: const InputDecoration(
                     hintText: 'Total QTY',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -278,7 +281,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
@@ -309,7 +312,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Edit Food Item",
@@ -321,21 +324,22 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   initialValue: itemName,
                   validator: (String? value) {
-                    if (value!.length < 3)
+                    if (value!.length < 3) {
                       return "Not a valid name";
-                    else
+                    } else {
                       return null;
+                    }
                   },
                   keyboardType: TextInputType.text,
                   onSaved: (String? value) {
                     itemName = value!;
                   },
-                  cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                  decoration: InputDecoration(
+                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  decoration: const InputDecoration(
                     hintText: 'Food Name',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -349,23 +353,24 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   initialValue: price.toString(),
                   validator: (String? value) {
-                    if (value!.length > 3)
+                    if (value!.length > 3) {
                       return "Not a valid price";
-                    else if (int.tryParse(value) == null)
+                    } else if (int.tryParse(value) == null) {
                       return "Not a valid integer";
-                    else
+                    } else {
                       return null;
+                    }
                   },
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: const TextInputType.numberWithOptions(),
                   onSaved: (String? value) {
                     price = int.parse(value!);
                   },
-                  cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                  decoration: InputDecoration(
+                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  decoration: const InputDecoration(
                     hintText: 'Price in INR',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -379,23 +384,24 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   initialValue: totalQty.toString(),
                   validator: (String? value) {
-                    if (value!.length > 4)
+                    if (value!.length > 4) {
                       return "QTY cannot be above 4 digits";
-                    else if (int.tryParse(value) == null)
+                    } else if (int.tryParse(value) == null) {
                       return "Not a valid integer";
-                    else
+                    } else {
                       return null;
+                    }
                   },
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: const TextInputType.numberWithOptions(),
                   onSaved: (String? value) {
                     totalQty = int.parse(value!);
                   },
-                  cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                  decoration: InputDecoration(
+                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  decoration: const InputDecoration(
                     hintText: 'Total QTY',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -409,7 +415,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
                     if (_formKeyEdit.currentState!.validate()) {
@@ -436,7 +442,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () {
                   deleteItem(data.id!, context);
@@ -445,7 +451,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () {
                   editItem(data.itemName!, data.price!, 0, context, data.id!);

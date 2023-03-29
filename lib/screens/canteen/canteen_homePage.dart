@@ -1,9 +1,10 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
-import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:campus_ease/models/food.dart';
 import 'package:provider/provider.dart';
+
+import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/models/food.dart';
+import 'package:campus_ease/notifiers/authNotifier.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,14 +31,14 @@ class _HomePageState extends State<HomePage> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Cassia'),
+          title: const Text('CampusEase'),
         ),
         // ignore: unrelated_type_equality_checks
         body: (authNotifier.userDetails!.uuid == Null)
             ? Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 width: MediaQuery.of(context).size.width * 0.6,
-                child: Text("No Items to display"),
+                child: const Text("No Items to display"),
               )
             : userHome(context));
   }
@@ -46,14 +47,14 @@ class _HomePageState extends State<HomePage> {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     return SingleChildScrollView(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
             Card(
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search), hintText: 'Search...'),
                 onChanged: (val) {
                   setState(() {
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                           .toList();
                   if (_suggestionList.length > 0) {
                     return Container(
-                      margin: EdgeInsets.only(top: 10.0),
+                      margin: const EdgeInsets.only(top: 10.0),
                       child: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -113,16 +114,16 @@ class _HomePageState extends State<HomePage> {
                     );
                   } else {
                     return Container(
-                      padding: EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       width: MediaQuery.of(context).size.width * 0.6,
-                      child: Text("No Items to display"),
+                      child: const Text("No Items to display"),
                     );
                   }
                 } else {
                   return Container(
-                    padding: EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     width: MediaQuery.of(context).size.width * 0.6,
-                    child: Text("No Items to display"),
+                    child: const Text("No Items to display"),
                   );
                 }
               },

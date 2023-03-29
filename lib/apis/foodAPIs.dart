@@ -1,15 +1,19 @@
-import 'package:campus_ease/models/food.dart';
-import 'package:campus_ease/models/user.dart' as u;
-import 'package:campus_ease/notifiers/authNotifier.dart';
-import 'package:campus_ease/screens/login/login.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../models/faculty_details_model.dart';
+import 'package:campus_ease/models/food.dart';
+import 'package:campus_ease/models/user.dart' as u;
+import 'package:campus_ease/notifiers/authNotifier.dart';
+import 'package:campus_ease/screens/login/login.dart';
+
 import '../screens/canteen/canteen_adminhomepage.dart';
 import '../screens/canteen/canteen_navigationBar.dart';
+import '../screens/dashboard/admin_dashboard.dart';
+import '../screens/dashboard/student_dashboard_screen.dart';
 
 void toast(String data) {
   Fluttertoast.showToast(
@@ -32,36 +36,47 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
   }
 
   try {
-    if (authResult != null) {
-      User? firebaseUser = authResult.user;
-      if (!firebaseUser!.emailVerified) {
-        await FirebaseAuth.instance.signOut();
+    User? firebaseUser = authResult.user;
+    if (!firebaseUser!.emailVerified) {
+      await FirebaseAuth.instance.signOut();
 
-        toast("Email ID not verified");
-        return;
-      } else if (firebaseUser != null) {
-        print("Log In: $firebaseUser");
-        authNotifier.setUser(firebaseUser);
-        await getUserDetails(authNotifier);
-        print("done");
+      toast("Email ID not verified");
+      return;
+    } else
+      print("Log In: $firebaseUser");
+    authNotifier.setUser(firebaseUser);
+    await getUserDetails(authNotifier);
+    print("done");
 
-        if (authNotifier.userDetails!.role == 'admin') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) {
-              return AdminHomePage();
-            }),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) {
-              return NavigationBarPage(selectedIndex: 1);
-            }),
-          );
-        }
-      }
-    }
+    (authNotifier.userDetails!.role == 'admin')
+        ? Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (BuildContext context) {
+              return const AdminDashboardScreen();
+            },
+          ))
+        : (authNotifier.userDetails!.role == 'faculty')
+            ? Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return const AdminDashboardScreen();
+                },
+              ))
+            : (authNotifier.userDetails!.role == 'worker')
+                ? Navigator.pushReplacement(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return const AdminDashboardScreen();
+                    },
+                  ))
+                : (authNotifier.userDetails!.role == 'canteen')
+                    ? Navigator.pushReplacement(context, MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return AdminHomePage();
+                        },
+                      ))
+                    : Navigator.pushReplacement(context, MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return const StudentDashBoardScreen();
+                        },
+                      ));
   } catch (error) {
     toast(error.toString());
     print(error);
@@ -82,24 +97,18 @@ signUp(u.User user, AuthNotifier authNotifier, BuildContext context) async {
   }
 
   try {
-    if (authResult != null) {
-      UserInfo updateInfo = authResult.user!.providerData[0];
+    User? firebaseUser = authResult.user;
+    await firebaseUser!.sendEmailVerification();
 
-      User? firebaseUser = authResult.user;
-      await firebaseUser!.sendEmailVerification();
+    await firebaseUser.updateDisplayName(user.displayName);
+    await firebaseUser.reload();
+    print("Sign Up: $firebaseUser");
+    uploadUserData(user, userDataUploaded);
+    await FirebaseAuth.instance.signOut();
+    authNotifier.setUser(null);
 
-      if (firebaseUser != null) {
-        await firebaseUser.updateDisplayName(user.displayName);
-        await firebaseUser.reload();
-        print("Sign Up: $firebaseUser");
-        uploadUserData(user, userDataUploaded);
-        await FirebaseAuth.instance.signOut();
-        authNotifier.setUser(null);
-
-        toast("Verification link is sent to ${user.email}");
-        Navigator.pop(context);
-      }
-    }
+    toast("Verification link is sent to ${user.email}");
+    Navigator.pop(context);
   } catch (error) {
     toast(error.toString());
     print(error);
@@ -782,6 +791,23 @@ profileUpdate(u.User user) async {
     await userRef
         .doc(currentUser.uid)
         .set(user.toMap())
+        .catchError((e) => print(e))
+        .then((value) => userDataUploadVar = true);
+  } else {
+    print('already uploaded user data');
+  }
+  print('user data uploaded successfully');
+}
+
+updateUserProfile(u.User user) async {
+  bool userDataUploadVar = false;
+
+  CollectionReference userRef = FirebaseFirestore.instance.collection('users');
+
+  if (userDataUploadVar != true) {
+    await userRef
+        .doc(user.uuid)
+        .update(user.toMap())
         .catchError((e) => print(e))
         .then((value) => userDataUploadVar = true);
   } else {
