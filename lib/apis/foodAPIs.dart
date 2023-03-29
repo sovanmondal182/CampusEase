@@ -425,6 +425,7 @@ outingInOut(int? enrollNo, BuildContext context) async {
                         "in_time": "null",
                         "enroll_no": enrollNo,
                         "late": false,
+                        "message": "",
                       })
                       .catchError((e) => print(e))
                       .then((value) {
@@ -438,24 +439,24 @@ outingInOut(int? enrollNo, BuildContext context) async {
                       .doc(value.docs[0].id)
                       .update({
                         "in_time": DateTime.now().toLocal().toString(),
-                        "late": (((DateTime.now().hour <=
+                        "late": (DateTime.now().weekday != 6 ||
+                                DateTime.now().weekday != 7)
+                            ? (DateTime.now().hour <
+                                    (int.parse(timeInWeekdays!.split(":")[0])))
+                                ? false
+                                : (DateTime.now().minute <=
                                         (int.parse(
-                                            timeInWeekends!.split(":")[0]))) &&
-                                    (DateTime.now().minute <=
+                                            timeInWeekdays!.split(":")[1])))
+                                    ? false
+                                    : true
+                            : (DateTime.now().hour <
+                                    (int.parse(timeInWeekends!.split(":")[0])))
+                                ? false
+                                : (DateTime.now().minute <=
                                         (int.parse(
-                                            timeInWeekends!.split(":")[1]))) &&
-                                    (DateTime.now().weekday == 6 ||
-                                        DateTime.now().weekday == 7)) ||
-                                (DateTime.now().hour <=
-                                        (int.parse(
-                                            timeInWeekdays!.split(":")[0]))) &&
-                                    (DateTime.now().minute <=
-                                        (int.parse(
-                                            timeInWeekdays!.split(":")[1]))) &&
-                                    (DateTime.now().weekday != 6 &&
-                                        DateTime.now().weekday != 7))
-                            ? false
-                            : true,
+                                            timeInWeekends!.split(":")[1])))
+                                    ? false
+                                    : true
                       })
                       .catchError((e) => print(e))
                       .then((value) {
@@ -466,6 +467,97 @@ outingInOut(int? enrollNo, BuildContext context) async {
             });
   } catch (error) {
     toast("Failed to Entry!");
+    print(error);
+    return;
+  }
+}
+
+updateOutingInOut(String? message, String? id, BuildContext context) async {
+  try {
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('outingInOut');
+    await itemRef.doc(id).update({
+      "message": message,
+    }).then((value) async {
+      toast("Message updated successfully!");
+    });
+  } catch (error) {
+    toast("Failed to Entry!");
+    print(error);
+    return;
+  }
+}
+
+deleteOutingInOut(String? id, BuildContext context) async {
+  try {
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('outingInOut');
+    await itemRef.doc(id).delete().then((value) async {
+      toast("Entry deleted successfully!");
+    });
+  } catch (error) {
+    toast("Failed to delete!");
+    print(error);
+    return;
+  }
+}
+
+registerComplaint(
+    u.User? user, String? type, String? message, BuildContext context) async {
+  try {
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('complaints');
+    await itemRef
+        .doc()
+        .set({
+          "type": type,
+          "message": message,
+          "hostel_name": user!.hostelName,
+          "room_no": user.roomNo,
+          "name": user.displayName,
+          "enroll_no": user.enrollNo,
+          "phone": user.phone,
+          "status": "Pending",
+          "date": DateTime.now().toLocal().toString(),
+          "solved_date": "null",
+        })
+        .catchError((e) => print(e))
+        .then((value) {
+          toast("Complaint registered successfully!");
+        });
+  } catch (error) {
+    toast("Failed to register complaint!");
+    print(error);
+    return;
+  }
+}
+
+updateComplaint(String? id, String? status, BuildContext context) async {
+  try {
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('complaints');
+    await itemRef.doc(id).update({
+      "status": status,
+      "solved_date": DateTime.now().toLocal().toString(),
+    }).then((value) async {
+      toast("Complaint updated successfully!");
+    });
+  } catch (error) {
+    toast("Failed to update complaint!");
+    print(error);
+    return;
+  }
+}
+
+deleteComplaint(String? id, BuildContext context) async {
+  try {
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('complaints');
+    await itemRef.doc(id).delete().then((value) async {
+      toast("Complaint deleted successfully!");
+    });
+  } catch (error) {
+    toast("Failed to delete complaint!");
     print(error);
     return;
   }

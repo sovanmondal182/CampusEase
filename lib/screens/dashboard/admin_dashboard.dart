@@ -14,6 +14,7 @@ import '../faculty_details/faculty_admin_screen.dart';
 import '../library/library_student.dart';
 import '../library/library_admin.dart';
 import '../mess/mess_student_screen.dart';
+import '../service/service_admin_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -110,10 +111,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       builder: (context) => FacultyAdminScreen(),
                     )),
               ),
-              const DashBoardItem(
-                text: 'Services',
-                image: 'services',
-              ),
+              DashBoardItem(
+                  text: 'Services',
+                  image: 'services',
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ServiceAdminScreen(),
+                      ))),
               const DashBoardItem(
                 text: 'Calendar',
                 image: 'calendar',
