@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../models/faculty_details_model.dart';
 import '../screens/canteen/canteen_adminhomepage.dart';
 import '../screens/canteen/canteen_navigationBar.dart';
 
@@ -691,6 +692,43 @@ profileUpdate(u.User user) async {
         .set(user.toMap())
         .catchError((e) => print(e))
         .then((value) => userDataUploadVar = true);
+  } else {
+    print('already uploaded user data');
+  }
+  print('user data uploaded successfully');
+}
+
+facultyDetailsUpdate(String? facultyId, String? facultyName,
+    String? facultyEmail, String? facultyMobile, String? facultyBranch) async {
+  bool userDataUploadVar = false;
+
+  CollectionReference userRef =
+      FirebaseFirestore.instance.collection('faculty_details');
+
+  if (userDataUploadVar != true) {
+    if (facultyId != null) {
+      await userRef
+          .doc(facultyId)
+          .update({
+            "facultyName": facultyName,
+            "facultyEmail": facultyEmail,
+            "facultyMobile": facultyMobile,
+            "facultyBranch": facultyBranch
+          })
+          .catchError((e) => print(e))
+          .then((value) => userDataUploadVar = true);
+    } else {
+      await userRef
+          .doc(facultyId)
+          .set({
+            "facultyName": facultyName,
+            "facultyEmail": facultyEmail,
+            "facultyMobile": facultyMobile,
+            "facultyBranch": facultyBranch
+          })
+          .catchError((e) => print(e))
+          .then((value) => userDataUploadVar = true);
+    }
   } else {
     print('already uploaded user data');
   }

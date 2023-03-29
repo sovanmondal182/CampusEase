@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../widgets/dashboard_item.dart';
 import '../canteen/canteen_navigationBar.dart';
 import '../canteen/canteen_profilePage.dart';
+import '../faculty_details/faculty_details_table.dart';
 import '../library/library_student.dart';
 import '../mess/mess_student_screen.dart';
 import '../profile/user_profile.dart';
@@ -97,9 +98,14 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                 text: 'Notice Board',
                 image: 'notice_board',
               ),
-              const DashBoardItem(
+              DashBoardItem(
                 text: 'Faculty Details',
                 image: 'faculty_details',
+                onTap: () => Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return FacultyDetailsTableScreen();
+                  },
+                )),
               ),
               const DashBoardItem(
                 text: 'Services',

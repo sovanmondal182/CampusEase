@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../notifiers/authNotifier.dart';
 import '../../widgets/dashboard_item.dart';
 import '../canteen/canteen_navigationBar.dart';
+import '../faculty_details/faculty_admin_screen.dart';
 import '../library/library_student.dart';
 import '../library/library_admin.dart';
 import '../mess/mess_student_screen.dart';
@@ -100,9 +101,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 text: 'Notice Board',
                 image: 'notice_board',
               ),
-              const DashBoardItem(
+              DashBoardItem(
                 text: 'Faculty Details',
                 image: 'faculty_details',
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FacultyAdminScreen(),
+                    )),
               ),
               const DashBoardItem(
                 text: 'Services',
