@@ -95,44 +95,6 @@ class _OutingSettingState extends State<OutingSetting> {
                         ),
                         Row(
                           children: [
-                            const Expanded(child: Text('In Time: ')),
-                            const SizedBox(
-                              width: 10.0,
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: TextField(
-                                controller: timeInWeekdays,
-                                decoration:
-                                    const InputDecoration(hintText: "In Time"),
-                                readOnly: true,
-                                onTap: () async {
-                                  TimeOfDay? pickedTime = await showTimePicker(
-                                    initialTime: TimeOfDay.now(),
-                                    context: context,
-                                  );
-
-                                  if (pickedTime != null) {
-                                    DateTime parsedTime = DateFormat.jm().parse(
-                                        pickedTime.format(context).toString());
-
-                                    String formattedTime =
-                                        DateFormat('HH:mm').format(parsedTime);
-
-                                    setState(() {
-                                      timeInWeekdays.text = formattedTime;
-                                    });
-                                  } else {}
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          children: [
                             const Expanded(child: Text('Out Time: ')),
                             const SizedBox(
                               width: 10.0,
@@ -167,11 +129,7 @@ class _OutingSettingState extends State<OutingSetting> {
                           ],
                         ),
                         const SizedBox(
-                          height: 20.0,
-                        ),
-                        const Text(
-                          'Weekends',
-                          style: TextStyle(fontSize: 20),
+                          height: 10.0,
                         ),
                         Row(
                           children: [
@@ -182,7 +140,7 @@ class _OutingSettingState extends State<OutingSetting> {
                             Expanded(
                               flex: 3,
                               child: TextField(
-                                controller: timeInWeekends,
+                                controller: timeInWeekdays,
                                 decoration:
                                     const InputDecoration(hintText: "In Time"),
                                 readOnly: true,
@@ -200,7 +158,7 @@ class _OutingSettingState extends State<OutingSetting> {
                                         DateFormat('HH:mm').format(parsedTime);
 
                                     setState(() {
-                                      timeInWeekends.text = formattedTime;
+                                      timeInWeekdays.text = formattedTime;
                                     });
                                   } else {}
                                 },
@@ -209,7 +167,11 @@ class _OutingSettingState extends State<OutingSetting> {
                           ],
                         ),
                         const SizedBox(
-                          height: 10.0,
+                          height: 20.0,
+                        ),
+                        const Text(
+                          'Weekends',
+                          style: TextStyle(fontSize: 20),
                         ),
                         Row(
                           children: [
@@ -239,6 +201,44 @@ class _OutingSettingState extends State<OutingSetting> {
 
                                     setState(() {
                                       timeOutWeekends.text = formattedTime;
+                                    });
+                                  } else {}
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Row(
+                          children: [
+                            const Expanded(child: Text('In Time: ')),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: TextField(
+                                controller: timeInWeekends,
+                                decoration:
+                                    const InputDecoration(hintText: "In Time"),
+                                readOnly: true,
+                                onTap: () async {
+                                  TimeOfDay? pickedTime = await showTimePicker(
+                                    initialTime: TimeOfDay.now(),
+                                    context: context,
+                                  );
+
+                                  if (pickedTime != null) {
+                                    DateTime parsedTime = DateFormat.jm().parse(
+                                        pickedTime.format(context).toString());
+
+                                    String formattedTime =
+                                        DateFormat('HH:mm').format(parsedTime);
+
+                                    setState(() {
+                                      timeInWeekends.text = formattedTime;
                                     });
                                   } else {}
                                 },

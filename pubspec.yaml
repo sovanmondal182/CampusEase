@@ -55,6 +55,7 @@ dependencies:
   image_cropper: ^3.0.1
   image_picker: ^0.8.6
   qr_flutter: ^4.0.0
+  data_table_2: ^2.4.1
 
 
 dev_dependencies:

@@ -24,11 +24,6 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  bool _isPersonalInfoVisible = false;
-  bool _isSettingsVisible = false;
-  bool _isReferVisible = false;
-  late bool _pushNotification;
-  late bool _emailNotification;
   bool nameUpdate = false;
   bool emailUpdate = false;
   bool phoneUpdate = false;
@@ -293,7 +288,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     isEditable: emailUpdate,
                     validator: (val) => val != "" &&
                             val!.length > 2 &&
-                            (RegExp(r"^[a-zA-Z][a-zA-Z\s]*$")).hasMatch(val)
+                            (RegExp(r'\S+@\S+\.\S+')).hasMatch(val)
                         ? null
                         : "Invalid Last Name",
                     onIconTap: () async {
