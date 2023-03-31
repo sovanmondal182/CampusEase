@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/dashboard_item.dart';
@@ -24,6 +25,33 @@ class StudentDashBoardScreen extends StatefulWidget {
 }
 
 class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
+  TextEditingController timeInWeekdays = TextEditingController();
+  TextEditingController timeOutWeekdays = TextEditingController();
+  TextEditingController timeInWeekends = TextEditingController();
+  TextEditingController timeOutWeekends = TextEditingController();
+  fetch() async {
+    CollectionReference itemRef =
+        FirebaseFirestore.instance.collection('outing_setting');
+
+    await itemRef
+        .where('timeInWeekdays', isNotEqualTo: null)
+        .get()
+        .then((value) async {
+      for (var element in value.docs) {
+        timeInWeekdays.text = element['timeInWeekdays'];
+        timeOutWeekdays.text = element['timeOutWeekdays'];
+        timeInWeekends.text = element['timeInWeekends'];
+        timeOutWeekends.text = element['timeOutWeekends'];
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetch();
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
@@ -67,14 +95,104 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                         },
                       ))),
               DashBoardItem(
-                text: 'Outing',
-                image: 'outing',
-                onTap: () => Navigator.push(context, MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return OutingInOut();
-                  },
-                )),
-              ),
+                  text: 'Outing',
+                  image: 'outing',
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Outing Timing"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text('Weekdays'),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Row(
+                                  children: [
+                                    const Expanded(child: Text('Out Time: ')),
+                                    const SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(timeOutWeekdays.text),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Row(
+                                  children: [
+                                    const Expanded(child: Text('In Time: ')),
+                                    const SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(timeInWeekdays.text),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                const Text('Weekends'),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Row(
+                                  children: [
+                                    const Expanded(child: Text('Out Time: ')),
+                                    const SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(timeOutWeekends.text),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Row(
+                                  children: [
+                                    const Expanded(child: Text('In Time: ')),
+                                    const SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(timeInWeekends.text),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Cancel")),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                        return OutingInOut();
+                                      },
+                                    ));
+                                  },
+                                  child: Text("Next")),
+                            ],
+                          );
+                        });
+                  }),
               DashBoardItem(
                 text: 'Mess',
                 image: 'mess',
