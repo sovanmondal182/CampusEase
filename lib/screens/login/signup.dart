@@ -79,7 +79,7 @@ class _SignupPageState extends State<SignupPage> {
             borderRadius: BorderRadius.circular(40),
           ),
           child: TextFormField(
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.name,
             validator: (String? value) {
               return null;
             },

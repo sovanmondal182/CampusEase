@@ -1,3 +1,4 @@
+import 'package:campus_ease/apis/foodAPIs.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,8 @@ class _OutingSettingState extends State<OutingSetting> {
           'timeInWeekends': timeInWeekends.text,
           'timeOutWeekends': timeOutWeekends.text,
         });
+        sendNotificationToRole('Outing',
+            'Outing timing changed! Please check it out!', 'user', 'outing');
       } else {
         await itemRef
             .doc()

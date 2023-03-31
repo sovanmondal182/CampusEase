@@ -58,7 +58,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData && snapshot.data!.docs.length > 0) {
                     _books = <Book>[];
-                    snapshot.data!.docs.forEach((item) {
+                    for (var item in snapshot.data!.docs) {
                       _books.add(Book(
                         bookId: item['book_id'],
                         bookName: item['book_name'],
@@ -66,7 +66,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                             DateTime.parse(item['date_issued'].toString()),
                         enrollNo: item['enroll_no'],
                       ));
-                    });
+                    }
                     List<Book> _suggestionList = (name == '' || name == null)
                         ? _books
                         : _books

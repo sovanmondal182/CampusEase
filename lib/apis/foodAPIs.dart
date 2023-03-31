@@ -1,19 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:campus_ease/models/food.dart';
 import 'package:campus_ease/models/user.dart' as u;
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/login/login.dart';
+import 'package:provider/provider.dart';
 
+import '../notificationservice/local_notification_service.dart';
 import '../screens/canteen/canteen_adminhomepage.dart';
 import '../screens/canteen/canteen_navigationBar.dart';
 import '../screens/dashboard/admin_dashboard.dart';
 import '../screens/dashboard/student_dashboard_screen.dart';
+import '../screens/notice/view_notice.dart';
 
 void toast(String data) {
   Fluttertoast.showToast(
@@ -137,6 +144,7 @@ uploadUserData(u.User user, bool userdataUpload) async {
   CollectionReference cartRef = FirebaseFirestore.instance.collection('carts');
 
   user.uuid = currentUser!.uid;
+  user.deviceToken = "";
   if (userDataUploadVar != true) {
     await userRef
         .doc(currentUser.uid)
@@ -156,10 +164,87 @@ uploadUserData(u.User user, bool userdataUpload) async {
 
 initializeCurrentUser(AuthNotifier authNotifier, BuildContext context) async {
   User? firebaseUser = FirebaseAuth.instance.currentUser;
+  String deviceTokenToSendPushNotification = "";
+  Future<void> getDeviceTokenToSendNotification() async {
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    final token = await _fcm.getToken();
+    deviceTokenToSendPushNotification = token.toString();
+    print("Token Value $deviceTokenToSendPushNotification");
+    if (deviceTokenToSendPushNotification != "" &&
+        authNotifier.userDetails != null) {
+      CollectionReference deviceRef =
+          FirebaseFirestore.instance.collection('devices');
+      CollectionReference userRef =
+          FirebaseFirestore.instance.collection('users');
+      await userRef
+          .doc(authNotifier.userDetails!.uuid)
+          .update({'device_token': deviceTokenToSendPushNotification})
+          .catchError((e) => print(e))
+          .then((value) => print("Device Token Updated"));
+
+      await deviceRef
+          .doc(authNotifier.userDetails!.uuid)
+          .set({
+            'device_token': deviceTokenToSendPushNotification,
+            'role': authNotifier.userDetails!.role
+          })
+          .catchError((e) => print(e))
+          .then((value) => print("Device Token Added"));
+    }
+  }
+
   if (firebaseUser != null) {
     authNotifier.setUser(firebaseUser);
     await getUserDetails(authNotifier);
+    await getDeviceTokenToSendNotification();
   }
+}
+
+initilizeFirebaseMessage(BuildContext context) {
+  // 1. This method call when app in terminated state and you get a notification
+  // when you click on notification app open from terminated state and you can get notification data in this method
+
+  FirebaseMessaging.instance.getInitialMessage().then(
+    (message) {
+      print("FirebaseMessaging.instance.getInitialMessage");
+      if (message != null) {
+        print("New Notification");
+        if (message.data['_id'] != null) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ViewNoticeScreen(
+                  // id: message.data['_id'],
+                  ),
+            ),
+          );
+        }
+      }
+    },
+  );
+  // 2. This method only call when App in forground it mean app must be opened
+  FirebaseMessaging.onMessage.listen(
+    (message) {
+      print("FirebaseMessaging.onMessage.listen");
+      if (message.notification != null) {
+        print(message.notification!.title);
+        print(message.notification!.body);
+        print("message.data11 ${message.data}");
+        LocalNotificationService.createanddisplaynotification(message);
+      }
+    },
+  );
+
+  // 3. This method only call when App in background and not terminated(not closed)
+  FirebaseMessaging.onMessageOpenedApp.listen(
+    (message) {
+      print("FirebaseMessaging.onMessageOpenedApp.listen");
+      if (message.notification != null) {
+        print(message.notification!.title);
+        print(message.notification!.body);
+        print("message.data22 ${message.data['_id']}");
+      }
+    },
+  );
 }
 
 signOut(AuthNotifier authNotifier, BuildContext context) async {
@@ -281,6 +366,8 @@ issueBook(
           })
           .catchError((e) => print(e))
           .then((value) => toast("Book issued successfully!"));
+      sendNotificationToSpecificUserByEnrollNo(enrollNo, 'Library',
+          'Book ID $bookId issued successfully', 'book-issued');
     } else {
       toast("Book is already issued!");
     }
@@ -345,7 +432,11 @@ returnBook(String id, BuildContext context) async {
                   .delete()
                   .catchError((e) => print(e))
                   .then((value) => print("Success"));
-              ;
+              sendNotificationToSpecificUserByEnrollNo(
+                  element['enroll_no'],
+                  'Library',
+                  'Book ID $id returned successfully',
+                  'book-returned');
             }));
   } catch (error) {
     toast("Failed to return book!");
@@ -681,10 +772,10 @@ placeOrder(BuildContext context, double total) async {
     // Getting all cart items of the user
     QuerySnapshot data =
         await cartRef.doc(currentUser.uid).collection('items').get();
-    data.docs.forEach((item) {
+    for (var item in data.docs) {
       foodIds.add(item.id);
       count[item.id] = item['count'];
-    });
+    }
 
     // Checking for item availability
     QuerySnapshot snap =
@@ -699,14 +790,14 @@ placeOrder(BuildContext context, double total) async {
     }
 
     // Creating cart items array
-    snap.docs.forEach((item) {
+    for (var item in snap.docs) {
       _cartItems.add({
         "item_id": item.id,
         "count": count[item.id],
         "item_name": item['item_name'],
         "price": item['price']
       });
-    });
+    }
 
     // Creating a transaction
     await FirebaseFirestore.instance
@@ -741,6 +832,18 @@ placeOrder(BuildContext context, double total) async {
     });
 
     // Successfull transaction
+    sendNotificationToSpecificUser(currentUser.uid, 'Canteen',
+        'Your order has been successfully placed!', 'order-placed');
+    orderRef
+        .where("delivery_at", isEqualTo: "null")
+        .where('placed_by', isEqualTo: currentUser.uid)
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        sendNotificationToRole('Order', 'New order received!', 'canteen',
+            'new-order+${element.id}');
+      });
+    });
 
     Navigator.pop(context);
     Navigator.pushReplacement(
@@ -810,6 +913,8 @@ updateUserProfile(u.User user) async {
         .update(user.toMap())
         .catchError((e) => print(e))
         .then((value) => userDataUploadVar = true);
+    sendNotificationToSpecificUser(user.uuid, 'Profile Updated',
+        'Your profile has been updated!', 'profile-update');
   } else {
     print('already uploaded user data');
   }
@@ -851,4 +956,199 @@ facultyDetailsUpdate(String? facultyId, String? facultyName,
     print('already uploaded user data');
   }
   print('user data uploaded successfully');
+}
+
+publishNotice(String? title, String? message, BuildContext context) async {
+  CollectionReference noticeRef =
+      FirebaseFirestore.instance.collection('notices');
+  await noticeRef.doc().set({
+    "title": title,
+    "message": message,
+    "published_at": DateTime.now().toLocal().toString(),
+  });
+}
+
+updateNotice(
+    String? title, String? message, String? id, BuildContext context) async {
+  CollectionReference noticeRef =
+      FirebaseFirestore.instance.collection('notices');
+  await noticeRef.doc(id).update({
+    "title": title,
+    "message": message,
+    "published_at": DateTime.now().toLocal().toString(),
+  });
+}
+
+deleteNotice(String? id) async {
+  CollectionReference noticeRef =
+      FirebaseFirestore.instance.collection('notices');
+  await noticeRef.doc(id).delete();
+}
+
+sendNotification(String? title, String? message) async {
+  CollectionReference userRef =
+      FirebaseFirestore.instance.collection('devices');
+  List<String> tokens = [];
+  await userRef
+      .where('role', isNotEqualTo: ['canteen', 'worker'])
+      .get()
+      .then((value) {
+        for (var element in value.docs) {
+          tokens.add(element['device_token']);
+          print(tokens);
+        }
+      });
+  try {
+    var response =
+        await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            headers: <String, String>{
+              'Authorization':
+                  'key=AAAAEOXp7dQ:APA91bG9068JCt-ylX58Q7Dagz5kJ0LUUdp1ndY5Sxhsi1ZwQ7ICLI8lNaZCk9vDGsyx_kthe2Q1MOFHlBijZWB0_4eXvarNlzxkAe-m8Gn43JKvSmwdbzDwgrMiA-xo-SV4G2k_HQcr',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              "registration_ids": tokens,
+              "notification": {
+                "body": message,
+                "title": title,
+                "android_channel_id": "campus_ease",
+                "sound": true
+              },
+              "priority": "high",
+              "data": {
+                "_id": "Notice",
+              }
+            }));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    throw Exception(e.toString());
+  }
+}
+
+sendNotificationToRole(
+    String? title, String? message, String? role, String? payload) async {
+  CollectionReference userRef =
+      FirebaseFirestore.instance.collection('devices');
+  List<String> tokens = [];
+  await userRef.where("role", isEqualTo: role).get().then((value) {
+    for (var element in value.docs) {
+      tokens.add(element['device_token']);
+      print(tokens);
+    }
+  });
+  try {
+    var response =
+        await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            headers: <String, String>{
+              'Authorization':
+                  'key=AAAAEOXp7dQ:APA91bG9068JCt-ylX58Q7Dagz5kJ0LUUdp1ndY5Sxhsi1ZwQ7ICLI8lNaZCk9vDGsyx_kthe2Q1MOFHlBijZWB0_4eXvarNlzxkAe-m8Gn43JKvSmwdbzDwgrMiA-xo-SV4G2k_HQcr',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              "registration_ids": tokens,
+              "notification": {
+                "body": message,
+                "title": title,
+                "android_channel_id": "campus_ease",
+                "sound": true
+              },
+              "priority": "high",
+              "data": {
+                "_id": payload,
+              }
+            }));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    throw Exception(e.toString());
+  }
+}
+
+sendNotificationToSpecificUser(
+    String? id, String? title, String? message, String? payload) async {
+  CollectionReference userRef = FirebaseFirestore.instance.collection('users');
+  List<String> tokens = [];
+  await userRef.doc(id).get().then((value) {
+    tokens.add(value['device_token']);
+  });
+  try {
+    var response =
+        await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            headers: <String, String>{
+              'Authorization':
+                  'key=AAAAEOXp7dQ:APA91bG9068JCt-ylX58Q7Dagz5kJ0LUUdp1ndY5Sxhsi1ZwQ7ICLI8lNaZCk9vDGsyx_kthe2Q1MOFHlBijZWB0_4eXvarNlzxkAe-m8Gn43JKvSmwdbzDwgrMiA-xo-SV4G2k_HQcr',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              "registration_ids": tokens,
+              "notification": {
+                "body": message,
+                "title": title,
+                "android_channel_id": "campus_ease",
+                "sound": true
+              },
+              "priority": "high",
+              "data": {
+                "_id": payload,
+              }
+            }));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    throw Exception(e.toString());
+  }
+}
+
+sendNotificationToSpecificUserByEnrollNo(
+    int? enrollNo, String? title, String? message, String? payload) async {
+  CollectionReference userRef = FirebaseFirestore.instance.collection('users');
+  List<String> tokens = [];
+  await userRef.where('enroll_no', isEqualTo: enrollNo).get().then((value) {
+    for (var element in value.docs) {
+      tokens.add(element['device_token']);
+    }
+  });
+  try {
+    var response =
+        await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            headers: <String, String>{
+              'Authorization':
+                  'key=AAAAEOXp7dQ:APA91bG9068JCt-ylX58Q7Dagz5kJ0LUUdp1ndY5Sxhsi1ZwQ7ICLI8lNaZCk9vDGsyx_kthe2Q1MOFHlBijZWB0_4eXvarNlzxkAe-m8Gn43JKvSmwdbzDwgrMiA-xo-SV4G2k_HQcr',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              "registration_ids": tokens,
+              "notification": {
+                "body": message,
+                "title": title,
+                "android_channel_id": "campus_ease",
+                "sound": true
+              },
+              "priority": "high",
+              "data": {
+                "_id": payload,
+              }
+            }));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    throw Exception(e.toString());
+  }
 }

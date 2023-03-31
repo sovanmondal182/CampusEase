@@ -119,6 +119,32 @@ DataRow recentFileDataRow(BuildContext context, FacultyDetailsModel fileInfo) {
                     id: fileInfo.facultyId,
                   )));
     },
+    onLongPress: () {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Delete ${fileInfo.facultyName}"),
+              content: Text("Are you sure you want to delete this item?"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancel")),
+                TextButton(
+                    onPressed: () {
+                      FirebaseFirestore.instance
+                          .collection('faculty_details')
+                          .doc(fileInfo.facultyId)
+                          .delete();
+                      Navigator.pop(context);
+                    },
+                    child: Text("Delete")),
+              ],
+            );
+          });
+    },
     cells: [
       DataCell(Text(
         fileInfo.facultyName!,

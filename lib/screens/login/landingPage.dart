@@ -4,9 +4,13 @@ import 'package:campus_ease/screens/canteen/canteen_adminhomepage.dart';
 
 import 'package:campus_ease/screens/login/login.dart';
 import 'package:campus_ease/screens/canteen/canteen_navigationBar.dart';
+import 'package:campus_ease/screens/notice/view_notice.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../notificationservice/local_notification_service.dart';
 import '../dashboard/admin_dashboard.dart';
 
 import '../dashboard/student_dashboard_screen.dart';
@@ -30,6 +34,7 @@ class _LandingPageState extends State<LandingPage>
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     initializeCurrentUser(authNotifier, context);
+    initilizeFirebaseMessage(context);
     animationController = AnimationController(
       /// [AnimationController]s can be created with `vsync: this` because of
       /// [TickerProviderStateMixin].
@@ -87,8 +92,6 @@ class _LandingPageState extends State<LandingPage>
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
-
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,

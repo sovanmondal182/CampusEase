@@ -1,5 +1,7 @@
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/outing/outing_in_out.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';

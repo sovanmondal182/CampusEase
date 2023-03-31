@@ -242,11 +242,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             null,
                           ),
                     isEditable: nameUpdate,
-                    validator: (val) => val != "" &&
-                            val!.length > 2 &&
-                            (RegExp(r"^[a-zA-Z][a-zA-Z\s]*$")).hasMatch(val)
-                        ? null
-                        : "Invalid Name",
+                    validator: (val) =>
+                        val != "" && val!.length > 2 ? null : "Invalid Name",
                     onIconTap: () async {
                       if (authNotifier.userDetails!.role == "admin" &&
                           _formKey.currentState!.validate()) {
