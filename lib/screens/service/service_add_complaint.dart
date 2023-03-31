@@ -16,7 +16,7 @@ class ServiceAddComplaint extends StatefulWidget {
 
 class _ServiceAddComplaintState extends State<ServiceAddComplaint> {
   final TextEditingController _reviewController = TextEditingController();
-  final items = ['Water', 'Electricity', 'Wifi', 'Other'];
+  final items = ['Water', 'Electricity', 'Wifi', 'Sweeper', 'Other'];
   String type = 'Water';
 
   @override
@@ -105,6 +105,13 @@ class _ServiceAddComplaintState extends State<ServiceAddComplaint> {
                   onTap: () {
                     registerComplaint(authNotifier.userDetails, type,
                         _reviewController.text, context);
+                    sendNotificationToRole(
+                        type, _reviewController.text, 'worker', 'worker');
+                    sendNotificationToSpecificUser(
+                        authNotifier.userDetails!.uuid,
+                        'Services',
+                        'Your complaint has been registered',
+                        'worker');
                     Navigator.pop(context);
                   },
                   child: CustomRaisedButton(buttonText: 'Submit'),

@@ -74,6 +74,7 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
         user.uuid = value['uuid'] ?? "";
         user.balance = value['balance'] ?? 0;
         user.photoUrl = value['photo_url'] ?? "";
+        user.deviceToken = value['device_token'] ?? "";
       });
     });
   }
@@ -120,11 +121,8 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                                 fontWeight: FontWeight.w500),
                           ),
                     isEditable: nameUpdate,
-                    validator: (val) => val != "" &&
-                            val!.length > 2 &&
-                            (RegExp(r"^[a-zA-Z][a-zA-Z\s]*$")).hasMatch(val)
-                        ? null
-                        : "Invalid Name",
+                    validator: (val) =>
+                        val != "" && val!.length > 2 ? null : "Invalid Name",
                     onIconTap: () async {
                       if (_formKey.currentState!.validate()) {
                         if (nameUpdate == true) {

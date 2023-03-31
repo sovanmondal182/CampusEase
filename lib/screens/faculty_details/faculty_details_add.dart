@@ -80,11 +80,8 @@ class _FacultyDetailsAddScreenState extends State<FacultyDetailsAddScreen> {
                       isEditable: (authNotifier.userDetails!.role == 'admin')
                           ? true
                           : false,
-                      validator: (val) => val != "" &&
-                              val!.length > 2 &&
-                              (RegExp(r"^[a-zA-Z][a-zA-Z\s]*$")).hasMatch(val)
-                          ? null
-                          : "Invalid Name",
+                      validator: (val) =>
+                          val != "" && val!.length > 2 ? null : "Invalid Name",
                     ),
                     ProfileInfoListTile(
                       leading: 'Email',

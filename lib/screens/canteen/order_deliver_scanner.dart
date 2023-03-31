@@ -94,6 +94,11 @@ class _OrderDeliverScannerState extends State<OrderDeliverScanner> {
                               TextButton(
                                 onPressed: () {
                                   orderReceived(widget.orderdata.id, context);
+                                  sendNotificationToSpecificUser(
+                                      widget.orderdata['placed_by'],
+                                      'Canteen',
+                                      'Your Order has benn successfully delivered',
+                                      'order-delivered+${widget.orderdata.id}');
                                   Navigator.of(context).pop();
                                   Navigator.of(context).pop();
                                 },

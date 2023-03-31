@@ -15,6 +15,7 @@ class User {
   String? course;
   String? roomNo;
   String? hostelName;
+  String? deviceToken;
 
   User({
     this.displayName,
@@ -31,6 +32,7 @@ class User {
     this.course,
     this.roomNo,
     this.hostelName,
+    this.deviceToken,
   });
 
   User.fromMap(Map<String, dynamic> data)
@@ -47,7 +49,8 @@ class User {
         branch = data['branch'],
         course = data['course'],
         roomNo = data['room_no'],
-        hostelName = data['hostel_name'];
+        hostelName = data['hostel_name'],
+        deviceToken = data['device_token'];
 
   Map<String, dynamic> toMap() {
     return {
@@ -65,6 +68,7 @@ class User {
       'course': course,
       'room_no': roomNo,
       'hostel_name': hostelName,
+      'device_token': deviceToken,
     };
   }
 }

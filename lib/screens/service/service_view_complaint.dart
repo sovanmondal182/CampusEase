@@ -288,6 +288,13 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
             onTap: () {
               updateComplaint(data.id,
                   data.status == 'Solved' ? 'Pending' : 'Solved', context);
+              if (data.status == 'Solved') {
+                sendNotificationToSpecificUserByEnrollNo(
+                    data.enrollNo,
+                    'Services',
+                    'Your complaint has been marked as solved',
+                    'worker');
+              }
               Navigator.pop(context);
             },
             child: CustomRaisedButton(
