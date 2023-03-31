@@ -53,6 +53,8 @@ class _SignupPageState extends State<SignupPage> {
       toast("Contact number length must be 10");
     } else if (int.tryParse(_user.phone!) == null) {
       toast("Contact number must be a number");
+    } else if (_user.enrollNo.toString().length != 14) {
+      toast("Enrollment number length must be 14");
     } else if (_user.password!.length < 8) {
       toast("Password must have atleast 8 characters");
     } else if (_passwordController.text.toString() != _user.password) {
@@ -182,9 +184,6 @@ class _SignupPageState extends State<SignupPage> {
           ),
           child: TextFormField(
             validator: (String? value) {
-              if (value!.length != 14) {
-                return "Enrollment number must be 14 digits";
-              }
               return null;
             },
             onSaved: (String? value) {

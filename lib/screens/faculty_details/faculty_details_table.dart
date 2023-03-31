@@ -1,8 +1,10 @@
 import 'package:campus_ease/models/faculty_details_model.dart';
+import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/faculty_details/faculty_details_add.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FacultyDetailsTableScreen extends StatefulWidget {
   const FacultyDetailsTableScreen({
@@ -108,6 +110,7 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
 }
 
 DataRow recentFileDataRow(BuildContext context, FacultyDetailsModel fileInfo) {
+  AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
   return DataRow(
     onSelectChanged: (value) {
       Navigator.push(
@@ -118,30 +121,33 @@ DataRow recentFileDataRow(BuildContext context, FacultyDetailsModel fileInfo) {
                   )));
     },
     onLongPress: () {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Delete ${fileInfo.facultyName}"),
-              content: const Text("Are you sure you want to delete this item?"),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Cancel")),
-                TextButton(
-                    onPressed: () {
-                      FirebaseFirestore.instance
-                          .collection('faculty_details')
-                          .doc(fileInfo.facultyId)
-                          .delete();
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Delete")),
-              ],
-            );
-          });
+      if (authNotifier.userDetails!.role == 'admin') {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Delete ${fileInfo.facultyName}"),
+                content:
+                    const Text("Are you sure you want to delete this item?"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Cancel")),
+                  TextButton(
+                      onPressed: () {
+                        FirebaseFirestore.instance
+                            .collection('faculty_details')
+                            .doc(fileInfo.facultyId)
+                            .delete();
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Delete")),
+                ],
+              );
+            });
+      }
     },
     cells: [
       DataCell(Text(
