@@ -1,13 +1,10 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/screens/notice/publish_notice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/book.dart';
 import '../../models/notice.dart';
 import '../../notifiers/authNotifier.dart';
 
@@ -38,7 +35,7 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
             children: [
               Card(
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.search), hintText: 'Search...'),
                   onChanged: (val) {
                     setState(() {
@@ -54,9 +51,9 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     _notice = <Notice>[];
-                    snapshot.data!.docs.forEach((item) {
+                    for (var item in snapshot.data!.docs) {
                       _notice.add(Notice(
                         title: item['title'],
                         description: item['message'],
@@ -64,22 +61,22 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                             DateTime.parse(item['published_at'].toString()),
                         id: item.id,
                       ));
-                    });
-                    List<Notice> _suggestionList = (name == '' || name == null)
+                    }
+                    List<Notice> suggestionList = (name == '')
                         ? _notice
                         : _notice
                             .where((element) => element.title
                                 .toLowerCase()
                                 .contains(name.toLowerCase()))
                             .toList();
-                    if (_suggestionList.length > 0) {
+                    if (suggestionList.isNotEmpty) {
                       return Container(
-                        margin: EdgeInsets.only(top: 10.0),
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        margin: const EdgeInsets.only(top: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _suggestionList.length,
+                            itemCount: suggestionList.length,
                             itemBuilder: (context, int i) {
                               return GestureDetector(
                                 onTap: () {
@@ -87,9 +84,9 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
-                                          title: Text(_suggestionList[i].title),
+                                          title: Text(suggestionList[i].title),
                                           content: Text(
-                                              _suggestionList[i].description),
+                                              suggestionList[i].description),
                                           actions: [
                                             if (authNotifier
                                                     .userDetails!.role ==
@@ -102,17 +99,17 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 PublishNoticeScreen(
-                                                                  id: _suggestionList[
+                                                                  id: suggestionList[
                                                                           i]
                                                                       .id,
                                                                 )));
                                                   },
-                                                  child: Text("Edit")),
+                                                  child: const Text("Edit")),
                                             TextButton(
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                                child: Text("Close"))
+                                                child: const Text("Close"))
                                           ],
                                         );
                                       });
@@ -124,22 +121,22 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            title: Text("Delete Notice"),
-                                            content: Text(
+                                            title: const Text("Delete Notice"),
+                                            content: const Text(
                                                 "Are you sure you want to delete this notice?"),
                                             actions: [
                                               TextButton(
                                                   onPressed: () {
                                                     deleteNotice(
-                                                        _suggestionList[i].id);
+                                                        suggestionList[i].id);
                                                     Navigator.pop(context);
                                                   },
-                                                  child: Text("Yes")),
+                                                  child: const Text("Yes")),
                                               TextButton(
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                   },
-                                                  child: Text("No"))
+                                                  child: const Text("No"))
                                             ],
                                           );
                                         });
@@ -147,7 +144,7 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                                 },
                                 behavior: HitTestBehavior.opaque,
                                 child: Container(
-                                  margin: EdgeInsets.only(bottom: 20.0),
+                                  margin: const EdgeInsets.only(bottom: 20.0),
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -158,7 +155,7 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "Title: ${_suggestionList[i].title}"),
+                                              "Title: ${suggestionList[i].title}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
@@ -166,7 +163,7 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                                                 0.01,
                                           ),
                                           Text(
-                                              "Date Issued: ${DateFormat("d MMM yyyy hh:mm aa").format(_suggestionList[i].issueDate)}"),
+                                              "Date Issued: ${DateFormat("d MMM yyyy hh:mm aa").format(suggestionList[i].issueDate)}"),
                                         ],
                                       ),
                                     ],
@@ -177,16 +174,16 @@ class _ViewNoticeScreenState extends State<ViewNoticeScreen> {
                       );
                     } else {
                       return Container(
-                        padding: EdgeInsets.symmetric(vertical: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 20),
                         width: MediaQuery.of(context).size.width * 0.6,
-                        child: Text("No Items to display"),
+                        child: const Text("No Items to display"),
                       );
                     }
                   } else {
                     return Container(
-                      padding: EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
                       width: MediaQuery.of(context).size.width * 0.6,
-                      child: Text("No Items to display"),
+                      child: const Text("No Items to display"),
                     );
                   }
                 },

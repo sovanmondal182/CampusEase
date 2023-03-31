@@ -1,14 +1,18 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/models/food.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
@@ -70,41 +74,41 @@ class _HomePageState extends State<HomePage> {
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+                if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                   _foodItems = <Food>[];
-                  snapshot.data!.docs.forEach((item) {
+                  for (var item in snapshot.data!.docs) {
                     _foodItems.add(Food(item.id, item['item_name'],
                         item['total_qty'], item['price']));
-                  });
-                  List<Food> _suggestionList = (name == '' || name == null)
+                  }
+                  List<Food> suggestionList = (name == '')
                       ? _foodItems
                       : _foodItems
                           .where((element) => element.itemName!
                               .toLowerCase()
                               .contains(name.toLowerCase()))
                           .toList();
-                  if (_suggestionList.length > 0) {
+                  if (suggestionList.isNotEmpty) {
                     return Container(
                       margin: const EdgeInsets.only(top: 10.0),
                       child: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _suggestionList.length,
+                          itemCount: suggestionList.length,
                           itemBuilder: (context, int i) {
                             return ListTile(
-                                title: Text(_suggestionList[i].itemName ?? ''),
+                                title: Text(suggestionList[i].itemName ?? ''),
                                 subtitle: Text(
-                                    'cost: ${_suggestionList[i].price.toString()}'),
+                                    'cost: ${suggestionList[i].price.toString()}'),
                                 trailing: IconButton(
-                                  icon: cartIds.contains(_suggestionList[i].id)
-                                      ? new Icon(Icons.remove)
-                                      : new Icon(Icons.add),
+                                  icon: cartIds.contains(suggestionList[i].id)
+                                      ? const Icon(Icons.remove)
+                                      : const Icon(Icons.add),
                                   onPressed: () async {
-                                    cartIds.contains(_suggestionList[i].id)
+                                    cartIds.contains(suggestionList[i].id)
                                         ? await removeFromCart(
-                                            _suggestionList[i], context)
+                                            suggestionList[i], context)
                                         : await addToCart(
-                                            _suggestionList[i], context);
+                                            suggestionList[i], context);
                                     setState(() {
                                       getCart(authNotifier.userDetails!.uuid!);
                                     });

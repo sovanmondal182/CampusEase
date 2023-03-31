@@ -1,12 +1,7 @@
 import 'package:campus_ease/models/mess_review_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-
-import '../../notifiers/authNotifier.dart';
 
 class MessReviewLog extends StatefulWidget {
   const MessReviewLog({super.key});
@@ -21,8 +16,6 @@ class _MessReviewLogState extends State<MessReviewLog> {
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mess Review Log'),

@@ -1,6 +1,8 @@
+// ignore_for_file: file_names
+
 import 'dart:io';
 
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/canteen/orderDetails.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
@@ -10,13 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -66,14 +69,13 @@ class _ProfilePageState extends State<ProfilePage> {
             FirebaseStorage.instance.ref().child('profiles/$firebaseId');
         UploadTask uploadTask = storage.putFile(File(pickedFile.path));
         String imgUrl = await (await uploadTask).ref.getDownloadURL();
-        print(imgUrl);
         authNotifier.userDetails!.photoUrl = imgUrl;
         profileUpdate(authNotifier.userDetails!);
         setState(() {
           uploading = true;
         });
       } catch (e) {
-        print("ERROR " + e.toString());
+        debugPrint(e.toString());
       }
     });
   }
@@ -85,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<CroppedFile?> cropSelectedImage(String filePath) async {
     return await ImageCropper().cropImage(
       sourcePath: filePath,
-      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+      aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
     );
   }
 
@@ -95,17 +97,17 @@ class _ProfilePageState extends State<ProfilePage> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wallet'),
+        title: const Text('Wallet'),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(top: 30, right: 10),
+                  padding: const EdgeInsets.only(top: 30, right: 10),
                 ),
               ],
             ),
@@ -127,39 +129,39 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: CircleAvatar(
                       backgroundColor: Colors.grey.withOpacity(0.3),
                       radius: 40,
-                      child: Icon(
+                      child: const Icon(
                         Icons.person,
                         size: 70,
                       ),
                     ),
                   ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             authNotifier.userDetails!.displayName != null
                 ? Text(
                     authNotifier.userDetails!.displayName!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 30,
                       fontFamily: 'MuseoModerno',
                       fontWeight: FontWeight.bold,
                     ),
                   )
-                : Text("You don't have a user name"),
-            SizedBox(
+                : const Text("You don't have a user name"),
+            const SizedBox(
               height: 10,
             ),
             authNotifier.userDetails!.balance != null
                 ? Text(
                     "Balance: ${authNotifier.userDetails!.balance} INR",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                       fontFamily: 'MuseoModerno',
                     ),
                   )
-                : Text(
+                : const Text(
                     "Balance: 0 INR",
                     style: TextStyle(
                       color: Colors.black,
@@ -167,7 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontFamily: 'MuseoModerno',
                     ),
                   ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             GestureDetector(
@@ -179,12 +181,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       return popupForm(context);
                     });
               },
-              child: CustomRaisedButton(buttonText: 'Add Money'),
+              child: const CustomRaisedButton(buttonText: 'Add Money'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
-            Text(
+            const Text(
               "Order History",
               style: TextStyle(
                 color: Colors.black,
@@ -209,10 +211,10 @@ class _ProfilePageState extends State<ProfilePage> {
           .orderBy("placed_at", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+        if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
           List<dynamic> orders = snapshot.data!.docs;
           return Container(
-            margin: EdgeInsets.only(top: 10.0),
+            margin: const EdgeInsets.only(top: 10.0),
             child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -240,9 +242,9 @@ class _ProfilePageState extends State<ProfilePage> {
           );
         } else {
           return Container(
-            padding: EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             width: MediaQuery.of(context).size.width * 0.6,
-            child: Text(""),
+            child: const Text(""),
           );
         }
       },
@@ -261,7 +263,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   "Deposit Money",
@@ -273,24 +275,25 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   validator: (String? value) {
-                    if (int.tryParse(value!) == null)
+                    if (int.tryParse(value!) == null) {
                       return "Not a valid integer";
-                    else if (int.parse(value) < 100)
+                    } else if (int.parse(value) < 100) {
                       return "Minimum Deposit is 100 INR";
-                    else if (int.parse(value) > 1000)
+                    } else if (int.parse(value) > 1000) {
                       return "Maximum Deposit is 1000 INR";
-                    else
+                    } else {
                       return null;
+                    }
                   },
-                  keyboardType: TextInputType.numberWithOptions(),
+                  keyboardType: const TextInputType.numberWithOptions(),
                   onSaved: (String? value) {
                     amount = int.parse(value!);
                   },
-                  cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                  decoration: InputDecoration(
+                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  decoration: const InputDecoration(
                     hintText: 'Money in INR',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -304,7 +307,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
@@ -312,7 +315,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       return openCheckout(amount);
                     }
                   },
-                  child: CustomRaisedButton(buttonText: 'Add Money'),
+                  child: const CustomRaisedButton(buttonText: 'Add Money'),
                 ),
               ),
             ],
@@ -363,11 +366,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    toast("ERROR: " + response.code.toString() + " - " + response.message!);
+    toast("ERROR: ${response.code} - ${response.message!}");
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    toast("EXTERNAL_WALLET: " + response.walletName!);
+    toast("EXTERNAL_WALLET: ${response.walletName!}");
     Navigator.pop(context);
   }
 }

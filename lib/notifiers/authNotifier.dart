@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, library_prefixes
+
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:campus_ease/models/user.dart' as UserModel;

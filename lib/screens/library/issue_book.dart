@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
-import '../../apis/foodAPIs.dart';
+import '../../apis/allAPIs.dart';
 import '../../widgets/customRaisedButton.dart';
 
 class IssueBookScreen extends StatefulWidget {
@@ -29,7 +27,7 @@ class _IssueBookScreenState extends State<IssueBookScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     "Issue a Book",
@@ -41,20 +39,21 @@ class _IssueBookScreenState extends State<IssueBookScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     validator: (String? value) {
-                      if (value!.length < 3)
+                      if (value!.length < 3) {
                         return "Not a valid name";
-                      else
+                      } else {
                         return null;
+                      }
                     },
                     keyboardType: TextInputType.text,
                     onSaved: (String? value) {
                       bookName = value!;
                     },
-                    cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                    decoration: InputDecoration(
+                    cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                    decoration: const InputDecoration(
                       hintText: 'Book Name',
                       hintStyle: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -68,22 +67,23 @@ class _IssueBookScreenState extends State<IssueBookScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     validator: (String? value) {
-                      if (value!.length < 3)
+                      if (value!.length < 3) {
                         return "Not a valid bookId";
-                      else if (int.tryParse(value) == null)
+                      } else if (int.tryParse(value) == null) {
                         return "Not a valid integer";
-                      else
+                      } else {
                         return null;
+                      }
                     },
-                    keyboardType: TextInputType.numberWithOptions(),
+                    keyboardType: const TextInputType.numberWithOptions(),
                     onSaved: (String? value) {
                       bookId = int.parse(value!);
                     },
-                    cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                    decoration: InputDecoration(
+                    cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                    decoration: const InputDecoration(
                       hintText: 'Book ID',
                       hintStyle: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -97,22 +97,23 @@ class _IssueBookScreenState extends State<IssueBookScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     validator: (String? value) {
-                      if (value!.length != 14)
+                      if (value!.length != 14) {
                         return "Enroll No must be 14 digits";
-                      else if (int.tryParse(value) == null)
+                      } else if (int.tryParse(value) == null) {
                         return "Not a valid integer";
-                      else
+                      } else {
                         return null;
+                      }
                     },
-                    keyboardType: TextInputType.numberWithOptions(),
+                    keyboardType: const TextInputType.numberWithOptions(),
                     onSaved: (String? value) {
                       enrollNo = int.parse(value!);
                     },
-                    cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                    decoration: InputDecoration(
+                    cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                    decoration: const InputDecoration(
                       hintText: 'Enrollment Number',
                       hintStyle: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -126,7 +127,7 @@ class _IssueBookScreenState extends State<IssueBookScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
@@ -134,7 +135,7 @@ class _IssueBookScreenState extends State<IssueBookScreen> {
                         issueBook(bookName, bookId, enrollNo, context);
                       }
                     },
-                    child: CustomRaisedButton(buttonText: 'Issue'),
+                    child: const CustomRaisedButton(buttonText: 'Issue'),
                   ),
                 ),
               ],

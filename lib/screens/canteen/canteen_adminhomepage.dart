@@ -1,4 +1,4 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,8 +9,10 @@ import 'package:provider/provider.dart';
 import 'admin_order_history.dart';
 
 class AdminHomePage extends StatefulWidget {
+  const AdminHomePage({super.key});
+
   @override
-  _AdminHomePageState createState() => _AdminHomePageState();
+  State<AdminHomePage> createState() => _AdminHomePageState();
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
@@ -39,7 +41,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             icon: const Icon(Icons.person_2_rounded),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AdminOrderDetailsPage();
+                return const AdminOrderDetailsPage();
               }));
             },
           ),
@@ -289,7 +291,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       addNewItem(itemName, price, totalQty, context);
                     }
                   },
-                  child: CustomRaisedButton(buttonText: 'Add Item'),
+                  child: const CustomRaisedButton(buttonText: 'Add Item'),
                 ),
               ),
             ],
@@ -423,7 +425,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       editItem(itemName, price, totalQty, context, data.id!);
                     }
                   },
-                  child: CustomRaisedButton(buttonText: 'Edit Item'),
+                  child: const CustomRaisedButton(buttonText: 'Edit Item'),
                 ),
               ),
             ],
@@ -447,7 +449,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 onTap: () {
                   deleteItem(data.id!, context);
                 },
-                child: CustomRaisedButton(buttonText: 'Delete Item'),
+                child: const CustomRaisedButton(buttonText: 'Delete Item'),
               ),
             ),
             Padding(
@@ -456,7 +458,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 onTap: () {
                   editItem(data.itemName!, data.price!, 0, context, data.id!);
                 },
-                child: CustomRaisedButton(buttonText: 'Empty Item'),
+                child: const CustomRaisedButton(buttonText: 'Empty Item'),
               ),
             ),
           ],

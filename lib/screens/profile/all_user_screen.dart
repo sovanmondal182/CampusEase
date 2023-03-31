@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:campus_ease/screens/profile/update_user_details.dart';
 
 import '../../models/user.dart';
-import '../../notifiers/authNotifier.dart';
 
 class AllUserScreen extends StatefulWidget {
   const AllUserScreen({super.key});

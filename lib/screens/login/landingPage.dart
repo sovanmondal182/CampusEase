@@ -1,19 +1,19 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+// ignore_for_file: file_names, avoid_print
+
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/canteen/canteen_adminhomepage.dart';
 
 import 'package:campus_ease/screens/login/login.dart';
-import 'package:campus_ease/screens/canteen/canteen_navigationBar.dart';
-import 'package:campus_ease/screens/notice/view_notice.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../notificationservice/local_notification_service.dart';
 import '../dashboard/admin_dashboard.dart';
 
+import '../dashboard/faculty_dashboard.dart';
 import '../dashboard/student_dashboard_screen.dart';
+import '../outing/outing_admin.dart';
+import '../service/service_admin_screen.dart';
 
 // import 'package:foodlab/api/food_api.dart';
 // import 'package:foodlab/screens/login_signup_page.dart';
@@ -22,8 +22,10 @@ import '../dashboard/student_dashboard_screen.dart';
 // import 'package:provider/provider.dart';
 
 class LandingPage extends StatefulWidget {
+  const LandingPage({super.key});
+
   @override
-  _LandingPageState createState() => _LandingPageState();
+  State<LandingPage> createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage>
@@ -46,43 +48,70 @@ class _LandingPageState extends State<LandingPage>
             (authNotifier.user == null)
                 ? Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (BuildContext context) {
-                    return LoginPage();
+                    return const LoginPage();
                   }))
                 : (authNotifier.userDetails == null)
                     ? print('wait')
                     : (authNotifier.userDetails!.role == 'admin')
                         ? Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (BuildContext context) {
-                              return AdminDashboardScreen();
+                              return const AdminDashboardScreen();
                             },
                           ))
                         : (authNotifier.userDetails!.role == 'faculty')
                             ? Navigator.pushReplacement(context,
                                 MaterialPageRoute(
                                 builder: (BuildContext context) {
-                                  return AdminDashboardScreen();
+                                  return const FacultyDashboardScreen();
                                 },
                               ))
                             : (authNotifier.userDetails!.role == 'worker')
                                 ? Navigator.pushReplacement(context,
                                     MaterialPageRoute(
                                     builder: (BuildContext context) {
-                                      return AdminDashboardScreen();
+                                      return const ServiceAdminScreen();
                                     },
                                   ))
                                 : (authNotifier.userDetails!.role == 'canteen')
                                     ? Navigator.pushReplacement(context,
                                         MaterialPageRoute(
                                         builder: (BuildContext context) {
-                                          return AdminHomePage();
+                                          return const AdminHomePage();
                                         },
                                       ))
-                                    : Navigator.pushReplacement(context,
-                                        MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                          return StudentDashBoardScreen();
-                                        },
-                                      ));
+                                    : (authNotifier.userDetails!.role ==
+                                            'warden')
+                                        ? Navigator.pushReplacement(context,
+                                            MaterialPageRoute(
+                                            builder: (BuildContext context) {
+                                              return const FacultyDashboardScreen();
+                                            },
+                                          ))
+                                        : (authNotifier.userDetails!.role ==
+                                                'librarian')
+                                            ? Navigator.pushReplacement(context,
+                                                MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return const FacultyDashboardScreen();
+                                                },
+                                              ))
+                                            : (authNotifier.userDetails!.role ==
+                                                    'guard')
+                                                ? Navigator.pushReplacement(
+                                                    context, MaterialPageRoute(
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return const OutingAdmin();
+                                                    },
+                                                  ))
+                                                : Navigator.pushReplacement(
+                                                    context, MaterialPageRoute(
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return const StudentDashBoardScreen();
+                                                    },
+                                                  ));
           }
         });
       });
@@ -96,7 +125,7 @@ class _LandingPageState extends State<LandingPage>
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color.fromRGBO(255, 138, 120, 1),
@@ -110,7 +139,7 @@ class _LandingPageState extends State<LandingPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: const <Widget>[
             Text(
               'CampusEase',
               style: TextStyle(
@@ -120,47 +149,6 @@ class _LandingPageState extends State<LandingPage>
                 fontFamily: 'MuseoModerno',
               ),
             ),
-            // SizedBox(
-            //   height: MediaQuery.of(context).size.height * 0.1,
-            // ),
-            // GestureDetector(
-            //   onTap: () {
-            //     (authNotifier.user == null)
-            //         ? Navigator.pushReplacement(context,
-            //             MaterialPageRoute(builder: (BuildContext context) {
-            //             return LoginPage();
-            //           }))
-            //         : (authNotifier.userDetails == null)
-            //             ? print('wait')
-            //             : (authNotifier.userDetails!.role == 'admin')
-            //                 ? Navigator.pushReplacement(context,
-            //                     MaterialPageRoute(
-            //                     builder: (BuildContext context) {
-            //                       return AdminHomePage();
-            //                     },
-            //                   ))
-            //                 : Navigator.pushReplacement(context,
-            //                     MaterialPageRoute(
-            //                     builder: (BuildContext context) {
-            //                       return NavigationBarPage(selectedIndex: 1);
-            //                     },
-            //                   ));
-            //   },
-            //   child: Container(
-            //     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-            //     decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(30),
-            //     ),
-            //     child: Text(
-            //       "Explore",
-            //       style: TextStyle(
-            //         fontSize: 20,
-            //         color: Color.fromRGBO(255, 63, 111, 1),
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

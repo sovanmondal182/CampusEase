@@ -1,8 +1,6 @@
 import 'package:campus_ease/screens/library/library_in_out.dart';
 import 'package:campus_ease/widgets/dashboard_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'view_issued_book.dart';
 
@@ -22,7 +20,7 @@ class _LibraryStudentScreenState extends State<LibraryStudentScreen> {
       ),
       body: SafeArea(
           child: GridView(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1.0,
@@ -33,14 +31,16 @@ class _LibraryStudentScreenState extends State<LibraryStudentScreen> {
           DashBoardItem(
             text: 'View Issued Books',
             image: 'library',
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ViewIssuedBook())),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ViewIssuedBook())),
           ),
           DashBoardItem(
             text: 'Library In-Out',
             image: 'outing',
             onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => LibraryInOut())),
+                MaterialPageRoute(builder: (context) => const LibraryInOut())),
           ),
         ],
       )),

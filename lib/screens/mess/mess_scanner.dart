@@ -1,17 +1,7 @@
-import 'dart:typed_data';
-
 import 'package:campus_ease/screens/mess/mess_review_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_scanner/mobile_scanner.dart' as mobile_scanner;
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:provider/provider.dart';
-
-import '../../apis/foodAPIs.dart';
-import '../../notifiers/authNotifier.dart';
 
 class MessScanner extends StatefulWidget {
   const MessScanner({super.key});
@@ -27,8 +17,6 @@ class _MessScannerState extends State<MessScanner> {
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Mess Review'),
@@ -38,7 +26,7 @@ class _MessScannerState extends State<MessScanner> {
               icon: ValueListenableBuilder(
                 valueListenable: cameraController.torchState,
                 builder: (context, state, child) {
-                  switch (state as mobile_scanner.TorchState) {
+                  switch (state) {
                     case mobile_scanner.TorchState.off:
                       return const Icon(Icons.flash_off, color: Colors.grey);
                     case mobile_scanner.TorchState.on:
@@ -54,7 +42,7 @@ class _MessScannerState extends State<MessScanner> {
               icon: ValueListenableBuilder(
                 valueListenable: cameraController.cameraFacingState,
                 builder: (context, state, child) {
-                  switch (state as mobile_scanner.CameraFacing) {
+                  switch (state) {
                     case mobile_scanner.CameraFacing.front:
                       return const Icon(Icons.camera_front);
                     case mobile_scanner.CameraFacing.back:
@@ -76,12 +64,11 @@ class _MessScannerState extends State<MessScanner> {
                 final List<Barcode> barcodes = capture.barcodes;
                 for (final barcode in barcodes) {
                   Navigator.pop(context);
-                  print('Barcode found! ${barcode.rawValue}');
                   if (barcode.rawValue == "Mess") {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MessReviewScreen()));
+                            builder: (context) => const MessReviewScreen()));
                   }
                 }
               },

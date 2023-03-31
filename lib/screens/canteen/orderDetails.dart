@@ -1,21 +1,21 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+// ignore_for_file: file_names
+
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/canteen/order_deliver_scanner.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class OrderDetailsPage extends StatefulWidget {
   final dynamic orderdata;
 
-  OrderDetailsPage(this.orderdata);
+  const OrderDetailsPage(this.orderdata, {super.key});
 
   @override
-  _OrderDetailsPageState createState() => _OrderDetailsPageState();
+  State<OrderDetailsPage> createState() => _OrderDetailsPageState();
 }
 
 class _OrderDetailsPageState extends State<OrderDetailsPage> {
@@ -35,15 +35,15 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Details'),
+        title: const Text('Order Details'),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
-              Text(
+              const Text(
                 "Order Details",
                 style: TextStyle(
                   color: Colors.black,
@@ -52,7 +52,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ListView.builder(
@@ -64,14 +64,14 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     return ListTile(
                       title: Text(
                         "${items[i]["item_name"]}",
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       subtitle: Text("Quantity: ${items[i]["count"]}"),
                       trailing: Text(
                           "Price: ${items[i]["count"]} * ${items[i]["price"]} = ${items[i]["price"] * items[i]["count"]} INR"),
                     );
                   }),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Column(
@@ -79,25 +79,25 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 children: [
                   Text(
                     "Ordered At: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(widget.orderdata['placed_at']))}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'MuseoModerno',
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   (widget.orderdata['delivery_at'] != "null")
                       ? Text(
                           "Delivered At: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(widget.orderdata['delivery_at']))}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 14,
                             fontFamily: 'MuseoModerno',
                           ),
                         )
-                      : Text(
+                      : const Text(
                           "Delivered At: -",
                           style: TextStyle(
                             color: Colors.black,
@@ -105,23 +105,23 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                             fontFamily: 'MuseoModerno',
                           ),
                         ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text(
                     "Total Amount: ${widget.orderdata['total'].toString()} INR",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'MuseoModerno',
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text(
                     "Status: ${widget.orderdata['is_delivered'] ? "Delivered" : "Pending"}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
                       fontFamily: 'MuseoModerno',
@@ -129,7 +129,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               (!widget.orderdata['is_delivered'])
@@ -145,7 +145,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Center(child: Text("Scan Me")),
+                                    title: const Center(child: Text("Scan Me")),
                                     content: Container(
                                       decoration: BoxDecoration(
                                         boxShadow: [
@@ -170,12 +170,13 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                             version: 5,
                                             semanticsLabel: 'Scan Me',
                                             data: widget.orderdata.id,
-                                            dataModuleStyle: QrDataModuleStyle(
+                                            dataModuleStyle:
+                                                const QrDataModuleStyle(
                                               dataModuleShape:
                                                   QrDataModuleShape.circle,
                                               color: Colors.black,
                                             ),
-                                            eyeStyle: QrEyeStyle(
+                                            eyeStyle: const QrEyeStyle(
                                               eyeShape: QrEyeShape.circle,
                                               color: Colors.black,
                                             ),
@@ -188,13 +189,12 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: Text("Close"),
+                                        child: const Text("Close"),
                                       ),
                                     ],
                                   );
                                 });
                         // orderReceived(widget.orderdata.id, context);
-                        print(widget.orderdata.id);
                       },
                       child: CustomRaisedButton(
                           buttonText:
@@ -202,7 +202,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                   ? 'Delivered'
                                   : 'Received'),
                     )
-                  : Text(""),
+                  : const Text(""),
             ],
           ),
         ),

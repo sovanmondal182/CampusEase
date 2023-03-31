@@ -1,15 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_scanner/mobile_scanner.dart' as mobile_scanner;
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
-import '../../apis/foodAPIs.dart';
+import '../../apis/allAPIs.dart';
 import '../../notifiers/authNotifier.dart';
 
 class OutingInOut extends StatefulWidget {
@@ -75,7 +69,6 @@ class _OutingInOutState extends State<OutingInOut> {
                 final List<Barcode> barcodes = capture.barcodes;
                 for (final barcode in barcodes) {
                   Navigator.pop(context);
-                  print('Barcode found! ${barcode.rawValue}');
                   if (barcode.rawValue == "Outing") {
                     showDialog(
                         context: context,
@@ -102,7 +95,6 @@ class _OutingInOutState extends State<OutingInOut> {
                             ],
                           );
                         });
-                    print("Entry Successful");
                   }
                 }
               },

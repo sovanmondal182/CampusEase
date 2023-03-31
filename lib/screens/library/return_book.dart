@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
-import '../../apis/foodAPIs.dart';
+import '../../apis/allAPIs.dart';
 import '../../widgets/customRaisedButton.dart';
 
 class ReturnBookScreen extends StatefulWidget {
@@ -16,8 +14,7 @@ class _ReturnBookScreenState extends State<ReturnBookScreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    String? bookName;
-    int? enrollNo, bookId;
+    int? bookId;
     return Scaffold(
         appBar: AppBar(
           title: const Text('Return Book'),
@@ -29,7 +26,7 @@ class _ReturnBookScreenState extends State<ReturnBookScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
                     "Return a Book",
@@ -41,22 +38,23 @@ class _ReturnBookScreenState extends State<ReturnBookScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     validator: (String? value) {
-                      if (value!.length < 3)
+                      if (value!.length < 3) {
                         return "Not a valid bookId";
-                      else if (int.tryParse(value) == null)
+                      } else if (int.tryParse(value) == null) {
                         return "Not a valid integer";
-                      else
+                      } else {
                         return null;
+                      }
                     },
-                    keyboardType: TextInputType.numberWithOptions(),
+                    keyboardType: const TextInputType.numberWithOptions(),
                     onSaved: (String? value) {
                       bookId = int.parse(value!);
                     },
-                    cursorColor: Color.fromRGBO(255, 63, 111, 1),
-                    decoration: InputDecoration(
+                    cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                    decoration: const InputDecoration(
                       hintText: 'Book ID',
                       hintStyle: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -70,7 +68,7 @@ class _ReturnBookScreenState extends State<ReturnBookScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
@@ -78,7 +76,7 @@ class _ReturnBookScreenState extends State<ReturnBookScreen> {
                         returnBook(bookId.toString(), context);
                       }
                     },
-                    child: CustomRaisedButton(buttonText: 'Return'),
+                    child: const CustomRaisedButton(buttonText: 'Return'),
                   ),
                 ),
               ],

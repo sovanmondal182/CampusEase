@@ -1,22 +1,23 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/login/forgotPassword.dart';
 import 'package:campus_ease/screens/login/signup.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:campus_ease/models/user.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  User _user = new User();
+  final User _user = User();
   bool isSignedIn = false, showPassword = true;
 
   @override
@@ -43,14 +44,13 @@ class _LoginPageState extends State<LoginPage> {
     _formkey.currentState!.save();
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
-    RegExp regExp = new RegExp(
-        r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$');
+    RegExp regExp =
+        RegExp(r'^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$');
     if (!regExp.hasMatch(_user.email!)) {
       toast("Enter a valid Email ID");
     } else if (_user.password!.length < 8) {
       toast("Password must have atleast 8 characters");
     } else {
-      print("Success");
       login(_user, authNotifier, context);
     }
   }
@@ -58,13 +58,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLoginForm() {
     return Column(
       children: <Widget>[
-        SizedBox(
+        const SizedBox(
           height: 120,
         ),
         // Email Text Field
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 40),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(40),
@@ -77,8 +77,8 @@ class _LoginPageState extends State<LoginPage> {
             onSaved: (String? value) {
               _user.email = value!;
             },
-            cursorColor: Color.fromRGBO(255, 63, 111, 1),
-            decoration: InputDecoration(
+            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Email',
               hintStyle: TextStyle(
@@ -92,13 +92,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ), //EMAIL TEXT FIELD
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         // Password Text Field
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 40),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(40),
@@ -112,12 +112,12 @@ class _LoginPageState extends State<LoginPage> {
               _user.password = value!;
             },
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
             decoration: InputDecoration(
               suffixIcon: IconButton(
                   icon: Icon(
                     (showPassword) ? Icons.visibility_off : Icons.visibility,
-                    color: Color.fromRGBO(255, 63, 111, 1),
+                    color: const Color.fromRGBO(255, 63, 111, 1),
                   ),
                   onPressed: () {
                     setState(() {
@@ -126,55 +126,53 @@ class _LoginPageState extends State<LoginPage> {
                   }),
               border: InputBorder.none,
               hintText: 'Password',
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Color.fromRGBO(255, 63, 111, 1),
               ),
-              icon: Icon(
+              icon: const Icon(
                 Icons.lock,
                 color: Color.fromRGBO(255, 63, 111, 1),
               ),
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         // Forgot Password Line
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'Forgot Password?',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return ForgotPasswordPage();
+                    return const ForgotPasswordPage();
                   },
                 ));
               },
-              child: Container(
-                child: Text(
-                  'Reset here',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
+              child: const Text(
+                'Reset here',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 50,
         ),
         //LOGIN BUTTON
@@ -183,12 +181,12 @@ class _LoginPageState extends State<LoginPage> {
             _submitForm();
           },
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
             ),
-            child: Text(
+            child: const Text(
               "Log In",
               style: TextStyle(
                 fontSize: 20,
@@ -197,39 +195,37 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 60,
         ),
         // SignUp Line
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'Not a registered user?',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return SignupPage();
+                    return const SignupPage();
                   },
                 ));
               },
-              child: Container(
-                child: Text(
-                  'Sign Up here',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
+              child: const Text(
+                'Sign Up here',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -244,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color.fromRGBO(255, 138, 120, 1),
@@ -264,8 +260,8 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 GestureDetector(
                   child: Container(
-                    padding: EdgeInsets.only(top: 60),
-                    child: Text(
+                    padding: const EdgeInsets.only(top: 60),
+                    child: const Text(
                       'CampusEase',
                       style: TextStyle(
                         fontSize: 50,
@@ -276,7 +272,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   '',
                   style: TextStyle(
                     fontStyle: FontStyle.italic,

@@ -1,4 +1,6 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+// ignore_for_file: file_names
+
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/models/cart.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
@@ -7,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
+  const CartPage({super.key});
+
   @override
-  _CartPageState createState() => _CartPageState();
+  State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
@@ -29,14 +33,14 @@ class _CartPageState extends State<CartPage> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Cart'),
+          title: const Text('Cart'),
         ),
         // ignore: unrelated_type_equality_checks
         body: (authNotifier.userDetails!.uuid == Null)
             ? Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 width: MediaQuery.of(context).size.width * 0.6,
-                child: Text("No Items to display"),
+                child: const Text("No Items to display"),
               )
             : cartList(context));
   }
@@ -45,7 +49,7 @@ class _CartPageState extends State<CartPage> {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     return SingleChildScrollView(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       child: Column(
         children: <Widget>[
           StreamBuilder<QuerySnapshot>(
@@ -56,20 +60,20 @@ class _CartPageState extends State<CartPage> {
                 .snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot1) {
-              if (snapshot1.hasData && snapshot1.data!.docs.length > 0) {
+              if (snapshot1.hasData && snapshot1.data!.docs.isNotEmpty) {
                 List<String> foodIds = <String>[];
-                Map<String, int> count = new Map<String, int>();
-                snapshot1.data!.docs.forEach((item) {
+                Map<String, int> count = <String, int>{};
+                for (var item in snapshot1.data!.docs) {
                   foodIds.add(item.id);
                   count[item.id] = item['count'];
-                });
+                }
                 return dataDisplay(
                     context, authNotifier.userDetails!.uuid!, foodIds, count);
               } else {
                 return Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   width: MediaQuery.of(context).size.width * 0.6,
-                  child: Text("No Items to display"),
+                  child: const Text("No Items to display"),
                 );
               }
             },
@@ -87,77 +91,74 @@ class _CartPageState extends State<CartPage> {
           .where(FieldPath.documentId, whereIn: foodIds)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasData && snapshot.data!.docs.length > 0) {
-          List<Cart> _cartItems = <Cart>[];
-          snapshot.data!.docs.forEach((item) {
-            _cartItems.add(Cart(item.id, count[item.id]!, item['item_name'],
+        if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+          List<Cart> cartItems = <Cart>[];
+          for (var item in snapshot.data!.docs) {
+            cartItems.add(Cart(item.id, count[item.id]!, item['item_name'],
                 item['total_qty'], item['price']));
-          });
-          if (_cartItems.length > 0) {
+          }
+          if (cartItems.isNotEmpty) {
             sum = 0;
             itemsCount = 0;
-            _cartItems.forEach((element) {
-              if (element.price != null && element.count != null) {
-                sum += element.price * element.count;
-                itemsCount += element.count;
-              }
-            });
+            for (var element in cartItems) {
+              sum += element.price * element.count;
+              itemsCount += element.count;
+            }
             return Container(
-                margin: EdgeInsets.only(top: 10.0),
+                margin: const EdgeInsets.only(top: 10.0),
                 child: Column(
                   children: [
                     ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _cartItems.length,
+                        itemCount: cartItems.length,
                         itemBuilder: (context, int i) {
                           return ListTile(
-                            title: Text(_cartItems[i].itemName ?? ''),
+                            title: Text(cartItems[i].itemName),
                             subtitle:
-                                Text('cost: ${_cartItems[i].price.toString()}'),
+                                Text('cost: ${cartItems[i].price.toString()}'),
                             trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  (_cartItems[i].count == null ||
-                                          _cartItems[i].count <= 1)
+                                  (cartItems[i].count <= 1)
                                       ? IconButton(
                                           onPressed: () async {
                                             setState(() {
                                               foodIds
-                                                  .remove(_cartItems[i].itemId);
+                                                  .remove(cartItems[i].itemId);
                                             });
                                             await editCartItem(
-                                                _cartItems[i].itemId,
+                                                cartItems[i].itemId,
                                                 0,
                                                 context);
                                           },
-                                          icon: new Icon(Icons.delete),
+                                          icon: const Icon(Icons.delete),
                                         )
                                       : IconButton(
                                           onPressed: () async {
                                             await editCartItem(
-                                                _cartItems[i].itemId,
-                                                (_cartItems[i].count - 1),
+                                                cartItems[i].itemId,
+                                                (cartItems[i].count - 1),
                                                 context);
                                           },
-                                          icon: new Icon(Icons.remove),
+                                          icon: const Icon(Icons.remove),
                                         ),
                                   Text(
-                                    '${_cartItems[i].count ?? 0}',
-                                    style: TextStyle(fontSize: 18.0),
+                                    '${cartItems[i].count}',
+                                    style: const TextStyle(fontSize: 18.0),
                                   ),
                                   IconButton(
-                                    icon: new Icon(Icons.add),
+                                    icon: const Icon(Icons.add),
                                     onPressed: () async {
-                                      await editCartItem(_cartItems[i].itemId,
-                                          (_cartItems[i].count + 1), context);
+                                      await editCartItem(cartItems[i].itemId,
+                                          (cartItems[i].count + 1), context);
                                     },
                                   )
                                 ]),
                           );
                         }),
                     Text("Total ($itemsCount items): $sum INR"),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     GestureDetector(
@@ -165,25 +166,26 @@ class _CartPageState extends State<CartPage> {
                         showAlertDialog(
                             context, "Total ($itemsCount items): $sum INR");
                       },
-                      child: CustomRaisedButton(buttonText: 'Proceed to buy'),
+                      child: const CustomRaisedButton(
+                          buttonText: 'Proceed to buy'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 70,
                     ),
                   ],
                 ));
           } else {
             return Container(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               width: MediaQuery.of(context).size.width * 0.6,
-              child: Text("No Items to display"),
+              child: const Text("No Items to display"),
             );
           }
         } else {
           return Container(
-            padding: EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             width: MediaQuery.of(context).size.width * 0.6,
-            child: Text("No Items to display"),
+            child: const Text("No Items to display"),
           );
         }
       },
@@ -193,13 +195,13 @@ class _CartPageState extends State<CartPage> {
   showAlertDialog(BuildContext context, String data) {
     // set up the buttons
     Widget cancelButton = ElevatedButton(
-      child: Text("Cancel"),
+      child: const Text("Cancel"),
       onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = ElevatedButton(
-      child: Text("Place Order"),
+      child: const Text("Place Order"),
       onPressed: () {
         placeOrder(context, sum);
       },
@@ -207,7 +209,7 @@ class _CartPageState extends State<CartPage> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Proceed to checkout?"),
+      title: const Text("Proceed to checkout?"),
       content: Text(data),
       actions: [
         cancelButton,

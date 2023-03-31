@@ -1,14 +1,18 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/models/user.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
+
   @override
-  _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
@@ -45,7 +49,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (!regExp.hasMatch(_user.email!)) {
       toast("Enter a valid Email ID");
     } else {
-      print("Success");
       forgotPassword(_user, authNotifier, context);
     }
   }

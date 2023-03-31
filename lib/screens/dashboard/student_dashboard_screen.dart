@@ -1,16 +1,11 @@
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/outing/outing_in_out.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/dashboard_item.dart';
 import '../canteen/canteen_navigationBar.dart';
-import '../canteen/canteen_profilePage.dart';
 import '../faculty_details/faculty_details_table.dart';
 import '../library/library_student.dart';
 import '../mess/mess_student_screen.dart';
@@ -55,8 +50,6 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
-    final hight = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student Dashboard'),
@@ -66,7 +59,7 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => UserProfileScreen()));
+                        builder: (context) => const UserProfileScreen()));
               },
               icon: (authNotifier.userDetails!.photoUrl != null)
                   ? CircleAvatar(
@@ -91,7 +84,7 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                   image: 'library',
                   onTap: () => Navigator.push(context, MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return LibraryStudentScreen();
+                          return const LibraryStudentScreen();
                         },
                       ))),
               DashBoardItem(
@@ -102,7 +95,7 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: Text("Outing Timing"),
+                            title: const Text("Outing Timing"),
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -178,17 +171,17 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text("Cancel")),
+                                  child: const Text("Cancel")),
                               TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                        return OutingInOut();
+                                        return const OutingInOut();
                                       },
                                     ));
                                   },
-                                  child: Text("Next")),
+                                  child: const Text("Next")),
                             ],
                           );
                         });
@@ -198,7 +191,7 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                 image: 'mess',
                 onTap: () => Navigator.push(context, MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return MessStudentScreen();
+                    return const MessStudentScreen();
                   },
                 )),
               ),
@@ -212,10 +205,6 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                 )),
               ),
               const DashBoardItem(
-                text: 'Clubs',
-                image: 'clubs',
-              ),
-              const DashBoardItem(
                 text: 'Notice Board',
                 image: 'notice_board',
               ),
@@ -224,7 +213,7 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                 image: 'faculty_details',
                 onTap: () => Navigator.push(context, MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return FacultyDetailsTableScreen();
+                    return const FacultyDetailsTableScreen();
                   },
                 )),
               ),
@@ -234,12 +223,8 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ServiceStudentScreen(),
+                      builder: (context) => const ServiceStudentScreen(),
                     )),
-              ),
-              const DashBoardItem(
-                text: 'Calendar',
-                image: 'calendar',
               ),
             ]),
       ),

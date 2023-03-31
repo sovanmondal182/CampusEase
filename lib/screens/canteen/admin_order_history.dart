@@ -1,19 +1,16 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
-import 'package:campus_ease/widgets/customRaisedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import 'orderDetails.dart';
 
 class AdminOrderDetailsPage extends StatefulWidget {
-  AdminOrderDetailsPage();
+  const AdminOrderDetailsPage({super.key});
 
   @override
-  _AdminOrderDetailsPageState createState() => _AdminOrderDetailsPageState();
+  State<AdminOrderDetailsPage> createState() => _AdminOrderDetailsPageState();
 }
 
 class _AdminOrderDetailsPageState extends State<AdminOrderDetailsPage> {
@@ -36,14 +33,12 @@ class _AdminOrderDetailsPageState extends State<AdminOrderDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Details'),
+        title: const Text('Order Details'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.logout_rounded,
               color: Colors.white,
             ),
@@ -61,10 +56,10 @@ class _AdminOrderDetailsPageState extends State<AdminOrderDetailsPage> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+            if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
               List<dynamic> orders = snapshot.data!.docs;
               return Container(
-                margin: EdgeInsets.only(top: 10.0),
+                margin: const EdgeInsets.only(top: 10.0),
                 child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -92,9 +87,9 @@ class _AdminOrderDetailsPageState extends State<AdminOrderDetailsPage> {
               );
             } else {
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 width: MediaQuery.of(context).size.width * 0.6,
-                child: Text(""),
+                child: const Text(""),
               );
             }
           },

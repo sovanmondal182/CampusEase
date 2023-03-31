@@ -1,12 +1,7 @@
-import 'package:campus_ease/screens/library/library_in_out.dart';
 import 'package:campus_ease/screens/outing/outing_in_out_log.dart';
 import 'package:campus_ease/screens/outing/outing_setting.dart';
 import 'package:campus_ease/widgets/dashboard_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
-import 'outing_in_out.dart';
 
 class OutingAdmin extends StatefulWidget {
   const OutingAdmin({super.key});
@@ -24,7 +19,7 @@ class _OutingAdminState extends State<OutingAdmin> {
       ),
       body: SafeArea(
           child: GridView(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1.0,
@@ -36,13 +31,15 @@ class _OutingAdminState extends State<OutingAdmin> {
             text: 'Outing Setting',
             image: 'outing',
             onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OutingSetting())),
+                MaterialPageRoute(builder: (context) => const OutingSetting())),
           ),
           DashBoardItem(
             text: 'Outing Log',
             image: 'outing',
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OutingInOutLog())),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const OutingInOutLog())),
           ),
         ],
       )),

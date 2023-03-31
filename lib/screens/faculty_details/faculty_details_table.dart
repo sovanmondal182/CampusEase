@@ -1,10 +1,8 @@
 import 'package:campus_ease/models/faculty_details_model.dart';
-import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/faculty_details/faculty_details_add.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class FacultyDetailsTableScreen extends StatefulWidget {
   const FacultyDetailsTableScreen({
@@ -32,9 +30,9 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+            if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
               _faculty = <FacultyDetailsModel>[];
-              snapshot.data!.docs.forEach((item) {
+              for (var item in snapshot.data!.docs) {
                 _faculty.add(FacultyDetailsModel(
                   facultyId: item.id,
                   facultyName: item['facultyName'],
@@ -42,7 +40,7 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
                   facultyMobile: item['facultyMobile'],
                   facultyBranch: item['facultyBranch'],
                 ));
-              });
+              }
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SizedBox(
@@ -97,9 +95,9 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
               );
             } else {
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 width: MediaQuery.of(context).size.width * 0.6,
-                child: Text("No Items to display"),
+                child: const Text("No Items to display"),
               );
             }
           },
@@ -125,13 +123,13 @@ DataRow recentFileDataRow(BuildContext context, FacultyDetailsModel fileInfo) {
           builder: (context) {
             return AlertDialog(
               title: Text("Delete ${fileInfo.facultyName}"),
-              content: Text("Are you sure you want to delete this item?"),
+              content: const Text("Are you sure you want to delete this item?"),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("Cancel")),
+                    child: const Text("Cancel")),
                 TextButton(
                     onPressed: () {
                       FirebaseFirestore.instance
@@ -140,7 +138,7 @@ DataRow recentFileDataRow(BuildContext context, FacultyDetailsModel fileInfo) {
                           .delete();
                       Navigator.pop(context);
                     },
-                    child: Text("Delete")),
+                    child: const Text("Delete")),
               ],
             );
           });
