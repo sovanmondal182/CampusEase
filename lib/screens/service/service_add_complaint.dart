@@ -101,16 +101,30 @@ class _ServiceAddComplaintState extends State<ServiceAddComplaint> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    registerComplaint(authNotifier.userDetails, type,
-                        _reviewController.text, context);
-                    sendNotificationToRole(
-                        type, _reviewController.text, 'worker', 'worker');
-                    sendNotificationToSpecificUser(
-                        authNotifier.userDetails!.uuid,
-                        'Services',
-                        'Your complaint has been registered',
-                        'worker');
-                    Navigator.pop(context);
+                    if ((authNotifier.userDetails!.hostelName != null ||
+                            authNotifier.userDetails!.hostelName != "") &&
+                        (authNotifier.userDetails!.roomNo != null ||
+                            authNotifier.userDetails!.roomNo != "")) {
+                      registerComplaint(authNotifier.userDetails, type,
+                          _reviewController.text, context);
+                      sendNotificationToSpecificUser(
+                          authNotifier.userDetails!.uuid,
+                          'Services',
+                          'Your complaint has been registered',
+                          'worker');
+                      Navigator.pop(context);
+                    } else if ((authNotifier.userDetails!.hostelName == null ||
+                            authNotifier.userDetails!.hostelName == "") &&
+                        (authNotifier.userDetails!.roomNo == null ||
+                            authNotifier.userDetails!.roomNo == "")) {
+                      toast('Please update your hostel details in profile!');
+                    } else if (authNotifier.userDetails!.hostelName == null ||
+                        authNotifier.userDetails!.hostelName == "") {
+                      toast('Please update your hostel name in profile!');
+                    } else if (authNotifier.userDetails!.roomNo == null ||
+                        authNotifier.userDetails!.roomNo == "") {
+                      toast('Please update your room no in profile!');
+                    }
                   },
                   child: const CustomRaisedButton(buttonText: 'Submit'),
                 ),

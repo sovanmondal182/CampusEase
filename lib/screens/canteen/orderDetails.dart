@@ -78,6 +78,17 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
+                    "Order ID: ${widget.orderdata.id.substring(widget.orderdata.id.length - 5)}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'MuseoModerno',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
                     "Ordered At: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(widget.orderdata['placed_at']))}",
                     style: const TextStyle(
                       color: Colors.black,

@@ -51,6 +51,7 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
       authNotifier.setUser(firebaseUser);
     }
     await getUserDetails(authNotifier);
+    initializeCurrentUser(authNotifier, context);
 
     (authNotifier.userDetails!.role == 'admin')
         ? Navigator.pushReplacement(context, MaterialPageRoute(
@@ -109,6 +110,7 @@ signUp(u.User user, AuthNotifier authNotifier, BuildContext context) async {
     authNotifier.setUser(null);
 
     toast("Verification link is sent to ${user.email}");
+    initializeCurrentUser(authNotifier, context);
     Navigator.pop(context);
   } catch (error) {
     toast(error.toString());
@@ -775,7 +777,8 @@ placeOrder(BuildContext context, double total) async {
         "total": total,
         "placed_at": DateTime.now().toLocal().toString(),
         "delivery_at": "null",
-        "placed_by": currentUser.uid
+        "placed_by": currentUser.uid,
+        "user_name": userData["displayName"]
       });
 
       // Empty cart

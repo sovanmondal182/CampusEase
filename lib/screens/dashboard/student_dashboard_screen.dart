@@ -9,6 +9,7 @@ import '../canteen/canteen_navigationBar.dart';
 import '../faculty_details/faculty_details_table.dart';
 import '../library/library_student.dart';
 import '../mess/mess_student_screen.dart';
+import '../notice/view_notice.dart';
 import '../profile/user_profile.dart';
 import '../service/service_student.dart';
 
@@ -20,10 +21,10 @@ class StudentDashBoardScreen extends StatefulWidget {
 }
 
 class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
-  TextEditingController timeInWeekdays = TextEditingController();
-  TextEditingController timeOutWeekdays = TextEditingController();
-  TextEditingController timeInWeekends = TextEditingController();
-  TextEditingController timeOutWeekends = TextEditingController();
+  String timeInWeekdays = "";
+  String timeOutWeekdays = "";
+  String timeInWeekends = "";
+  String timeOutWeekends = "";
   fetch() async {
     CollectionReference itemRef =
         FirebaseFirestore.instance.collection('outing_setting');
@@ -33,10 +34,10 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
         .get()
         .then((value) async {
       for (var element in value.docs) {
-        timeInWeekdays.text = element['timeInWeekdays'];
-        timeOutWeekdays.text = element['timeOutWeekdays'];
-        timeInWeekends.text = element['timeInWeekends'];
-        timeOutWeekends.text = element['timeOutWeekends'];
+        timeInWeekdays = element['timeInWeekdays'];
+        timeOutWeekdays = element['timeOutWeekdays'];
+        timeInWeekends = element['timeInWeekends'];
+        timeOutWeekends = element['timeOutWeekends'];
       }
     });
   }
@@ -91,100 +92,7 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                   text: 'Outing',
                   image: 'outing',
                   onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text("Outing Timing"),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text('Weekdays'),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                Row(
-                                  children: [
-                                    const Expanded(child: Text('Out Time: ')),
-                                    const SizedBox(
-                                      width: 10.0,
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(timeOutWeekdays.text),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                Row(
-                                  children: [
-                                    const Expanded(child: Text('In Time: ')),
-                                    const SizedBox(
-                                      width: 10.0,
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(timeInWeekdays.text),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20.0,
-                                ),
-                                const Text('Weekends'),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                Row(
-                                  children: [
-                                    const Expanded(child: Text('Out Time: ')),
-                                    const SizedBox(
-                                      width: 10.0,
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(timeOutWeekends.text),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                Row(
-                                  children: [
-                                    const Expanded(child: Text('In Time: ')),
-                                    const SizedBox(
-                                      width: 10.0,
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(timeInWeekends.text),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("Cancel")),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                        return const OutingInOut();
-                                      },
-                                    ));
-                                  },
-                                  child: const Text("Next")),
-                            ],
-                          );
-                        });
+                    showOutingInfo(context);
                   }),
               DashBoardItem(
                 text: 'Mess',
@@ -204,9 +112,14 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
                   },
                 )),
               ),
-              const DashBoardItem(
+              DashBoardItem(
                 text: 'Notice Board',
                 image: 'notice_board',
+                onTap: () => Navigator.push(context, MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return const ViewNoticeScreen();
+                  },
+                )),
               ),
               DashBoardItem(
                 text: 'Faculty Details',
@@ -229,5 +142,102 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
             ]),
       ),
     );
+  }
+
+  Future<dynamic> showOutingInfo(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Outing Timing"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Weekdays'),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  children: [
+                    const Expanded(child: Text('Out Time: ')),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(timeOutWeekdays),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  children: [
+                    const Expanded(child: Text('In Time: ')),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(timeInWeekdays),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                const Text('Weekends'),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  children: [
+                    const Expanded(child: Text('Out Time: ')),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(timeOutWeekends),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  children: [
+                    const Expanded(child: Text('In Time: ')),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(timeInWeekends),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Cancel")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return const OutingInOut();
+                      },
+                    ));
+                  },
+                  child: const Text("Next")),
+            ],
+          );
+        });
   }
 }

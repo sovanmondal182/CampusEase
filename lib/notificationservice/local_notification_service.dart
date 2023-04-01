@@ -105,6 +105,7 @@ class LocalNotificationService {
           "campus_ease",
           importance: Importance.max,
           priority: Priority.high,
+          icon: "@mipmap/ic_launcher",
         ),
       );
 
