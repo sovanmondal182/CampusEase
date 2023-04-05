@@ -55,6 +55,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Widget _buildForgotPasswordForm() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         const SizedBox(
           height: 120,
@@ -123,6 +124,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -140,27 +142,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         child: Form(
           key: _formkey,
           autovalidateMode: AutovalidateMode.always,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 60),
-                    child: const Text(
-                      'CampusEase',
-                      style: TextStyle(
-                        fontSize: 60,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'MuseoModerno',
-                      ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                child: Container(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: const Text(
+                    'CampusEase',
+                    style: TextStyle(
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: 'MuseoModerno',
                     ),
                   ),
                 ),
-                _buildForgotPasswordForm(),
-              ],
-            ),
+              ),
+              _buildForgotPasswordForm(),
+            ],
           ),
         ),
       ),

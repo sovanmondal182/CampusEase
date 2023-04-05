@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
             const Text(
               'Forgot Password?',
               style: TextStyle(
-                color: Colors.white,
+                color: Color.fromARGB(255, 72, 154, 247),
                 fontSize: 16,
               ),
             ),
@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
               child: const Text(
                 'Reset here',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 72, 154, 247),
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
@@ -237,6 +237,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -254,27 +255,25 @@ class _LoginPageState extends State<LoginPage> {
         child: Form(
           key: _formkey,
           autovalidateMode: AutovalidateMode.always,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                GestureDetector(
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 60),
-                    child: const Text(
-                      'CampusEase',
-                      style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: 'MuseoModerno',
-                      ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                child: Container(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: const Text(
+                    'CampusEase',
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontFamily: 'MuseoModerno',
                     ),
                   ),
                 ),
-                _buildLoginForm()
-              ],
-            ),
+              ),
+              _buildLoginForm()
+            ],
           ),
         ),
       ),
