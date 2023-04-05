@@ -1,13 +1,9 @@
 import 'package:campus_ease/models/book.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../apis/foodAPIs.dart';
-import '../../models/food.dart';
 import '../../notifiers/authNotifier.dart';
 
 class ViewIssuedBook extends StatefulWidget {
@@ -37,7 +33,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
             children: [
               Card(
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.search), hintText: 'Search...'),
                   onChanged: (val) {
                     setState(() {
@@ -56,7 +52,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                         .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     _books = <Book>[];
                     for (var item in snapshot.data!.docs) {
                       _books.add(Book(
@@ -67,7 +63,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                         enrollNo: item['enroll_no'],
                       ));
                     }
-                    List<Book> _suggestionList = (name == '' || name == null)
+                    List<Book> suggestionList = (name == '')
                         ? _books
                         : _books
                             .where((element) =>
@@ -83,17 +79,17 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                                     .toLowerCase()
                                     .contains(name.toLowerCase()))
                             .toList();
-                    if (_suggestionList.length > 0) {
+                    if (suggestionList.isNotEmpty) {
                       return Container(
-                        margin: EdgeInsets.only(top: 10.0),
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        margin: const EdgeInsets.only(top: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _suggestionList.length,
+                            itemCount: suggestionList.length,
                             itemBuilder: (context, int i) {
                               return Container(
-                                margin: EdgeInsets.only(bottom: 20.0),
+                                margin: const EdgeInsets.only(bottom: 20.0),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -103,7 +99,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                            "Book Name: ${_suggestionList[i].bookName}"),
+                                            "Book Name: ${suggestionList[i].bookName}"),
                                         SizedBox(
                                           height: MediaQuery.of(context)
                                                   .size
@@ -111,7 +107,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                                               0.01,
                                         ),
                                         Text(
-                                            "Book ID: ${_suggestionList[i].bookId}"),
+                                            "Book ID: ${suggestionList[i].bookId}"),
                                         SizedBox(
                                           height: MediaQuery.of(context)
                                                   .size
@@ -119,7 +115,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                                               0.01,
                                         ),
                                         Text(
-                                            "Date Issued: ${DateFormat("d MMM yyyy hh:mm aa").format(_suggestionList[i].issueDate)}"),
+                                            "Date Issued: ${DateFormat("d MMM yyyy hh:mm aa").format(suggestionList[i].issueDate)}"),
                                         if (authNotifier.userDetails!.role ==
                                             'admin')
                                           Column(
@@ -131,7 +127,7 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                                                     0.01,
                                               ),
                                               Text(
-                                                  "Issued to: ${_suggestionList[i].enrollNo}"),
+                                                  "Issued to: ${suggestionList[i].enrollNo}"),
                                             ],
                                           ),
                                       ],
@@ -142,17 +138,21 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                             }),
                       );
                     } else {
-                      return Container(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: Text("No Items to display"),
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          child: const Text("No Items to display"),
+                        ),
                       );
                     }
                   } else {
-                    return Container(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: Text("No Items to display"),
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: const Text("No Items to display"),
+                      ),
                     );
                   }
                 },

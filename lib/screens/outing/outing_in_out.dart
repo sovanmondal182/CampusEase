@@ -1,15 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_scanner/mobile_scanner.dart' as mobile_scanner;
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
-import '../../apis/foodAPIs.dart';
+import '../../apis/allAPIs.dart';
 import '../../notifiers/authNotifier.dart';
 
 class OutingInOut extends StatefulWidget {
@@ -39,9 +33,11 @@ class _OutingInOutState extends State<OutingInOut> {
                 builder: (context, state, child) {
                   switch (state) {
                     case mobile_scanner.TorchState.off:
-                      return const Icon(Icons.flash_off, color: Colors.grey);
+                      return const Icon(Icons.flashlight_off_rounded,
+                          size: 22, color: Colors.black);
                     case mobile_scanner.TorchState.on:
-                      return const Icon(Icons.flash_on, color: Colors.yellow);
+                      return const Icon(Icons.flashlight_on_rounded,
+                          size: 22, color: Colors.yellow);
                   }
                 },
               ),
@@ -55,9 +51,17 @@ class _OutingInOutState extends State<OutingInOut> {
                 builder: (context, state, child) {
                   switch (state) {
                     case mobile_scanner.CameraFacing.front:
-                      return const Icon(Icons.camera_front);
+                      return const Icon(
+                        Icons.flip_camera_android_sharp,
+                        size: 22,
+                        color: Colors.black,
+                      );
                     case mobile_scanner.CameraFacing.back:
-                      return const Icon(Icons.camera_rear);
+                      return const Icon(
+                        Icons.flip_camera_android_sharp,
+                        size: 22,
+                        color: Colors.black,
+                      );
                   }
                 },
               ),
@@ -75,7 +79,6 @@ class _OutingInOutState extends State<OutingInOut> {
                 final List<Barcode> barcodes = capture.barcodes;
                 for (final barcode in barcodes) {
                   Navigator.pop(context);
-                  print('Barcode found! ${barcode.rawValue}');
                   if (barcode.rawValue == "Outing") {
                     showDialog(
                         context: context,
@@ -102,10 +105,22 @@ class _OutingInOutState extends State<OutingInOut> {
                             ],
                           );
                         });
-                    print("Entry Successful");
                   }
                 }
               },
+            ),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xFF8CBBF1),
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                height: 200,
+                width: 200,
+              ),
             ),
           ],
         ));

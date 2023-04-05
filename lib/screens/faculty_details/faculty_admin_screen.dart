@@ -1,8 +1,6 @@
 import 'package:campus_ease/screens/faculty_details/faculty_details_add.dart';
 import 'package:campus_ease/screens/faculty_details/faculty_details_table.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../widgets/dashboard_item.dart';
 
@@ -22,7 +20,8 @@ class _FacultyAdminScreenState extends State<FacultyAdminScreen> {
       ),
       body: SafeArea(
           child: GridView(
-        padding: EdgeInsets.all(10.0),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1.0,
@@ -36,7 +35,7 @@ class _FacultyAdminScreenState extends State<FacultyAdminScreen> {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => FacultyDetailsAddScreen())),
+                    builder: (context) => const FacultyDetailsAddScreen())),
           ),
           DashBoardItem(
             text: 'View Faculty Details',
@@ -44,7 +43,7 @@ class _FacultyAdminScreenState extends State<FacultyAdminScreen> {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => FacultyDetailsTableScreen())),
+                    builder: (context) => const FacultyDetailsTableScreen())),
           ),
         ],
       )),

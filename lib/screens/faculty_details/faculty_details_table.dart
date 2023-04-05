@@ -32,9 +32,9 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+            if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
               _faculty = <FacultyDetailsModel>[];
-              snapshot.data!.docs.forEach((item) {
+              for (var item in snapshot.data!.docs) {
                 _faculty.add(FacultyDetailsModel(
                   facultyId: item.id,
                   facultyName: item['facultyName'],
@@ -42,17 +42,17 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
                   facultyMobile: item['facultyMobile'],
                   facultyBranch: item['facultyBranch'],
                 ));
-              });
+              }
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: DataTable2(
-                    border: TableBorder(
+                    border: const TableBorder(
                       horizontalInside:
-                          BorderSide(color: Colors.grey.shade400, width: .1),
+                          BorderSide(color: Colors.black, width: .1),
                       bottom: BorderSide(
-                        color: Colors.grey.shade400,
+                        color: Colors.black,
                         width: .75,
                       ),
                     ),
@@ -64,25 +64,25 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
                         size: ColumnSize.M,
                         label: Text("Name",
                             style: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                                 fontWeight: FontWeight.w400)),
                       ),
                       const DataColumn2(
-                        size: ColumnSize.M,
+                        size: ColumnSize.S,
                         label: Text("Phone",
                             style: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                                 fontWeight: FontWeight.w400)),
                       ),
                       DataColumn2(
                         size: ColumnSize.S,
                         label: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.24,
+                          width: MediaQuery.of(context).size.width * 0.23,
                           child: const Text(
                             "Designation",
                             textAlign: TextAlign.end,
                             style: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                                 fontWeight: FontWeight.w400),
                           ),
                         ),
@@ -97,9 +97,9 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
               );
             } else {
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 width: MediaQuery.of(context).size.width * 0.6,
-                child: Text("No Items to display"),
+                child: const Text("No Items to display"),
               );
             }
           },
@@ -110,6 +110,7 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
 }
 
 DataRow recentFileDataRow(BuildContext context, FacultyDetailsModel fileInfo) {
+  AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
   return DataRow(
     onSelectChanged: (value) {
       Navigator.push(
@@ -120,30 +121,33 @@ DataRow recentFileDataRow(BuildContext context, FacultyDetailsModel fileInfo) {
                   )));
     },
     onLongPress: () {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Delete ${fileInfo.facultyName}"),
-              content: Text("Are you sure you want to delete this item?"),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Cancel")),
-                TextButton(
-                    onPressed: () {
-                      FirebaseFirestore.instance
-                          .collection('faculty_details')
-                          .doc(fileInfo.facultyId)
-                          .delete();
-                      Navigator.pop(context);
-                    },
-                    child: Text("Delete")),
-              ],
-            );
-          });
+      if (authNotifier.userDetails!.role == 'admin') {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Delete ${fileInfo.facultyName}"),
+                content:
+                    const Text("Are you sure you want to delete this item?"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Cancel")),
+                  TextButton(
+                      onPressed: () {
+                        FirebaseFirestore.instance
+                            .collection('faculty_details')
+                            .doc(fileInfo.facultyId)
+                            .delete();
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Delete")),
+                ],
+              );
+            });
+      }
     },
     cells: [
       DataCell(Text(

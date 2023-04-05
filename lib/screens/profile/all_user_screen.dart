@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:campus_ease/screens/profile/update_user_details.dart';
 
 import '../../models/user.dart';
-import '../../notifiers/authNotifier.dart';
 
 class AllUserScreen extends StatefulWidget {
   const AllUserScreen({super.key});
@@ -124,17 +122,21 @@ class _AllUserScreenState extends State<AllUserScreen> {
                             }),
                       );
                     } else {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: const Text("No Items to display"),
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          child: const Text("No Items to display"),
+                        ),
                       );
                     }
                   } else {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: const Text("No Items to display"),
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: const Text("No Items to display"),
+                      ),
                     );
                   }
                 },

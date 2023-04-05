@@ -1,10 +1,8 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 class FacultyDetailsAddScreen extends StatefulWidget {
@@ -178,8 +176,8 @@ class ProfileInfoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: Column(
         children: [
           Row(children: [

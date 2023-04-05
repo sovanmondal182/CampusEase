@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
-import '../../apis/foodAPIs.dart';
-import '../../models/food.dart';
+import '../../apis/allAPIs.dart';
 import '../../models/outing_in_out_model.dart';
-import '../../notifiers/authNotifier.dart';
 import '../../widgets/customRaisedButton.dart';
 
 class OutingInOutLog extends StatefulWidget {
@@ -24,8 +20,6 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Outing Log'),
@@ -54,9 +48,9 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     _inOut = <OutingInOutModel>[];
-                    snapshot.data!.docs.forEach((item) {
+                    for (var item in snapshot.data!.docs) {
                       _inOut.add(OutingInOutModel(
                         inTime: item['in_time'],
                         outTime: item['out_time'],
@@ -65,37 +59,36 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                         message: item['message'],
                         id: item.id,
                       ));
-                    });
-                    List<OutingInOutModel> _suggestionList =
-                        (name == '' || name == null)
-                            ? _inOut
-                            : _inOut
-                                .where((element) =>
-                                    element.enrollNo
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(name.toLowerCase()) ||
-                                    element.late
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(name.toLowerCase()) ||
-                                    element.outTime
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(name.toLowerCase()) ||
-                                    element.message
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(name.toLowerCase()))
-                                .toList();
-                    if (_suggestionList.length > 0) {
+                    }
+                    List<OutingInOutModel> suggestionList = (name == '')
+                        ? _inOut
+                        : _inOut
+                            .where((element) =>
+                                element.enrollNo
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase()) ||
+                                element.late
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase()) ||
+                                element.outTime
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase()) ||
+                                element.message
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase()))
+                            .toList();
+                    if (suggestionList.isNotEmpty) {
                       return Container(
                         margin: const EdgeInsets.only(top: 10.0),
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _suggestionList.length,
+                            itemCount: suggestionList.length,
                             itemBuilder: (context, int i) {
                               return GestureDetector(
                                 behavior: HitTestBehavior.opaque,
@@ -104,7 +97,7 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return popupEditForm(
-                                            context, _suggestionList[i]);
+                                            context, suggestionList[i]);
                                       });
                                 },
                                 onLongPress: () {
@@ -123,7 +116,7 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                                             TextButton(
                                                 onPressed: () {
                                                   deleteOutingInOut(
-                                                      _suggestionList[i].id,
+                                                      suggestionList[i].id,
                                                       context);
                                                   Navigator.of(context).pop();
                                                 },
@@ -144,7 +137,7 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "Enroll No: ${_suggestionList[i].enrollNo}"),
+                                              "Enroll No: ${suggestionList[i].enrollNo}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
@@ -152,17 +145,17 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                                                 0.01,
                                           ),
                                           Text(
-                                              "Out Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].outTime))}"),
+                                              "Out Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(suggestionList[i].outTime))}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
                                                 0.01,
                                           ),
-                                          _suggestionList[i].inTime == "null"
+                                          suggestionList[i].inTime == "null"
                                               ? const Text("In Time: -")
                                               : Text(
-                                                  "In Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].inTime))}"),
+                                                  "In Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(suggestionList[i].inTime))}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
@@ -170,24 +163,24 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                                                 0.01,
                                           ),
                                           Text(
-                                              "Status: ${_suggestionList[i].inTime == "null" ? "Out" : "In"}"),
+                                              "Status: ${suggestionList[i].inTime == "null" ? "Out" : "In"}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
                                                 0.01,
                                           ),
-                                          _suggestionList[i].message == ""
+                                          suggestionList[i].message == ""
                                               ? Container()
                                               : Text(
-                                                  "Message: ${_suggestionList[i].message}"),
+                                                  "Message: ${suggestionList[i].message}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
                                                 0.01,
                                           ),
-                                          _suggestionList[i].late == true
+                                          suggestionList[i].late == true
                                               ? const Text(
                                                   "Late: Yes",
                                                   style: TextStyle(
@@ -203,17 +196,21 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                             }),
                       );
                     } else {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: const Text("No Items to display"),
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          child: const Text("No Items to display"),
+                        ),
                       );
                     }
                   } else {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: const Text("No Items to display"),
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: const Text("No Items to display"),
+                      ),
                     );
                   }
                 },
@@ -256,12 +253,12 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                   onSaved: (String? value) {
                     message = value!;
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Enter Message',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),
@@ -276,7 +273,7 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                       Navigator.pop(context);
                     }
                   },
-                  child: CustomRaisedButton(buttonText: 'Update'),
+                  child: const CustomRaisedButton(buttonText: 'Update'),
                 ),
               ),
             ],

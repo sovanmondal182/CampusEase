@@ -1,9 +1,9 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+// ignore_for_file: avoid_print
+
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:math' as math;
 
 import 'package:intl/intl.dart';
 
@@ -115,7 +115,7 @@ class _OutingSettingState extends State<OutingSetting> {
                                     context: context,
                                   );
 
-                                  if (pickedTime != null) {
+                                  if (pickedTime != null && mounted) {
                                     DateTime parsedTime = DateFormat.jm().parse(
                                         pickedTime.format(context).toString());
 
@@ -153,7 +153,7 @@ class _OutingSettingState extends State<OutingSetting> {
                                     context: context,
                                   );
 
-                                  if (pickedTime != null) {
+                                  if (pickedTime != null && mounted) {
                                     DateTime parsedTime = DateFormat.jm().parse(
                                         pickedTime.format(context).toString());
 
@@ -195,7 +195,7 @@ class _OutingSettingState extends State<OutingSetting> {
                                     context: context,
                                   );
 
-                                  if (pickedTime != null) {
+                                  if (pickedTime != null && mounted) {
                                     DateTime parsedTime = DateFormat.jm().parse(
                                         pickedTime.format(context).toString());
 
@@ -233,7 +233,7 @@ class _OutingSettingState extends State<OutingSetting> {
                                     context: context,
                                   );
 
-                                  if (pickedTime != null) {
+                                  if (pickedTime != null && mounted) {
                                     DateTime parsedTime = DateFormat.jm().parse(
                                         pickedTime.format(context).toString());
 
@@ -266,7 +266,7 @@ class _OutingSettingState extends State<OutingSetting> {
                         Navigator.pop(context);
                       }
                     },
-                    child: CustomRaisedButton(
+                    child: const CustomRaisedButton(
                       buttonText: "Update",
                     ),
                   ),

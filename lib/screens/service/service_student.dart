@@ -1,8 +1,6 @@
 import 'package:campus_ease/screens/service/service_add_complaint.dart';
 import 'package:campus_ease/screens/service/service_view_complaint.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../widgets/dashboard_item.dart';
 
@@ -22,7 +20,8 @@ class _ServiceStudentScreenState extends State<ServiceStudentScreen> {
       ),
       body: SafeArea(
           child: GridView(
-        padding: EdgeInsets.all(10.0),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1.0,
@@ -33,8 +32,10 @@ class _ServiceStudentScreenState extends State<ServiceStudentScreen> {
           DashBoardItem(
             text: 'Register a Complaint',
             image: 'services',
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ServiceAddComplaint())),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ServiceAddComplaint())),
           ),
           DashBoardItem(
             text: 'View Complaints',
@@ -42,7 +43,7 @@ class _ServiceStudentScreenState extends State<ServiceStudentScreen> {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ServiceViewComplaints())),
+                    builder: (context) => const ServiceViewComplaints())),
           ),
         ],
       )),

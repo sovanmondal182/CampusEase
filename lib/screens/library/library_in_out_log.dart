@@ -1,13 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
-import '../../models/book.dart';
 import '../../models/library_in_out_model.dart';
-import '../../notifiers/authNotifier.dart';
 
 class LibraryInOutLog extends StatefulWidget {
   const LibraryInOutLog({super.key});
@@ -22,8 +17,6 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Library In Out Log'),
@@ -36,7 +29,7 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
             children: [
               Card(
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.search), hintText: 'Search...'),
                   onChanged: (val) {
                     setState(() {
@@ -52,35 +45,34 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     _inOut = <LibraryInOut>[];
-                    snapshot.data!.docs.forEach((item) {
+                    for (var item in snapshot.data!.docs) {
                       _inOut.add(LibraryInOut(
                         inTime: item['in_time'],
                         outTime: item['out_time'],
                         enrollNo: item['enroll_no'],
                       ));
-                    });
-                    List<LibraryInOut> _suggestionList =
-                        (name == '' || name == null)
-                            ? _inOut
-                            : _inOut
-                                .where((element) => element.enrollNo
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(name.toLowerCase()))
-                                .toList();
-                    if (_suggestionList.length > 0) {
+                    }
+                    List<LibraryInOut> suggestionList = (name == '')
+                        ? _inOut
+                        : _inOut
+                            .where((element) => element.enrollNo
+                                .toString()
+                                .toLowerCase()
+                                .contains(name.toLowerCase()))
+                            .toList();
+                    if (suggestionList.isNotEmpty) {
                       return Container(
-                        margin: EdgeInsets.only(top: 10.0),
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        margin: const EdgeInsets.only(top: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _suggestionList.length,
+                            itemCount: suggestionList.length,
                             itemBuilder: (context, int i) {
                               return Container(
-                                margin: EdgeInsets.only(bottom: 20.0),
+                                margin: const EdgeInsets.only(bottom: 20.0),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -90,7 +82,7 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                            "Enroll No: ${_suggestionList[i].enrollNo}"),
+                                            "Enroll No: ${suggestionList[i].enrollNo}"),
                                         SizedBox(
                                           height: MediaQuery.of(context)
                                                   .size
@@ -98,17 +90,17 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
                                               0.01,
                                         ),
                                         Text(
-                                            "In Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].inTime))}"),
+                                            "In Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(suggestionList[i].inTime))}"),
                                         SizedBox(
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .height *
                                               0.01,
                                         ),
-                                        _suggestionList[i].outTime == "null"
+                                        suggestionList[i].outTime == "null"
                                             ? const Text("Out Time: -")
                                             : Text(
-                                                "Out Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].outTime))}"),
+                                                "Out Time: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(suggestionList[i].outTime))}"),
                                       ],
                                     ),
                                   ],
@@ -117,17 +109,21 @@ class _LibraryInOutLogState extends State<LibraryInOutLog> {
                             }),
                       );
                     } else {
-                      return Container(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: Text("No Items to display"),
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          child: const Text("No Items to display"),
+                        ),
                       );
                     }
                   } else {
-                    return Container(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: Text("No Items to display"),
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: const Text("No Items to display"),
+                      ),
                     );
                   }
                 },

@@ -1,14 +1,18 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/models/user.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
+
   @override
-  _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
@@ -45,7 +49,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (!regExp.hasMatch(_user.email!)) {
       toast("Enter a valid Email ID");
     } else {
-      print("Success");
       forgotPassword(_user, authNotifier, context);
     }
   }
@@ -72,17 +75,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             onSaved: (String? value) {
               _user.email = value!;
             },
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Email',
               hintStyle: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: Icon(
                 Icons.email,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -105,7 +108,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               "Reset Password",
               style: TextStyle(
                 fontSize: 20,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -126,9 +129,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromRGBO(255, 138, 120, 1),
-              Color.fromRGBO(255, 114, 117, 1),
-              Color.fromRGBO(255, 63, 111, 1),
+              Color(0xFF8CBBF1),
+              Color(0xFF8CBBF1),
+              Colors.white,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -153,14 +156,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         fontFamily: 'MuseoModerno',
                       ),
                     ),
-                  ),
-                ),
-                const Text(
-                  '',
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: 17,
-                    color: Color.fromRGBO(252, 188, 126, 1),
                   ),
                 ),
                 _buildForgotPasswordForm(),

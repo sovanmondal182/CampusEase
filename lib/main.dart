@@ -1,19 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import 'package:campus_ease/screens/login/landingPage.dart';
 
 import 'notificationservice/local_notification_service.dart';
 import 'notifiers/authNotifier.dart';
 
-Future<void> backgroundHandler(RemoteMessage message) async {
-  print(message.data.toString());
-  print(message.notification!.title);
-}
+Future<void> backgroundHandler(RemoteMessage message) async {}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,10 +35,40 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'CampusEase',
         theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+              color: Colors.transparent,
+              elevation: 0,
+              titleTextStyle: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+              ),
+              actionsIconTheme: IconThemeData(color: Colors.black),
+              iconTheme: IconThemeData(color: Colors.black)),
           fontFamily: 'Montserrat',
-          primaryColor: const Color.fromRGBO(255, 63, 111, 1),
+          primaryColor: const Color(0xFF8CBBF1),
         ),
-        home: LandingPage(),
+        builder: (BuildContext context, Widget? child) {
+          var loader = EasyLoading.init();
+          EasyLoading.instance
+            ..backgroundColor = Colors.transparent
+            ..progressColor = Colors.white
+            ..indicatorWidget = const CircularProgressIndicator(
+              color: Color(0xFF8CBBF1),
+            )
+            ..boxShadow = <BoxShadow>[] // removes black background
+            ..loadingStyle = EasyLoadingStyle.light
+            ..textColor = Colors.black
+            ..indicatorColor = Colors.white // color of animated loader
+            ..maskColor = Colors.black38
+            ..maskType = EasyLoadingMaskType.custom
+            ..radius = 180
+            ..loadingStyle = EasyLoadingStyle.custom
+            ..userInteractions = true
+            ..dismissOnTap = true;
+
+          return loader(context, child!);
+        },
+        home: const LandingPage(),
       ),
     );
   }

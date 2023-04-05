@@ -1,8 +1,6 @@
 import 'package:campus_ease/screens/notice/publish_notice.dart';
 import 'package:campus_ease/screens/notice/view_notice.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../widgets/dashboard_item.dart';
 
@@ -22,7 +20,8 @@ class _NoticeAdminScreenState extends State<NoticeAdminScreen> {
       ),
       body: SafeArea(
           child: GridView(
-        padding: EdgeInsets.all(10.0),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1.0,
@@ -33,14 +32,18 @@ class _NoticeAdminScreenState extends State<NoticeAdminScreen> {
           DashBoardItem(
             text: 'Publish a Notice',
             image: 'notice_board',
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PublishNoticeScreen())),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const PublishNoticeScreen())),
           ),
           DashBoardItem(
             text: 'View Notices',
             image: 'notice_board',
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ViewNoticeScreen())),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ViewNoticeScreen())),
           ),
         ],
       )),

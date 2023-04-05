@@ -1,10 +1,7 @@
-import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/canteen/canteen_profilePage.dart';
 import 'package:campus_ease/screens/canteen/orderDetails.dart';
 import 'package:campus_ease/screens/dashboard/student_dashboard_screen.dart';
 import 'package:campus_ease/screens/library/view_issued_book.dart';
-import 'package:campus_ease/screens/mess/mess_admin_screen.dart';
-import 'package:campus_ease/screens/mess/mess_review_screen.dart';
 import 'package:campus_ease/screens/notice/view_notice.dart';
 import 'package:campus_ease/screens/service/service_view_complaint.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +9,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 import '../screens/canteen/admin_order_history.dart';
 import '../screens/profile/user_profile.dart';
@@ -28,9 +24,7 @@ class LocalNotificationService {
     );
     _notificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (response) async {
-      print("onSelectNotification");
       if (response.payload != "" || response.payload != null) {
-        print("Payload Value ${response.payload}");
         if (response.payload == "worker") {
           Get.to(() => const ServiceViewComplaints());
         } else if (response.payload == "profile-update") {
@@ -40,7 +34,7 @@ class LocalNotificationService {
         } else if (response.payload == "book-issued") {
           Get.to(() => const ViewIssuedBook());
         } else if (response.payload == "order-placed") {
-          Get.to(() => ProfilePage());
+          Get.to(() => const ProfilePage());
         } else if (response.payload == "book-returned") {
           Get.to(() => const ViewIssuedBook());
         } else if (response.payload!.split("+")[0] == "new-order") {
@@ -51,7 +45,7 @@ class LocalNotificationService {
               .then((value) {
             Get.to(() => OrderDetailsPage(value));
           });
-          Get.to(() => AdminOrderDetailsPage());
+          Get.to(() => const AdminOrderDetailsPage());
         } else if (response.payload == "outing") {
           Get.to(() => const StudentDashBoardScreen());
         } else if (response.payload!.split("+")[0] == "order-delivered") {
@@ -64,11 +58,8 @@ class LocalNotificationService {
           });
         }
       }
-      print("Router Value1234 $response");
     }, onDidReceiveBackgroundNotificationResponse: (response) async {
-      print("onSelectNotification");
       if (response.payload != "" || response.payload != null) {
-        print("Payload Value ${response.payload}");
         if (response.payload == "worker") {
           Get.to(() => const ServiceViewComplaints());
         } else if (response.payload == "profile-update") {
@@ -78,7 +69,7 @@ class LocalNotificationService {
         } else if (response.payload == "book-issued") {
           Get.to(() => const ViewIssuedBook());
         } else if (response.payload == "order-placed") {
-          Get.to(() => ProfilePage());
+          Get.to(() => const ProfilePage());
         } else if (response.payload == "book-returned") {
           Get.to(() => const ViewIssuedBook());
         } else if (response.payload!.split("+")[0] == "new-order") {
@@ -89,7 +80,7 @@ class LocalNotificationService {
               .then((value) {
             Get.to(() => OrderDetailsPage(value));
           });
-          Get.to(() => AdminOrderDetailsPage());
+          Get.to(() => const AdminOrderDetailsPage());
         } else if (response.payload == "outing") {
           Get.to(() => const StudentDashBoardScreen());
         } else if (response.payload!.split("+")[0] == "order-delivered") {
@@ -102,7 +93,6 @@ class LocalNotificationService {
           });
         }
       }
-      print("Router Value123 $response");
     });
   }
 
@@ -115,6 +105,7 @@ class LocalNotificationService {
           "campus_ease",
           importance: Importance.max,
           priority: Priority.high,
+          icon: "@mipmap/ic_launcher",
         ),
       );
 
@@ -125,8 +116,8 @@ class LocalNotificationService {
         notificationDetails,
         payload: message.data['_id'],
       );
-    } on Exception catch (e) {
-      print(e);
+    } on Exception {
+      debugPrint("Error in displaying notification");
     }
   }
 }

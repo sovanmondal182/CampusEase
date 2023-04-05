@@ -1,9 +1,7 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/models/complaint_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +18,6 @@ class ServiceViewComplaints extends StatefulWidget {
 class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
   List<ComplaintModel> _complaints = <ComplaintModel>[];
   String name = '';
-  final _formKeyEdit = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +59,9 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                         .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData && snapshot.data!.docs.length > 0) {
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     _complaints = <ComplaintModel>[];
-                    snapshot.data!.docs.forEach((item) {
+                    for (var item in snapshot.data!.docs) {
                       _complaints.add(ComplaintModel(
                         name: item['name'],
                         hostelName: item['hostel_name'],
@@ -78,37 +75,36 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                         enrollNo: item['enroll_no'],
                         id: item.id,
                       ));
-                    });
-                    List<ComplaintModel> _suggestionList =
-                        (name == '' || name == null)
-                            ? _complaints
-                            : _complaints
-                                .where((element) =>
-                                    element.type
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(name.toLowerCase()) ||
-                                    element.roomNo
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(name.toLowerCase()) ||
-                                    element.hostelName
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(name.toLowerCase()) ||
-                                    element.name
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(name.toLowerCase()))
-                                .toList();
-                    if (_suggestionList.length > 0) {
+                    }
+                    List<ComplaintModel> suggestionList = (name == '')
+                        ? _complaints
+                        : _complaints
+                            .where((element) =>
+                                element.type
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase()) ||
+                                element.roomNo
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase()) ||
+                                element.hostelName
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase()) ||
+                                element.name
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase()))
+                            .toList();
+                    if (suggestionList.isNotEmpty) {
                       return Container(
                         margin: const EdgeInsets.only(top: 10.0),
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _suggestionList.length,
+                            itemCount: suggestionList.length,
                             itemBuilder: (context, int i) {
                               return GestureDetector(
                                 behavior: HitTestBehavior.opaque,
@@ -120,7 +116,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                           context: context,
                                           builder: (BuildContext context) {
                                             return popupEditForm(
-                                                context, _suggestionList[i]);
+                                                context, suggestionList[i]);
                                           })
                                       : null;
                                 },
@@ -144,7 +140,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                                 TextButton(
                                                     onPressed: () {
                                                       deleteComplaint(
-                                                          _suggestionList[i].id,
+                                                          suggestionList[i].id,
                                                           context);
                                                       Navigator.of(context)
                                                           .pop();
@@ -167,7 +163,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "Type: ${_suggestionList[i].type}"),
+                                              "Type: ${suggestionList[i].type}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
@@ -175,7 +171,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                                 0.01,
                                           ),
                                           Text(
-                                              "Message: ${_suggestionList[i].message}"),
+                                              "Message: ${suggestionList[i].message}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
@@ -191,7 +187,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                    "Hostel Name: ${_suggestionList[i].hostelName}"),
+                                                    "Hostel Name: ${suggestionList[i].hostelName}"),
                                                 SizedBox(
                                                   height: MediaQuery.of(context)
                                                           .size
@@ -199,7 +195,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                                       0.01,
                                                 ),
                                                 Text(
-                                                    "Room No: ${_suggestionList[i].roomNo}"),
+                                                    "Room No: ${suggestionList[i].roomNo}"),
                                                 SizedBox(
                                                   height: MediaQuery.of(context)
                                                           .size
@@ -207,7 +203,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                                       0.01,
                                                 ),
                                                 Text(
-                                                    "Name: ${_suggestionList[i].name}"),
+                                                    "Name: ${suggestionList[i].name}"),
                                                 SizedBox(
                                                   height: MediaQuery.of(context)
                                                           .size
@@ -215,7 +211,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                                       0.01,
                                                 ),
                                                 Text(
-                                                    "Phone: ${_suggestionList[i].phone}"),
+                                                    "Phone: ${suggestionList[i].phone}"),
                                                 SizedBox(
                                                   height: MediaQuery.of(context)
                                                           .size
@@ -225,18 +221,18 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                               ],
                                             ),
                                           Text(
-                                              "Issue Date: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].date))}"),
+                                              "Issue Date: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(suggestionList[i].date))}"),
                                           SizedBox(
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
                                                 0.01,
                                           ),
-                                          _suggestionList[i].status != "Solved"
+                                          suggestionList[i].status != "Solved"
                                               ? Container()
                                               : Text(
-                                                  "Solved Date: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(_suggestionList[i].solvedDate))}"),
-                                          _suggestionList[i].status != "Solved"
+                                                  "Solved Date: ${DateFormat("d MMM yyyy hh:mm aa").format(DateTime.parse(suggestionList[i].solvedDate))}"),
+                                          suggestionList[i].status != "Solved"
                                               ? Container()
                                               : SizedBox(
                                                   height: MediaQuery.of(context)
@@ -245,7 +241,7 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                                                       0.01,
                                                 ),
                                           Text(
-                                              "Status: ${_suggestionList[i].status}"),
+                                              "Status: ${suggestionList[i].status}"),
                                         ],
                                       ),
                                     ],
@@ -255,17 +251,21 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
                             }),
                       );
                     } else {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: const Text("No Items to display"),
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          child: const Text("No Items to display"),
+                        ),
                       );
                     }
                   } else {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: const Text("No Items to display"),
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: const Text("No Items to display"),
+                      ),
                     );
                   }
                 },
@@ -288,11 +288,11 @@ class _ServiceViewComplaintsState extends State<ServiceViewComplaints> {
             onTap: () {
               updateComplaint(data.id,
                   data.status == 'Solved' ? 'Pending' : 'Solved', context);
-              if (data.status == 'Solved') {
+              if (data.status == 'Pending') {
                 sendNotificationToSpecificUserByEnrollNo(
                     data.enrollNo,
                     'Services',
-                    'Your complaint has been marked as solved',
+                    'Your complaint has been marked as solved.',
                     'worker');
               }
               Navigator.pop(context);

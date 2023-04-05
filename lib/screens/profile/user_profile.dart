@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../apis/foodAPIs.dart';
+import '../../apis/allAPIs.dart';
 import '../../notifiers/authNotifier.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -93,14 +93,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             FirebaseStorage.instance.ref().child('profiles/$firebaseId');
         UploadTask uploadTask = storage.putFile(File(pickedFile.path));
         String imgUrl = await (await uploadTask).ref.getDownloadURL();
-        print(imgUrl);
         authNotifier.userDetails!.photoUrl = imgUrl;
         profileUpdate(authNotifier.userDetails!);
         setState(() {
           uploading = true;
         });
       } catch (e) {
-        print("ERROR " + e.toString());
+        debugPrint(e.toString());
       }
     });
   }
@@ -127,7 +126,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           IconButton(
             icon: const Icon(
               Icons.qr_code_rounded,
-              color: Colors.white,
             ),
             onPressed: () {
               showDialog(
@@ -251,7 +249,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.displayName =
                               _controllerName.text;
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             nameUpdate = false;
                           });
@@ -295,7 +292,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.email =
                               _controllerEmail.text;
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             emailUpdate = false;
                           });
@@ -336,7 +332,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.phone =
                               _controllerPhone.text;
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             phoneUpdate = false;
                           });
@@ -380,7 +375,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.enrollNo =
                               int.parse(_controllerEnrollNo.text);
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             enrollNoUpdate = false;
                           });
@@ -425,7 +419,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.admissionYear =
                               _controllerAdmissionYear.text;
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             admissionYearUpdate = false;
                           });
@@ -469,7 +462,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.course =
                               _controllerCourse.text;
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             courseUpdate = false;
                           });
@@ -513,7 +505,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.branch =
                               _controllerBranch.text;
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             branchUpdate = false;
                           });
@@ -556,7 +547,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.hostelName =
                               _controllerHostelName.text;
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             hostelNameUpdate = false;
                           });
@@ -599,7 +589,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           authNotifier.userDetails!.roomNo =
                               _controllerRoomNo.text;
                           await profileUpdate(authNotifier.userDetails!);
-                          print("update");
                           setState(() {
                             roomNoUpdate = false;
                           });

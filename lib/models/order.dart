@@ -31,9 +31,10 @@ class Order {
   double? totalAmount;
   List<OrderItem>? items;
   String? paymentId;
+  String? userName;
 
   Order(this.items, this.totalAmount, this.paymentId, this.placedAt,
-      this.deliveryAt, this.placedBy, this.isDelivered);
+      this.deliveryAt, this.placedBy, this.isDelivered, this.userName);
 
   Order.fromMap(Map<String, dynamic> map) {
     isDelivered = map['is_delivered'];
@@ -44,6 +45,7 @@ class Order {
     items = List<OrderItem>.from(
         map['items'].map((e) => OrderItem.fromMap(e)).toList());
     paymentId = map['payment_id'];
+    userName = map['user_name'];
   }
 
   Map<String, dynamic> toMap() {
@@ -55,6 +57,7 @@ class Order {
       'total': totalAmount,
       'items': items?.map((e) => e.toMap()).toList(),
       'payment_id': paymentId,
+      'user_name': userName,
     };
   }
 }

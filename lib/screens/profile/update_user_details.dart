@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:campus_ease/models/user.dart';
 
-import '../../apis/foodAPIs.dart';
-import '../../notifiers/authNotifier.dart';
+import '../../apis/allAPIs.dart';
 
 class UpdateUserDetails extends StatefulWidget {
   final String id;
@@ -38,7 +36,16 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
   final TextEditingController _controllerCourse = TextEditingController();
   final TextEditingController _controllerHostelName = TextEditingController();
   final TextEditingController _controllerRoomNo = TextEditingController();
-  final roles = ['user', 'admin', 'canteen', 'faculty', 'worker'];
+  final roles = [
+    'user',
+    'admin',
+    'canteen',
+    'faculty',
+    'worker',
+    'guard',
+    'librarian',
+    'warden',
+  ];
   String? selectedRole;
 
   int money = 0;
@@ -128,7 +135,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (nameUpdate == true) {
                           user.displayName = _controllerName.text;
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             nameUpdate = false;
                           });
@@ -166,7 +172,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (emailUpdate == true) {
                           user.email = _controllerEmail.text;
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             emailUpdate = false;
                           });
@@ -221,7 +226,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (phoneUpdate == true) {
                           user.phone = _controllerPhone.text;
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             phoneUpdate = false;
                           });
@@ -259,7 +263,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (enrollNoUpdate == true) {
                           user.enrollNo = int.parse(_controllerEnrollNo.text);
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             enrollNoUpdate = false;
                           });
@@ -295,7 +298,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (admissionYearUpdate == true) {
                           user.admissionYear = _controllerAdmissionYear.text;
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             admissionYearUpdate = false;
                           });
@@ -331,7 +333,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (courseUpdate == true) {
                           user.course = _controllerCourse.text;
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             courseUpdate = false;
                           });
@@ -367,7 +368,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (branchUpdate == true) {
                           user.branch = _controllerBranch.text;
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             branchUpdate = false;
                           });
@@ -400,7 +400,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (hostelNameUpdate == true) {
                           user.hostelName = _controllerHostelName.text;
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             hostelNameUpdate = false;
                           });
@@ -433,7 +432,6 @@ class _UpdateUserDetailsState extends State<UpdateUserDetails> {
                         if (roomNoUpdate == true) {
                           user.roomNo = _controllerRoomNo.text;
                           await updateUserProfile(user);
-                          print("update");
                           setState(() {
                             roomNoUpdate = false;
                           });

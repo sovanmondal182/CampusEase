@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:campus_ease/screens/canteen/cartPage.dart';
 import 'package:campus_ease/screens/canteen/canteen_homePage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -8,16 +10,16 @@ import 'canteen_profilePage.dart';
 // ignore: must_be_immutable
 class NavigationBarPage extends StatefulWidget {
   int selectedIndex;
-  NavigationBarPage({required this.selectedIndex});
+  NavigationBarPage({super.key, required this.selectedIndex});
   @override
-  _NavigationBarPageState createState() => _NavigationBarPageState();
+  State<NavigationBarPage> createState() => _NavigationBarPageState();
 }
 
 class _NavigationBarPageState extends State<NavigationBarPage> {
   final List<Widget> _children = [
-    ProfilePage(),
-    HomePage(),
-    CartPage(),
+    const ProfilePage(),
+    const HomePage(),
+    const CartPage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,9 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
       extendBody: true,
       body: _children[widget.selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        color: Color.fromRGBO(255, 63, 111, 1),
+        color: const Color(0xFF8CBBF1),
         backgroundColor: Colors.transparent,
-        buttonBackgroundColor: Color.fromRGBO(255, 63, 111, 1),
+        buttonBackgroundColor: const Color(0xFF8CBBF1),
         height: 50,
         index: widget.selectedIndex,
         onTap: (index) {
@@ -35,7 +37,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
             widget.selectedIndex = index;
           });
         },
-        items: <Widget>[
+        items: const <Widget>[
           Icon(
             Icons.wallet_rounded,
             size: 26,

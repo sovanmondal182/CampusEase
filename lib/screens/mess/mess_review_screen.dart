@@ -1,9 +1,7 @@
-import 'package:campus_ease/apis/foodAPIs.dart';
+import 'package:campus_ease/apis/allAPIs.dart';
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/widgets/customRaisedButton.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 class MessReviewScreen extends StatefulWidget {
@@ -41,34 +39,37 @@ class _MessReviewScreenState extends State<MessReviewScreen> {
               child: Column(children: [
                 Row(
                   children: [
-                    const Text(
-                      "Review: ",
-                      style: TextStyle(fontSize: 16),
+                    const Expanded(
+                      child: Text(
+                        "Review: ",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    DropdownButton(
-                      // Initial Value
-                      value: review,
+                    Expanded(
+                      flex: 2,
+                      child: DropdownButton(
+                        // Initial Value
+                        value: review,
+                        underline: const SizedBox(),
 
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
+                        // Down Arrow Icon
+                        icon: const Icon(Icons.keyboard_arrow_down),
 
-                      // Array list of items
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          review = newValue!;
-                        });
-                      },
+                        // Array list of items
+                        items: items.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                        // After selecting the desired option,it will
+                        // change button value to selected value
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            review = newValue!;
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -77,34 +78,37 @@ class _MessReviewScreenState extends State<MessReviewScreen> {
                 ),
                 Row(
                   children: [
-                    const Text(
-                      "Meal Type: ",
-                      style: TextStyle(fontSize: 16),
+                    const Expanded(
+                      child: Text(
+                        "Meal Type: ",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    DropdownButton(
-                      // Initial Value
-                      value: mealType,
+                    Expanded(
+                      flex: 2,
+                      child: DropdownButton(
+                        // Initial Value
+                        value: mealType,
+                        underline: const SizedBox(),
 
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
+                        // Down Arrow Icon
+                        icon: const Icon(Icons.keyboard_arrow_down),
 
-                      // Array list of items
-                      items: type.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          mealType = newValue!;
-                        });
-                      },
+                        // Array list of items
+                        items: type.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                        // After selecting the desired option,it will
+                        // change button value to selected value
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            mealType = newValue!;
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -114,14 +118,14 @@ class _MessReviewScreenState extends State<MessReviewScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Comment: ",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
+                    const Expanded(
+                      child: Text(
+                        "Comment: ",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                     Expanded(
+                      flex: 2,
                       child: TextField(
                         controller: _reviewController,
                         keyboardType: TextInputType.text,
@@ -147,7 +151,7 @@ class _MessReviewScreenState extends State<MessReviewScreen> {
                         _reviewController.text,
                         context);
                   },
-                  child: CustomRaisedButton(buttonText: 'Submit'),
+                  child: const CustomRaisedButton(buttonText: 'Submit'),
                 ),
               ]),
             ),

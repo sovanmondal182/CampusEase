@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, file_names
 
 import 'dart:convert';
 
@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +14,6 @@ import 'package:campus_ease/models/food.dart';
 import 'package:campus_ease/models/user.dart' as u;
 import 'package:campus_ease/notifiers/authNotifier.dart';
 import 'package:campus_ease/screens/login/login.dart';
-import 'package:provider/provider.dart';
 
 import '../notificationservice/local_notification_service.dart';
 import '../screens/canteen/canteen_adminhomepage.dart';
@@ -33,12 +33,12 @@ void toast(String data) {
 
 login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
   final UserCredential authResult;
+  EasyLoading.show();
   try {
     authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: user.email!, password: user.password!);
   } catch (error) {
     toast(error.toString());
-    print(error);
     return;
   }
 
@@ -49,11 +49,12 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
 
       toast("Email ID not verified");
       return;
-    } else
-      print("Log In: $firebaseUser");
-    authNotifier.setUser(firebaseUser);
+    } else {
+      authNotifier.setUser(firebaseUser);
+    }
     await getUserDetails(authNotifier);
-    print("done");
+    initializeCurrentUser(authNotifier, context);
+    EasyLoading.dismiss();
 
     (authNotifier.userDetails!.role == 'admin')
         ? Navigator.pushReplacement(context, MaterialPageRoute(
@@ -76,7 +77,7 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
                 : (authNotifier.userDetails!.role == 'canteen')
                     ? Navigator.pushReplacement(context, MaterialPageRoute(
                         builder: (BuildContext context) {
-                          return AdminHomePage();
+                          return const AdminHomePage();
                         },
                       ))
                     : Navigator.pushReplacement(context, MaterialPageRoute(
@@ -85,13 +86,14 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
                         },
                       ));
   } catch (error) {
+    EasyLoading.dismiss();
     toast(error.toString());
-    print(error);
     return;
   }
 }
 
 signUp(u.User user, AuthNotifier authNotifier, BuildContext context) async {
+  EasyLoading.show();
   bool userDataUploaded = false;
   final UserCredential authResult;
   try {
@@ -99,7 +101,6 @@ signUp(u.User user, AuthNotifier authNotifier, BuildContext context) async {
         email: user.email!.trim(), password: user.password!);
   } catch (error) {
     toast(error.toString());
-    print(error);
     return;
   }
 
@@ -109,16 +110,18 @@ signUp(u.User user, AuthNotifier authNotifier, BuildContext context) async {
 
     await firebaseUser.updateDisplayName(user.displayName);
     await firebaseUser.reload();
-    print("Sign Up: $firebaseUser");
     uploadUserData(user, userDataUploaded);
     await FirebaseAuth.instance.signOut();
     authNotifier.setUser(null);
+    EasyLoading.dismiss();
 
     toast("Verification link is sent to ${user.email}");
+    initializeCurrentUser(authNotifier, context);
     Navigator.pop(context);
   } catch (error) {
+    EasyLoading.dismiss();
+
     toast(error.toString());
-    print(error);
     return;
   }
 }
@@ -128,11 +131,11 @@ getUserDetails(AuthNotifier authNotifier) async {
       .collection('users')
       .doc(authNotifier.user!.uid)
       .get()
-      .catchError((e) => print(e))
+      .catchError((e) => (e))
       .then((value) => {
-            (value != null)
+            (value.exists)
                 ? authNotifier.setUserDetails(u.User.fromMap(value.data()!))
-                : print(value)
+                : null
           });
 }
 
@@ -149,27 +152,23 @@ uploadUserData(u.User user, bool userdataUpload) async {
     await userRef
         .doc(currentUser.uid)
         .set(user.toMap())
-        .catchError((e) => print(e))
+        .catchError((e) => debugPrint(e))
         .then((value) => userDataUploadVar = true);
     await cartRef
         .doc(currentUser.uid)
         .set({})
-        .catchError((e) => print(e))
+        .catchError((e) => debugPrint(e))
         .then((value) => userDataUploadVar = true);
-  } else {
-    print('already uploaded user data');
-  }
-  print('user data uploaded successfully');
+  } else {}
 }
 
 initializeCurrentUser(AuthNotifier authNotifier, BuildContext context) async {
   User? firebaseUser = FirebaseAuth.instance.currentUser;
   String deviceTokenToSendPushNotification = "";
   Future<void> getDeviceTokenToSendNotification() async {
-    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-    final token = await _fcm.getToken();
+    final FirebaseMessaging fcm = FirebaseMessaging.instance;
+    final token = await fcm.getToken();
     deviceTokenToSendPushNotification = token.toString();
-    print("Token Value $deviceTokenToSendPushNotification");
     if (deviceTokenToSendPushNotification != "" &&
         authNotifier.userDetails != null) {
       CollectionReference deviceRef =
@@ -179,8 +178,8 @@ initializeCurrentUser(AuthNotifier authNotifier, BuildContext context) async {
       await userRef
           .doc(authNotifier.userDetails!.uuid)
           .update({'device_token': deviceTokenToSendPushNotification})
-          .catchError((e) => print(e))
-          .then((value) => print("Device Token Updated"));
+          .catchError((e) => (e))
+          .then((value) => debugPrint("Device Token Updated"));
 
       await deviceRef
           .doc(authNotifier.userDetails!.uuid)
@@ -188,8 +187,8 @@ initializeCurrentUser(AuthNotifier authNotifier, BuildContext context) async {
             'device_token': deviceTokenToSendPushNotification,
             'role': authNotifier.userDetails!.role
           })
-          .catchError((e) => print(e))
-          .then((value) => print("Device Token Added"));
+          .catchError((e) => debugPrint(e))
+          .then((value) => debugPrint("Device Token Added"));
     }
   }
 
@@ -206,13 +205,11 @@ initilizeFirebaseMessage(BuildContext context) {
 
   FirebaseMessaging.instance.getInitialMessage().then(
     (message) {
-      print("FirebaseMessaging.instance.getInitialMessage");
       if (message != null) {
-        print("New Notification");
         if (message.data['_id'] != null) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => ViewNoticeScreen(
+              builder: (context) => const ViewNoticeScreen(
                   // id: message.data['_id'],
                   ),
             ),
@@ -224,11 +221,7 @@ initilizeFirebaseMessage(BuildContext context) {
   // 2. This method only call when App in forground it mean app must be opened
   FirebaseMessaging.onMessage.listen(
     (message) {
-      print("FirebaseMessaging.onMessage.listen");
       if (message.notification != null) {
-        print(message.notification!.title);
-        print(message.notification!.body);
-        print("message.data11 ${message.data}");
         LocalNotificationService.createanddisplaynotification(message);
       }
     },
@@ -237,12 +230,7 @@ initilizeFirebaseMessage(BuildContext context) {
   // 3. This method only call when App in background and not terminated(not closed)
   FirebaseMessaging.onMessageOpenedApp.listen(
     (message) {
-      print("FirebaseMessaging.onMessageOpenedApp.listen");
-      if (message.notification != null) {
-        print(message.notification!.title);
-        print(message.notification!.body);
-        print("message.data22 ${message.data['_id']}");
-      }
+      if (message.notification != null) {}
     },
   );
 }
@@ -251,11 +239,10 @@ signOut(AuthNotifier authNotifier, BuildContext context) async {
   await FirebaseAuth.instance.signOut();
 
   authNotifier.setUser(null);
-  print('log out');
   Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: (BuildContext context) {
-      return LoginPage();
+      return const LoginPage();
     }),
   );
 }
@@ -266,7 +253,6 @@ forgotPassword(
     await FirebaseAuth.instance.sendPasswordResetEmail(email: user.email!);
   } catch (error) {
     toast(error.toString());
-    print(error);
     return;
   }
 
@@ -290,11 +276,10 @@ addToCart(Food food, BuildContext context) async {
         .collection('items')
         .doc(food.id)
         .set({"count": 1})
-        .catchError((e) => print(e))
-        .then((value) => print("Success"));
+        .catchError((e) => debugPrint(e))
+        .then((value) => debugPrint("Success"));
   } catch (error) {
     toast("Failed to add to cart!");
-    print(error);
     return;
   }
 
@@ -311,11 +296,10 @@ removeFromCart(Food food, BuildContext context) async {
         .collection('items')
         .doc(food.id)
         .delete()
-        .catchError((e) => print(e))
-        .then((value) => print("Success"));
+        .catchError((e) => debugPrint(e))
+        .then((value) => debugPrint("Success"));
   } catch (error) {
     toast("Failed to Remove from cart!");
-    print(error);
     return;
   }
 
@@ -330,11 +314,10 @@ addNewItem(
     await itemRef
         .doc()
         .set({"item_name": itemName, "price": price, "total_qty": totalQty})
-        .catchError((e) => print(e))
-        .then((value) => print("Success"));
+        .catchError((e) => debugPrint(e))
+        .then((value) => debugPrint("Success"));
   } catch (error) {
     toast("Failed to add to new item!");
-    print(error);
     return;
   }
 
@@ -364,7 +347,7 @@ issueBook(
             "enroll_no": enrollNo,
             "date_issued": DateTime.now().toLocal().toString()
           })
-          .catchError((e) => print(e))
+          .catchError((e) => debugPrint(e))
           .then((value) => toast("Book issued successfully!"));
       sendNotificationToSpecificUserByEnrollNo(enrollNo, 'Library',
           'Book ID $bookId issued successfully', 'book-issued');
@@ -373,7 +356,6 @@ issueBook(
     }
   } catch (error) {
     toast("Failed to add to new item!");
-    print(error);
     return;
   }
 
@@ -388,11 +370,10 @@ editItem(String itemName, int price, int totalQty, BuildContext context,
     await itemRef
         .doc(id)
         .set({"item_name": itemName, "price": price, "total_qty": totalQty})
-        .catchError((e) => print(e))
-        .then((value) => print("Success"));
+        .catchError((e) => debugPrint(e))
+        .then((value) => debugPrint("Success"));
   } catch (error) {
     toast("Failed to edit item!");
-    print(error);
     return;
   }
 
@@ -407,11 +388,10 @@ deleteItem(String id, BuildContext context) async {
     await itemRef
         .doc(id)
         .delete()
-        .catchError((e) => print(e))
-        .then((value) => print("Success"));
+        .catchError((e) => debugPrint(e))
+        .then((value) => debugPrint("Success"));
   } catch (error) {
     toast("Failed to delete item!");
-    print(error);
     return;
   }
 
@@ -426,21 +406,19 @@ returnBook(String id, BuildContext context) async {
     await itemRef
         .where("book_id", isEqualTo: int.parse(id))
         .get()
-        .then((value) => value.docs.forEach((element) {
-              itemRef
-                  .doc(element.id)
-                  .delete()
-                  .catchError((e) => print(e))
-                  .then((value) => print("Success"));
-              sendNotificationToSpecificUserByEnrollNo(
-                  element['enroll_no'],
-                  'Library',
-                  'Book ID $id returned successfully',
-                  'book-returned');
-            }));
+        .then((value) {
+      for (var element in value.docs) {
+        itemRef
+            .doc(element.id)
+            .delete()
+            .catchError((e) => debugPrint(e))
+            .then((value) => debugPrint("Success"));
+        sendNotificationToSpecificUserByEnrollNo(element['enroll_no'],
+            'Library', 'Book ID $id returned successfully', 'book-returned');
+      }
+    });
   } catch (error) {
     toast("Failed to return book!");
-    print(error);
     return;
   }
 
@@ -450,7 +428,6 @@ returnBook(String id, BuildContext context) async {
 
 libraryInOut(int? enrollNo, BuildContext context) async {
   try {
-    bool dataFound = true;
     CollectionReference itemRef =
         FirebaseFirestore.instance.collection('libraryInOut');
     await itemRef
@@ -467,7 +444,7 @@ libraryInOut(int? enrollNo, BuildContext context) async {
                         "out_time": "null",
                         "enroll_no": enrollNo,
                       })
-                      .catchError((e) => print(e))
+                      .catchError((e) => debugPrint(e))
                       .then((value) {
                         // Navigator.pop(context);
                         toast("Entry successfull!");
@@ -480,7 +457,7 @@ libraryInOut(int? enrollNo, BuildContext context) async {
                       .update({
                         "out_time": DateTime.now().toLocal().toString(),
                       })
-                      .catchError((e) => print(e))
+                      .catchError((e) => debugPrint(e))
                       .then((value) {
                         // Navigator.pop(context);
                         toast("Entry successfull!");
@@ -489,14 +466,12 @@ libraryInOut(int? enrollNo, BuildContext context) async {
             });
   } catch (error) {
     toast("Failed to entry!");
-    print(error);
     return;
   }
 }
 
 outingInOut(int? enrollNo, BuildContext context) async {
   try {
-    bool late = false;
     String? timeInWeekdays;
     String? timeInWeekends;
     CollectionReference itemRef =
@@ -527,7 +502,7 @@ outingInOut(int? enrollNo, BuildContext context) async {
                         "late": false,
                         "message": "",
                       })
-                      .catchError((e) => print(e))
+                      .catchError((e) => debugPrint(e))
                       .then((value) {
                         // Navigator.pop(context);
                         toast("Entry successfull!");
@@ -558,7 +533,7 @@ outingInOut(int? enrollNo, BuildContext context) async {
                                     ? false
                                     : true
                       })
-                      .catchError((e) => print(e))
+                      .catchError((e) => debugPrint(e))
                       .then((value) {
                         // Navigator.pop(context);
                         toast("Entry successfull!");
@@ -567,7 +542,6 @@ outingInOut(int? enrollNo, BuildContext context) async {
             });
   } catch (error) {
     toast("Failed to Entry!");
-    print(error);
     return;
   }
 }
@@ -583,7 +557,6 @@ updateOutingInOut(String? message, String? id, BuildContext context) async {
     });
   } catch (error) {
     toast("Failed to Entry!");
-    print(error);
     return;
   }
 }
@@ -597,7 +570,6 @@ deleteOutingInOut(String? id, BuildContext context) async {
     });
   } catch (error) {
     toast("Failed to delete!");
-    print(error);
     return;
   }
 }
@@ -621,13 +593,12 @@ registerComplaint(
           "date": DateTime.now().toLocal().toString(),
           "solved_date": "null",
         })
-        .catchError((e) => print(e))
+        .catchError((e) => debugPrint(e))
         .then((value) {
           toast("Complaint registered successfully!");
         });
   } catch (error) {
     toast("Failed to register complaint!");
-    print(error);
     return;
   }
 }
@@ -644,7 +615,6 @@ updateComplaint(String? id, String? status, BuildContext context) async {
     });
   } catch (error) {
     toast("Failed to update complaint!");
-    print(error);
     return;
   }
 }
@@ -658,7 +628,6 @@ deleteComplaint(String? id, BuildContext context) async {
     });
   } catch (error) {
     toast("Failed to delete complaint!");
-    print(error);
     return;
   }
 }
@@ -674,20 +643,19 @@ editCartItem(String itemId, int count, BuildContext context) async {
           .collection('items')
           .doc(itemId)
           .delete()
-          .catchError((e) => print(e))
-          .then((value) => print("Success"));
+          .catchError((e) => debugPrint(e))
+          .then((value) => debugPrint("Success"));
     } else {
       await cartRef
           .doc(currentUser!.uid)
           .collection('items')
           .doc(itemId)
           .update({"count": count})
-          .catchError((e) => print(e))
-          .then((value) => print("Success"));
+          .catchError((e) => debugPrint(e))
+          .then((value) => debugPrint("Success"));
     }
   } catch (error) {
     toast("Failed to update Cart!");
-    print(error);
     return;
   }
 
@@ -709,11 +677,10 @@ messReview(String? review, String? mealTyle, int? enrollNo, String? comment,
           "comment": comment,
           "date": DateTime.now().toLocal().toString()
         })
-        .catchError((e) => print(e))
+        .catchError((e) => debugPrint(e))
         .then((value) => toast("Review added successfully!"));
   } catch (error) {
     toast("Failed to add to new item!");
-    print(error);
     return;
   }
 
@@ -727,11 +694,10 @@ addMoney(int amount, BuildContext context, String id) async {
     await userRef
         .doc(id)
         .update({'balance': FieldValue.increment(amount)})
-        .catchError((e) => print(e))
-        .then((value) => print("Success"));
+        .catchError((e) => debugPrint(e))
+        .then((value) => debugPrint("Success"));
   } catch (error) {
     toast("Failed to add money!");
-    print(error);
     return;
   }
 
@@ -760,7 +726,7 @@ placeOrder(BuildContext context, double total) async {
 
     List<String> foodIds = <String>[];
     Map<String, int> count = <String, int>{};
-    List<dynamic> _cartItems = <dynamic>[];
+    List<dynamic> cartItems = <dynamic>[];
 
     // Checking user balance
     DocumentSnapshot userData = await userRef.doc(currentUser!.uid).get();
@@ -782,7 +748,6 @@ placeOrder(BuildContext context, double total) async {
         await itemRef.where(FieldPath.documentId, whereIn: foodIds).get();
     for (var i = 0; i < snap.docs.length; i++) {
       if (snap.docs[i]['total_qty'] < count[snap.docs[i].id]) {
-        print("not");
         toast(
             "Item: ${snap.docs[i]['item_name']} has QTY: ${snap.docs[i]['total_qty']} only. Reduce/Remove the item.");
         return;
@@ -791,7 +756,7 @@ placeOrder(BuildContext context, double total) async {
 
     // Creating cart items array
     for (var item in snap.docs) {
-      _cartItems.add({
+      cartItems.add({
         "item_id": item.id,
         "count": count[item.id],
         "item_name": item['item_name'],
@@ -804,7 +769,7 @@ placeOrder(BuildContext context, double total) async {
         .runTransaction((Transaction transaction) async {
       // Update the item count in items table
       for (var i = 0; i < snap.docs.length; i++) {
-        await transaction.update(snap.docs[i].reference,
+        transaction.update(snap.docs[i].reference,
             {"total_qty": snap.docs[i]["total_qty"] - count[snap.docs[i].id]});
       }
 
@@ -815,19 +780,19 @@ placeOrder(BuildContext context, double total) async {
 
       // Place a new order
       await orderRef.doc().set({
-        "items": _cartItems,
+        "items": cartItems,
         "is_delivered": false,
         "total": total,
         "placed_at": DateTime.now().toLocal().toString(),
         "delivery_at": "null",
-        "placed_by": currentUser.uid
+        "placed_by": currentUser.uid,
+        "user_name": userData["displayName"]
       });
 
       // Empty cart
       for (var i = 0; i < data.docs.length; i++) {
-        await transaction.delete(data.docs[i].reference);
+        transaction.delete(data.docs[i].reference);
       }
-      print("in in");
       // return;
     });
 
@@ -839,10 +804,10 @@ placeOrder(BuildContext context, double total) async {
         .where('placed_by', isEqualTo: currentUser.uid)
         .get()
         .then((value) {
-      value.docs.forEach((element) {
+      for (var element in value.docs) {
         sendNotificationToRole('Order', 'New order received!', 'canteen',
             'new-order+${element.id}');
-      });
+      }
     });
 
     Navigator.pop(context);
@@ -856,7 +821,6 @@ placeOrder(BuildContext context, double total) async {
   } catch (error) {
     Navigator.pop(context);
     toast("Failed to place order!");
-    print(error);
     return;
   }
 }
@@ -871,11 +835,10 @@ orderReceived(String id, BuildContext context) async {
           'is_delivered': true,
           'delivery_at': DateTime.now().toLocal().toString()
         })
-        .catchError((e) => print(e))
-        .then((value) => print("Success"));
+        .catchError((e) => debugPrint(e))
+        .then((value) => debugPrint("Success"));
   } catch (error) {
     toast("Failed to mark as delivered!");
-    print(error);
     return;
   }
 
@@ -894,12 +857,9 @@ profileUpdate(u.User user) async {
     await userRef
         .doc(currentUser.uid)
         .set(user.toMap())
-        .catchError((e) => print(e))
+        .catchError((e) => debugPrint(e))
         .then((value) => userDataUploadVar = true);
-  } else {
-    print('already uploaded user data');
-  }
-  print('user data uploaded successfully');
+  } else {}
 }
 
 updateUserProfile(u.User user) async {
@@ -911,14 +871,11 @@ updateUserProfile(u.User user) async {
     await userRef
         .doc(user.uuid)
         .update(user.toMap())
-        .catchError((e) => print(e))
+        .catchError((e) => debugPrint(e))
         .then((value) => userDataUploadVar = true);
     sendNotificationToSpecificUser(user.uuid, 'Profile Updated',
         'Your profile has been updated!', 'profile-update');
-  } else {
-    print('already uploaded user data');
-  }
-  print('user data uploaded successfully');
+  } else {}
 }
 
 facultyDetailsUpdate(String? facultyId, String? facultyName,
@@ -938,7 +895,7 @@ facultyDetailsUpdate(String? facultyId, String? facultyName,
             "facultyMobile": facultyMobile,
             "facultyBranch": facultyBranch
           })
-          .catchError((e) => print(e))
+          .catchError((e) => debugPrint(e))
           .then((value) => userDataUploadVar = true);
     } else {
       await userRef
@@ -949,13 +906,10 @@ facultyDetailsUpdate(String? facultyId, String? facultyName,
             "facultyMobile": facultyMobile,
             "facultyBranch": facultyBranch
           })
-          .catchError((e) => print(e))
+          .catchError((e) => debugPrint(e))
           .then((value) => userDataUploadVar = true);
     }
-  } else {
-    print('already uploaded user data');
-  }
-  print('user data uploaded successfully');
+  } else {}
 }
 
 publishNotice(String? title, String? message, BuildContext context) async {
@@ -990,12 +944,11 @@ sendNotification(String? title, String? message) async {
       FirebaseFirestore.instance.collection('devices');
   List<String> tokens = [];
   await userRef
-      .where('role', isNotEqualTo: ['canteen', 'worker'])
+      .where('role', whereNotIn: ['canteen', 'worker', 'guard'])
       .get()
       .then((value) {
         for (var element in value.docs) {
           tokens.add(element['device_token']);
-          print(tokens);
         }
       });
   try {
@@ -1038,7 +991,6 @@ sendNotificationToRole(
   await userRef.where("role", isEqualTo: role).get().then((value) {
     for (var element in value.docs) {
       tokens.add(element['device_token']);
-      print(tokens);
     }
   });
   try {
