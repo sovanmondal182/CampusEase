@@ -31,6 +31,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage>
     with TickerProviderStateMixin {
   late AnimationController animationController;
+  late Animation<double> animation;
   @override
   void initState() {
     AuthNotifier authNotifier =
@@ -38,8 +39,6 @@ class _LandingPageState extends State<LandingPage>
     initializeCurrentUser(authNotifier, context);
     initilizeFirebaseMessage(context);
     animationController = AnimationController(
-      /// [AnimationController]s can be created with `vsync: this` because of
-      /// [TickerProviderStateMixin].
       vsync: this,
       duration: const Duration(milliseconds: 3000),
     )..addListener(() {
@@ -115,6 +114,10 @@ class _LandingPageState extends State<LandingPage>
           }
         });
       });
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.easeOut);
+
+    animation.addListener(() => setState(() {}));
     animationController.forward();
     super.initState();
   }
@@ -136,20 +139,16 @@ class _LandingPageState extends State<LandingPage>
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'CampusEase',
-              style: TextStyle(
-                fontSize: 50,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: 'MuseoModerno',
-              ),
+        child: Center(
+          child: Text(
+            'CampusEase',
+            style: TextStyle(
+              fontSize: animation.value * 50,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'MuseoModerno',
             ),
-          ],
+          ),
         ),
       ),
     );

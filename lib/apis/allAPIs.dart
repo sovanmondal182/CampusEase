@@ -19,8 +19,11 @@ import '../notificationservice/local_notification_service.dart';
 import '../screens/canteen/canteen_adminhomepage.dart';
 import '../screens/canteen/canteen_navigationBar.dart';
 import '../screens/dashboard/admin_dashboard.dart';
+import '../screens/dashboard/faculty_dashboard.dart';
 import '../screens/dashboard/student_dashboard_screen.dart';
 import '../screens/notice/view_notice.dart';
+import '../screens/outing/outing_admin.dart';
+import '../screens/service/service_admin_screen.dart';
 
 void toast(String data) {
   Fluttertoast.showToast(
@@ -65,13 +68,13 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
         : (authNotifier.userDetails!.role == 'faculty')
             ? Navigator.pushReplacement(context, MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return const AdminDashboardScreen();
+                  return const FacultyDashboardScreen();
                 },
               ))
             : (authNotifier.userDetails!.role == 'worker')
                 ? Navigator.pushReplacement(context, MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return const AdminDashboardScreen();
+                      return const ServiceAdminScreen();
                     },
                   ))
                 : (authNotifier.userDetails!.role == 'canteen')
@@ -80,11 +83,32 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
                           return const AdminHomePage();
                         },
                       ))
-                    : Navigator.pushReplacement(context, MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return const StudentDashBoardScreen();
-                        },
-                      ));
+                    : (authNotifier.userDetails!.role == 'warden')
+                        ? Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return const FacultyDashboardScreen();
+                            },
+                          ))
+                        : (authNotifier.userDetails!.role == 'librarian')
+                            ? Navigator.pushReplacement(context,
+                                MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return const FacultyDashboardScreen();
+                                },
+                              ))
+                            : (authNotifier.userDetails!.role == 'guard')
+                                ? Navigator.pushReplacement(context,
+                                    MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                      return const OutingAdmin();
+                                    },
+                                  ))
+                                : Navigator.pushReplacement(context,
+                                    MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                      return const StudentDashBoardScreen();
+                                    },
+                                  ));
   } catch (error) {
     EasyLoading.dismiss();
     toast(error.toString());

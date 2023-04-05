@@ -49,6 +49,9 @@ class DashBoardItem extends StatelessWidget {
               height: height * 0.14,
               fit: BoxFit.fill,
             ),
+            const SizedBox(
+              height: 10,
+            ),
             Text(text),
           ],
         ),
