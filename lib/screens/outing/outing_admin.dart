@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../apis/allAPIs.dart';
 import '../../notifiers/authNotifier.dart';
 
 class OutingAdmin extends StatefulWidget {
@@ -42,16 +43,45 @@ class _OutingAdminState extends State<OutingAdmin> {
     fetch();
   }
 
+  signOutUser() {
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
+    if (authNotifier.user != null) {
+      signOut(authNotifier, context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Outing'),
+        title: (authNotifier.userDetails!.role == 'guard')
+            ? const Text(
+                'CampusEase',
+                style: TextStyle(
+                    color: Color(0xFF8CBBF1),
+                    fontWeight: FontWeight.w800,
+                    fontSize: 26),
+              )
+            : const Text('Outing'),
+        actions: [
+          if (authNotifier.userDetails!.role == 'guard')
+            IconButton(
+              icon: const Icon(
+                Icons.logout_rounded,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                signOutUser();
+              },
+            )
+        ],
       ),
       body: SafeArea(
           child: GridView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

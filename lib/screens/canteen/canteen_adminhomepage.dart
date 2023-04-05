@@ -35,10 +35,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CampusEase'),
+        title: const Text(
+          'CampusEase',
+          style: TextStyle(
+              color: Color(0xFF8CBBF1),
+              fontWeight: FontWeight.w800,
+              fontSize: 26),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.person_2_rounded),
+            icon: const Icon(Icons.menu_book_rounded),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return const AdminOrderDetailsPage();
@@ -70,7 +76,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 return popupForm(context);
               });
         },
-        backgroundColor: const Color.fromRGBO(255, 63, 111, 1),
+        backgroundColor: const Color(0xFF8CBBF1),
         child: const Icon(Icons.add),
       ),
     );
@@ -149,10 +155,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           }),
                     );
                   } else {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: const Text("No Items to display"),
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: const Text("No Items to display"),
+                      ),
                     );
                   }
                 } else {
@@ -188,8 +196,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 child: Text(
                   "New Food Item",
                   style: TextStyle(
-                    color: Color.fromRGBO(255, 63, 111, 1),
-                    fontSize: 25,
+                    color: Color(0xFF8CBBF1),
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -208,16 +216,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   onSaved: (String? value) {
                     itemName = value!;
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Food Name',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
-                    ),
                     icon: Icon(
                       Icons.fastfood,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),
@@ -238,16 +242,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   onSaved: (String? value) {
                     price = int.parse(value!);
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Price in INR',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
-                    ),
                     icon: Icon(
                       Icons.attach_money,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),
@@ -268,16 +268,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   onSaved: (String? value) {
                     totalQty = int.parse(value!);
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Total QTY',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
-                    ),
                     icon: Icon(
                       Icons.add_shopping_cart,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),
@@ -319,7 +315,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 child: Text(
                   "Edit Food Item",
                   style: TextStyle(
-                    color: Color.fromRGBO(255, 63, 111, 1),
+                    color: Color(0xFF8CBBF1),
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
@@ -340,16 +336,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   onSaved: (String? value) {
                     itemName = value!;
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Food Name',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                     icon: Icon(
                       Icons.fastfood,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),
@@ -371,16 +367,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   onSaved: (String? value) {
                     price = int.parse(value!);
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Price in INR',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                     icon: Icon(
                       Icons.attach_money,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),
@@ -402,16 +398,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   onSaved: (String? value) {
                     totalQty = int.parse(value!);
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Total QTY',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                     icon: Icon(
                       Icons.add_shopping_cart,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),

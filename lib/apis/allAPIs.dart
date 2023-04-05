@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,6 +33,7 @@ void toast(String data) {
 
 login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
   final UserCredential authResult;
+  EasyLoading.show();
   try {
     authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: user.email!, password: user.password!);
@@ -52,6 +54,7 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
     }
     await getUserDetails(authNotifier);
     initializeCurrentUser(authNotifier, context);
+    EasyLoading.dismiss();
 
     (authNotifier.userDetails!.role == 'admin')
         ? Navigator.pushReplacement(context, MaterialPageRoute(
@@ -83,12 +86,14 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
                         },
                       ));
   } catch (error) {
+    EasyLoading.dismiss();
     toast(error.toString());
     return;
   }
 }
 
 signUp(u.User user, AuthNotifier authNotifier, BuildContext context) async {
+  EasyLoading.show();
   bool userDataUploaded = false;
   final UserCredential authResult;
   try {
@@ -108,11 +113,14 @@ signUp(u.User user, AuthNotifier authNotifier, BuildContext context) async {
     uploadUserData(user, userDataUploaded);
     await FirebaseAuth.instance.signOut();
     authNotifier.setUser(null);
+    EasyLoading.dismiss();
 
     toast("Verification link is sent to ${user.email}");
     initializeCurrentUser(authNotifier, context);
     Navigator.pop(context);
   } catch (error) {
+    EasyLoading.dismiss();
+
     toast(error.toString());
     return;
   }

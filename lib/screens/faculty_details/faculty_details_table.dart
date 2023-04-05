@@ -48,11 +48,11 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: DataTable2(
-                    border: TableBorder(
+                    border: const TableBorder(
                       horizontalInside:
-                          BorderSide(color: Colors.grey.shade400, width: .1),
+                          BorderSide(color: Colors.black, width: .1),
                       bottom: BorderSide(
-                        color: Colors.grey.shade400,
+                        color: Colors.black,
                         width: .75,
                       ),
                     ),
@@ -64,25 +64,25 @@ class _FacultyDetailsTableScreenState extends State<FacultyDetailsTableScreen> {
                         size: ColumnSize.M,
                         label: Text("Name",
                             style: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                                 fontWeight: FontWeight.w400)),
                       ),
                       const DataColumn2(
-                        size: ColumnSize.M,
+                        size: ColumnSize.S,
                         label: Text("Phone",
                             style: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                                 fontWeight: FontWeight.w400)),
                       ),
                       DataColumn2(
                         size: ColumnSize.S,
                         label: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.24,
+                          width: MediaQuery.of(context).size.width * 0.23,
                           child: const Text(
                             "Designation",
                             textAlign: TextAlign.end,
                             style: TextStyle(
-                                color: Colors.grey,
+                                color: Colors.black,
                                 fontWeight: FontWeight.w400),
                           ),
                         ),

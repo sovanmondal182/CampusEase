@@ -22,6 +22,7 @@ class _LibraryAdminState extends State<LibraryAdmin> {
       ),
       body: SafeArea(
           child: GridView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

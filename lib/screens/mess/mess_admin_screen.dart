@@ -19,6 +19,7 @@ class _MessAdminScreenState extends State<MessAdminScreen> {
       ),
       body: SafeArea(
           child: GridView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(10.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

@@ -77,17 +77,17 @@ class _LoginPageState extends State<LoginPage> {
             onSaved: (String? value) {
               _user.email = value!;
             },
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Email',
               hintStyle: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: Icon(
                 Icons.email,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -112,12 +112,12 @@ class _LoginPageState extends State<LoginPage> {
               _user.password = value!;
             },
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: InputDecoration(
               suffixIcon: IconButton(
                   icon: Icon(
                     (showPassword) ? Icons.visibility_off : Icons.visibility,
-                    color: const Color.fromRGBO(255, 63, 111, 1),
+                    color: const Color(0xFF8CBBF1),
                   ),
                   onPressed: () {
                     setState(() {
@@ -128,11 +128,11 @@ class _LoginPageState extends State<LoginPage> {
               hintText: 'Password',
               hintStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: const Icon(
                 Icons.lock,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
               "Log In",
               style: TextStyle(
                 fontSize: 20,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
             const Text(
               'Not a registered user?',
               style: TextStyle(
-                color: Colors.white,
+                color: Color.fromARGB(255, 72, 154, 247),
                 fontSize: 16,
               ),
             ),
@@ -223,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
               child: const Text(
                 'Sign Up here',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 72, 154, 247),
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
@@ -243,9 +243,9 @@ class _LoginPageState extends State<LoginPage> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromRGBO(255, 138, 120, 1),
-              Color.fromRGBO(255, 114, 117, 1),
-              Color.fromRGBO(255, 63, 111, 1),
+              Color(0xFF8CBBF1),
+              Color(0xFF8CBBF1),
+              Colors.white,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -270,14 +270,6 @@ class _LoginPageState extends State<LoginPage> {
                         fontFamily: 'MuseoModerno',
                       ),
                     ),
-                  ),
-                ),
-                const Text(
-                  '',
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: 17,
-                    color: Color.fromRGBO(252, 188, 126, 1),
                   ),
                 ),
                 _buildLoginForm()

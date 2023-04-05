@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
-          title: const Text('CampusEase'),
+          title: const Text('Canteen'),
         ),
         // ignore: unrelated_type_equality_checks
         body: (authNotifier.userDetails!.uuid == Null)
@@ -117,10 +117,12 @@ class _HomePageState extends State<HomePage> {
                           }),
                     );
                   } else {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: const Text("No Items to display"),
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: const Text("No Items to display"),
+                      ),
                     );
                   }
                 } else {

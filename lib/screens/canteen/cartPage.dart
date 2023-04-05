@@ -37,10 +37,12 @@ class _CartPageState extends State<CartPage> {
         ),
         // ignore: unrelated_type_equality_checks
         body: (authNotifier.userDetails!.uuid == Null)
-            ? Container(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: const Text("No Items to display"),
+            ? Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  // width: MediaQuery.of(context).size.width * 0.6,
+                  child: const Text("No Items to display"),
+                ),
               )
             : cartList(context));
   }
@@ -70,10 +72,12 @@ class _CartPageState extends State<CartPage> {
                 return dataDisplay(
                     context, authNotifier.userDetails!.uuid!, foodIds, count);
               } else {
-                return Container(
-                  padding: const EdgeInsets.all(20),
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: const Text("No Items to display"),
+                return Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    // width: MediaQuery.of(context).size.width * 0.6,
+                    child: const Text("No Items to display"),
+                  ),
                 );
               }
             },
@@ -106,6 +110,8 @@ class _CartPageState extends State<CartPage> {
             }
             return Container(
                 margin: const EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0, vertical: 10.0),
                 child: Column(
                   children: [
                     ListView.builder(
@@ -157,14 +163,14 @@ class _CartPageState extends State<CartPage> {
                                 ]),
                           );
                         }),
-                    Text("Total ($itemsCount items): $sum INR"),
+                    Text("Total ($itemsCount items): ₹$sum"),
                     const SizedBox(
                       height: 40,
                     ),
                     GestureDetector(
                       onTap: () {
                         showAlertDialog(
-                            context, "Total ($itemsCount items): $sum INR");
+                            context, "Total ($itemsCount items): ₹$sum");
                       },
                       child: const CustomRaisedButton(
                           buttonText: 'Proceed to buy'),

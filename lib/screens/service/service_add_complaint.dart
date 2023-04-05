@@ -34,38 +34,42 @@ class _ServiceAddComplaintState extends State<ServiceAddComplaint> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
               child: Column(children: [
                 Row(
                   children: [
-                    const Text(
-                      "Type: ",
-                      style: TextStyle(fontSize: 16),
+                    const Expanded(
+                      child: Text(
+                        "Type: ",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    DropdownButton(
-                      // Initial Value
-                      value: type,
+                    Expanded(
+                      flex: 2,
+                      child: DropdownButton(
+                        underline: const SizedBox(),
+                        // Initial Value
+                        value: type,
 
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
+                        // Down Arrow Icon
+                        icon: const Icon(Icons.arrow_drop_down),
 
-                      // Array list of items
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          type = newValue!;
-                        });
-                      },
+                        // Array list of items
+                        items: items.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                        // After selecting the desired option,it will
+                        // change button value to selected value
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            type = newValue!;
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -75,21 +79,27 @@ class _ServiceAddComplaintState extends State<ServiceAddComplaint> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Comment: ",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
+                    const Expanded(
+                      child: Text(
+                        "Comment: ",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                     Expanded(
+                      flex: 2,
                       child: TextField(
                         controller: _reviewController,
                         keyboardType: TextInputType.text,
                         maxLines: 5,
                         decoration: const InputDecoration(
+                          hoverColor: Color(0xFF8CBBF1),
+                          focusColor: Color(0xFF8CBBF1),
                           contentPadding: EdgeInsets.all(10.0),
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF8CBBF1),
+                            ),
+                          ),
                           hintText: 'Enter your comment',
                         ),
                       ),

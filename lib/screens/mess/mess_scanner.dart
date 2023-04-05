@@ -28,9 +28,11 @@ class _MessScannerState extends State<MessScanner> {
                 builder: (context, state, child) {
                   switch (state) {
                     case mobile_scanner.TorchState.off:
-                      return const Icon(Icons.flash_off, color: Colors.grey);
+                      return const Icon(Icons.flashlight_off_rounded,
+                          size: 22, color: Colors.black);
                     case mobile_scanner.TorchState.on:
-                      return const Icon(Icons.flash_on, color: Colors.yellow);
+                      return const Icon(Icons.flashlight_on_rounded,
+                          size: 22, color: Colors.yellow);
                   }
                 },
               ),
@@ -44,9 +46,17 @@ class _MessScannerState extends State<MessScanner> {
                 builder: (context, state, child) {
                   switch (state) {
                     case mobile_scanner.CameraFacing.front:
-                      return const Icon(Icons.camera_front);
+                      return const Icon(
+                        Icons.flip_camera_android_sharp,
+                        size: 22,
+                        color: Colors.black,
+                      );
                     case mobile_scanner.CameraFacing.back:
-                      return const Icon(Icons.camera_rear);
+                      return const Icon(
+                        Icons.flip_camera_android_sharp,
+                        size: 22,
+                        color: Colors.black,
+                      );
                   }
                 },
               ),
@@ -72,6 +82,19 @@ class _MessScannerState extends State<MessScanner> {
                   }
                 }
               },
+            ),
+            Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xFF8CBBF1),
+                    width: 3,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                height: 200,
+                width: 200,
+              ),
             ),
           ],
         ));

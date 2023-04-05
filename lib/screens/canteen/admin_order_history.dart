@@ -40,7 +40,7 @@ class _AdminOrderDetailsPageState extends State<AdminOrderDetailsPage> {
           IconButton(
             icon: const Icon(
               Icons.logout_rounded,
-              color: Colors.white,
+              color: Colors.black,
             ),
             onPressed: () {
               signOutUser();
@@ -69,12 +69,22 @@ class _AdminOrderDetailsPageState extends State<AdminOrderDetailsPage> {
                         child: Card(
                           child: ListTile(
                               enabled: !orders[i]['is_delivered'],
+                              minLeadingWidth: 5,
+                              leading: Text("${(i + 1)}."),
                               title: Text(
-                                  "#${(i + 1)} Order ID: ${orders[i].id.substring(orders[i].id.length - 5)}"),
-                              subtitle: Text(
-                                  'Total Amount: ${orders[i]['total'].toString()} INR'),
-                              trailing: Text(
-                                  'Status: ${(orders[i]['is_delivered']) ? "Delivered" : "Pending"}')),
+                                  "Order ID: ${orders[i].id.substring(orders[i].id.length - 5)}"),
+                              subtitle: Text('Name: ${orders[i]['user_name']}'),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      'Status: ${(orders[i]['is_delivered']) ? "Delivered" : "Pending"}'),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                      'Total Amount: ₹${orders[i]['total'].toString()}'),
+                                ],
+                              )),
                         ),
                         onTap: () {
                           Navigator.push(

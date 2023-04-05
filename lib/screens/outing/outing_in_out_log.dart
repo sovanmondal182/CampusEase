@@ -196,17 +196,21 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                             }),
                       );
                     } else {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: const Text("No Items to display"),
+                      return Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          child: const Text("No Items to display"),
+                        ),
                       );
                     }
                   } else {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      width: MediaQuery.of(context).size.width * 0.6,
-                      child: const Text("No Items to display"),
+                    return Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        child: const Text("No Items to display"),
+                      ),
                     );
                   }
                 },
@@ -249,12 +253,12 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                   onSaved: (String? value) {
                     message = value!;
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Enter Message',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),

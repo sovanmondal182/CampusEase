@@ -27,9 +27,9 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
       extendBody: true,
       body: _children[widget.selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
-        color: const Color.fromRGBO(255, 63, 111, 1),
+        color: const Color(0xFF8CBBF1),
         backgroundColor: Colors.transparent,
-        buttonBackgroundColor: const Color.fromRGBO(255, 63, 111, 1),
+        buttonBackgroundColor: const Color(0xFF8CBBF1),
         height: 50,
         index: widget.selectedIndex,
         onTap: (index) {

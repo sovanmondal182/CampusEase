@@ -154,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             authNotifier.userDetails!.balance != null
                 ? Text(
-                    "Balance: ${authNotifier.userDetails!.balance} INR",
+                    "Balance: ₹${authNotifier.userDetails!.balance}",
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -162,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   )
                 : const Text(
-                    "Balance: 0 INR",
+                    "Balance: ₹0",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -222,11 +222,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 itemBuilder: (context, int i) {
                   return GestureDetector(
                     child: Card(
+                      color: Colors.transparent,
+                      elevation: 0,
                       child: ListTile(
+                          minLeadingWidth: 5,
                           enabled: !orders[i]['is_delivered'],
-                          title: Text("Order #${(i + 1)}"),
+                          leading: Text("${(i + 1)}."),
+                          title: Text(
+                              "Order ID: ${orders[i].id.substring(orders[i].id.length - 5)}"),
                           subtitle: Text(
-                              'Total Amount: ${orders[i]['total'].toString()} INR'),
+                              'Total Amount: ₹${orders[i]['total'].toString()}'),
                           trailing: Text(
                               'Status: ${(orders[i]['is_delivered']) ? "Delivered" : "Pending"}')),
                     ),
@@ -268,7 +273,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Text(
                   "Deposit Money",
                   style: TextStyle(
-                    color: Color.fromRGBO(255, 63, 111, 1),
+                    color: Color(0xFF8CBBF1),
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
@@ -281,9 +286,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     if (int.tryParse(value!) == null) {
                       return "Not a valid integer";
                     } else if (int.parse(value) < 100) {
-                      return "Minimum Deposit is 100 INR";
+                      return "Minimum Deposit is ₹100";
                     } else if (int.parse(value) > 1000) {
-                      return "Maximum Deposit is 1000 INR";
+                      return "Maximum Deposit is ₹1000";
                     } else {
                       return null;
                     }
@@ -292,16 +297,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   onSaved: (String? value) {
                     amount = int.parse(value!);
                   },
-                  cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+                  cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Money in INR',
                     hintStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                     icon: Icon(
                       Icons.attach_money,
-                      color: Color.fromRGBO(255, 63, 111, 1),
+                      color: Color(0xFF8CBBF1),
                     ),
                   ),
                 ),

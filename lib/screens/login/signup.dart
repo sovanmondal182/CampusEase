@@ -88,17 +88,17 @@ class _SignupPageState extends State<SignupPage> {
             onSaved: (String? value) {
               _user.displayName = value!;
             },
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Full Name',
               hintStyle: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: Icon(
                 Icons.account_circle,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -122,17 +122,17 @@ class _SignupPageState extends State<SignupPage> {
               _user.email = value!;
             },
             keyboardType: TextInputType.emailAddress,
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Email',
               hintStyle: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: Icon(
                 Icons.email,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -156,17 +156,17 @@ class _SignupPageState extends State<SignupPage> {
               _user.phone = value!;
             },
             keyboardType: TextInputType.phone,
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Contact Number',
               hintStyle: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: Icon(
                 Icons.phone,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -190,17 +190,17 @@ class _SignupPageState extends State<SignupPage> {
               _user.enrollNo = int.parse(value!);
             },
             keyboardType: TextInputType.phone,
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'Enrollment Number',
               hintStyle: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: Icon(
                 Icons.numbers_rounded,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -225,12 +225,12 @@ class _SignupPageState extends State<SignupPage> {
               _user.password = value!;
             },
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: InputDecoration(
               suffixIcon: IconButton(
                   icon: Icon(
                     (showPassword) ? Icons.visibility_off : Icons.visibility,
-                    color: const Color.fromRGBO(255, 63, 111, 1),
+                    color: const Color(0xFF8CBBF1),
                   ),
                   onPressed: () {
                     setState(() {
@@ -241,11 +241,11 @@ class _SignupPageState extends State<SignupPage> {
               hintText: 'Password',
               hintStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: const Icon(
                 Icons.lock,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -268,14 +268,14 @@ class _SignupPageState extends State<SignupPage> {
             obscureText: showConfirmPassword,
             keyboardType: TextInputType.visiblePassword,
             controller: _passwordController,
-            cursorColor: const Color.fromRGBO(255, 63, 111, 1),
+            cursorColor: const Color(0xFF8CBBF1),
             decoration: InputDecoration(
               suffixIcon: IconButton(
                   icon: Icon(
                     (showConfirmPassword)
                         ? Icons.visibility_off
                         : Icons.visibility,
-                    color: const Color.fromRGBO(255, 63, 111, 1),
+                    color: const Color(0xFF8CBBF1),
                   ),
                   onPressed: () {
                     setState(() {
@@ -286,11 +286,11 @@ class _SignupPageState extends State<SignupPage> {
               hintText: 'Confirm Password',
               hintStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
               icon: const Icon(
                 Icons.lock,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -313,7 +313,7 @@ class _SignupPageState extends State<SignupPage> {
               "Sign Up",
               style: TextStyle(
                 fontSize: 20,
-                color: Color.fromRGBO(255, 63, 111, 1),
+                color: Color(0xFF8CBBF1),
               ),
             ),
           ),
@@ -328,7 +328,7 @@ class _SignupPageState extends State<SignupPage> {
             const Text(
               'Already a registered user?',
               style: TextStyle(
-                color: Colors.white,
+                color: Color.fromARGB(255, 72, 154, 247),
                 fontSize: 16,
               ),
             ),
@@ -342,7 +342,7 @@ class _SignupPageState extends State<SignupPage> {
               child: const Text(
                 'Log In here',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 72, 154, 247),
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
@@ -365,9 +365,9 @@ class _SignupPageState extends State<SignupPage> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromRGBO(255, 138, 120, 1),
-              Color.fromRGBO(255, 114, 117, 1),
-              Color.fromRGBO(255, 63, 111, 1),
+              Color(0xFF8CBBF1),
+              Color(0xFF8CBBF1),
+              Colors.white,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -392,14 +392,6 @@ class _SignupPageState extends State<SignupPage> {
                         fontFamily: 'MuseoModerno',
                       ),
                     ),
-                  ),
-                ),
-                const Text(
-                  '',
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: 17,
-                    color: Color.fromRGBO(252, 188, 126, 1),
                   ),
                 ),
                 _buildSignUPForm()

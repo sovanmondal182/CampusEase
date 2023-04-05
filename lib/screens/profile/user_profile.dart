@@ -126,7 +126,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           IconButton(
             icon: const Icon(
               Icons.qr_code_rounded,
-              color: Colors.white,
             ),
             onPressed: () {
               showDialog(

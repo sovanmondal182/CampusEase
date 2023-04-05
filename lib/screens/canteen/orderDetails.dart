@@ -68,7 +68,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       ),
                       subtitle: Text("Quantity: ${items[i]["count"]}"),
                       trailing: Text(
-                          "Price: ${items[i]["count"]} * ${items[i]["price"]} = ${items[i]["price"] * items[i]["count"]} INR"),
+                          "Price: ${items[i]["count"]} * ${items[i]["price"]} = ₹${items[i]["price"] * items[i]["count"]}"),
                     );
                   }),
               const SizedBox(
@@ -79,6 +79,17 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 children: [
                   Text(
                     "Order ID: ${widget.orderdata.id.substring(widget.orderdata.id.length - 5)}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: 'MuseoModerno',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Name: ${widget.orderdata['user_name']}",
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
@@ -120,7 +131,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     height: 20,
                   ),
                   Text(
-                    "Total Amount: ${widget.orderdata['total'].toString()} INR",
+                    "Total Amount: ₹${widget.orderdata['total'].toString()}",
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 14,
@@ -156,7 +167,14 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: const Center(child: Text("Scan Me")),
+                                    title: const Center(
+                                        child: Text(
+                                      "Show this QR code to the canteen staff",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    )),
                                     content: Container(
                                       decoration: BoxDecoration(
                                         boxShadow: [
