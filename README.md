@@ -1,6 +1,6 @@
-# campus_ease
+# CampusEase
 
-A new Flutter project.
+A Campus Management System project using Flutter.
 
 ## Getting Started
 
