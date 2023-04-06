@@ -28,17 +28,6 @@ class _ReturnBookScreenState extends State<ReturnBookScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Return a Book",
-                      style: TextStyle(
-                        color: Color(0xFF8CBBF1),
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(

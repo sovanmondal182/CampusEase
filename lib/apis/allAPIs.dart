@@ -41,6 +41,7 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
     authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: user.email!, password: user.password!);
   } catch (error) {
+    EasyLoading.dismiss();
     toast(error.toString());
     return;
   }
@@ -49,7 +50,7 @@ login(u.User user, AuthNotifier authNotifier, BuildContext context) async {
     User? firebaseUser = authResult.user;
     if (!firebaseUser!.emailVerified) {
       await FirebaseAuth.instance.signOut();
-
+      EasyLoading.dismiss();
       toast("Email ID not verified");
       return;
     } else {
@@ -124,6 +125,7 @@ signUp(u.User user, AuthNotifier authNotifier, BuildContext context) async {
     authResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: user.email!.trim(), password: user.password!);
   } catch (error) {
+    EasyLoading.dismiss();
     toast(error.toString());
     return;
   }
@@ -273,13 +275,16 @@ signOut(AuthNotifier authNotifier, BuildContext context) async {
 
 forgotPassword(
     u.User user, AuthNotifier authNotifier, BuildContext context) async {
+  EasyLoading.show();
   try {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: user.email!);
   } catch (error) {
+    EasyLoading.dismiss();
     toast(error.toString());
     return;
   }
 
+  EasyLoading.dismiss();
   toast("Reset Email has sent successfully");
   Navigator.pop(context);
 }

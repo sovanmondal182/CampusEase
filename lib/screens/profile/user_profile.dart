@@ -205,11 +205,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       updateProfileImage();
                     },
                     child: CircleAvatar(
-                      backgroundColor: Colors.grey.withOpacity(0.3),
+                      backgroundColor: Colors.grey.withOpacity(0.1),
                       radius: 40,
                       child: const Icon(
                         Icons.person,
                         size: 70,
+                        color: Color(0xFF8CBBF1),
                       ),
                     ),
                   ),

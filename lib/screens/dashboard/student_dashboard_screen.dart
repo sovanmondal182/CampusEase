@@ -106,18 +106,23 @@ class _StudentDashBoardScreenState extends State<StudentDashBoardScreen> {
           ),
           actions: [
             IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UserProfileScreen()));
-                },
-                icon: (authNotifier.userDetails!.photoUrl != null)
-                    ? CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(authNotifier.userDetails!.photoUrl!),
-                      )
-                    : const Icon(Icons.account_circle)),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const UserProfileScreen()));
+              },
+              icon: (authNotifier.userDetails!.photoUrl != null)
+                  ? CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(authNotifier.userDetails!.photoUrl!),
+                    )
+                  : const Icon(
+                      Icons.account_circle,
+                      size: 28,
+                      color: Color(0xFF8CBBF1),
+                    ),
+            ),
           ],
         ),
         body: SafeArea(

@@ -31,17 +31,6 @@ class _IssueBookScreenState extends State<IssueBookScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "Issue a Book",
-                          style: TextStyle(
-                            color: Color(0xFF8CBBF1),
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
