@@ -300,10 +300,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Money in INR',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF8CBBF1),
-                    ),
                     icon: Icon(
                       Icons.attach_money,
                       color: Color(0xFF8CBBF1),

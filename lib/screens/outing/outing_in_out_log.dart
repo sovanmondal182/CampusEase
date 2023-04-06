@@ -256,10 +256,6 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
                   cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Enter Message',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF8CBBF1),
-                    ),
                   ),
                 ),
               ),

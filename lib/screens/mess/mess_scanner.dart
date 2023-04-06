@@ -1,7 +1,9 @@
-import 'package:campus_ease/screens/mess/mess_review_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile_scanner/mobile_scanner.dart' as mobile_scanner;
 import 'package:mobile_scanner/mobile_scanner.dart';
+
+import 'package:campus_ease/screens/mess/mess_review_screen.dart';
 
 class MessScanner extends StatefulWidget {
   const MessScanner({super.key});
@@ -79,6 +81,15 @@ class _MessScannerState extends State<MessScanner> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const MessReviewScreen()));
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: "Invalid QR Code",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                   }
                 }
               },

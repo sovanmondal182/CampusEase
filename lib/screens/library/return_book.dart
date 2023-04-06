@@ -59,10 +59,6 @@ class _ReturnBookScreenState extends State<ReturnBookScreen> {
                       cursorColor: const Color(0xFF8CBBF1),
                       decoration: const InputDecoration(
                         hintText: 'Book ID',
-                        hintStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF8CBBF1),
-                        ),
                         // icon: Icon(
                         //   Icons.attach_money,
                         //   color: Color(0xFF8CBBF1),

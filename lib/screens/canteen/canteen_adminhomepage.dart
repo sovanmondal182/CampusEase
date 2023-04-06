@@ -339,10 +339,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Food Name',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF8CBBF1),
-                    ),
                     icon: Icon(
                       Icons.fastfood,
                       color: Color(0xFF8CBBF1),
@@ -370,10 +366,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Price in INR',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF8CBBF1),
-                    ),
                     icon: Icon(
                       Icons.attach_money,
                       color: Color(0xFF8CBBF1),
@@ -401,10 +393,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   cursorColor: const Color(0xFF8CBBF1),
                   decoration: const InputDecoration(
                     hintText: 'Total QTY',
-                    hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF8CBBF1),
-                    ),
                     icon: Icon(
                       Icons.add_shopping_cart,
                       color: Color(0xFF8CBBF1),
