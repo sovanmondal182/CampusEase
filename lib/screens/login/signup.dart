@@ -376,7 +376,6 @@ class _SignupPageState extends State<SignupPage> {
         ),
         child: Form(
           key: _formkey,
-          autovalidateMode: AutovalidateMode.always,
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

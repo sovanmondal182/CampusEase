@@ -40,7 +40,7 @@ class _LandingPageState extends State<LandingPage>
     initilizeFirebaseMessage(context);
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 2000),
     )..addListener(() {
         setState(() {
           if (animationController.isCompleted) {
@@ -50,7 +50,7 @@ class _LandingPageState extends State<LandingPage>
                     return const LoginPage();
                   }))
                 : (authNotifier.userDetails == null)
-                    ? print('wait')
+                    ? toast('Something went wrong. Please try again later!')
                     : (authNotifier.userDetails!.role == 'admin')
                         ? Navigator.pushReplacement(context, MaterialPageRoute(
                             builder: (BuildContext context) {

@@ -264,7 +264,6 @@ class _ProfilePageState extends State<ProfilePage> {
       children: <Widget>[
         Form(
           key: _formKey,
-          autovalidateMode: AutovalidateMode.always,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

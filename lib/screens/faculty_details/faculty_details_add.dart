@@ -119,9 +119,7 @@ class _FacultyDetailsAddScreenState extends State<FacultyDetailsAddScreen> {
                       isEditable: (authNotifier.userDetails!.role == 'admin')
                           ? true
                           : false,
-                      validator: (val) => val != "" &&
-                              val!.length > 1 &&
-                              (RegExp(r"^[a-zA-Z][a-zA-Z\s]*$")).hasMatch(val)
+                      validator: (val) => val != "" && val!.length > 1
                           ? null
                           : "Invalid Designation",
                     ),

@@ -22,7 +22,6 @@ class _ReturnBookScreenState extends State<ReturnBookScreen> {
         body: SafeArea(
           child: Form(
             key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

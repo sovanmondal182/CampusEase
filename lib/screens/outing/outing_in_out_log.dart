@@ -231,7 +231,6 @@ class _OutingInOutLogState extends State<OutingInOutLog> {
       children: <Widget>[
         Form(
           key: _formKeyEdit,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

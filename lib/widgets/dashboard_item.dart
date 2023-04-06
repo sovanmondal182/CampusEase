@@ -19,8 +19,9 @@ class DashBoardItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.2,
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
+        padding: EdgeInsets.all(height * 0.01),
+        margin: EdgeInsets.only(
+            left: height * 0.005, right: height * 0.005, bottom: height * 0.01),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: const BorderRadius.only(
@@ -46,11 +47,11 @@ class DashBoardItem extends StatelessWidget {
           children: [
             Image.asset(
               'assets/icons/$image.png',
-              height: height * 0.14,
+              height: height * 0.13,
               fit: BoxFit.fill,
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: height * 0.01,
             ),
             Text(text),
           ],

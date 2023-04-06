@@ -187,7 +187,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
       children: <Widget>[
         Form(
           key: _formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -306,7 +305,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
       children: <Widget>[
         Form(
           key: _formKeyEdit,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

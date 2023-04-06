@@ -70,9 +70,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
           child: TextFormField(
             keyboardType: TextInputType.emailAddress,
-            validator: (String? value) {
-              return null;
-            },
+            validator: (val) => val != "" &&
+                    val!.length > 2 &&
+                    (RegExp(r'\S+@\S+\.\S+')).hasMatch(val)
+                ? null
+                : "Invalid Email",
             onSaved: (String? value) {
               _user.email = value!;
             },
@@ -141,7 +143,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
         child: Form(
           key: _formkey,
-          autovalidateMode: AutovalidateMode.always,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

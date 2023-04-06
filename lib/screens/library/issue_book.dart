@@ -25,7 +25,6 @@ class _IssueBookScreenState extends State<IssueBookScreen> {
             children: [
               Form(
                 key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
