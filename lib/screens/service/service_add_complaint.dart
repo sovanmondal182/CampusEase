@@ -111,9 +111,9 @@ class _ServiceAddComplaintState extends State<ServiceAddComplaint> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    if ((authNotifier.userDetails!.hostelName != null ||
+                    if ((authNotifier.userDetails!.hostelName != null &&
                             authNotifier.userDetails!.hostelName != "") &&
-                        (authNotifier.userDetails!.roomNo != null ||
+                        (authNotifier.userDetails!.roomNo != null &&
                             authNotifier.userDetails!.roomNo != "")) {
                       registerComplaint(authNotifier.userDetails, type,
                           _reviewController.text, context);
