@@ -43,7 +43,8 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                 ),
               ),
               StreamBuilder<QuerySnapshot>(
-                stream: (authNotifier.userDetails!.role == 'admin')
+                stream: (authNotifier.userDetails!.role == 'admin' ||
+                        authNotifier.userDetails!.role == 'librarian')
                     ? FirebaseFirestore.instance.collection('books').snapshots()
                     : FirebaseFirestore.instance
                         .collection('books')
@@ -117,7 +118,9 @@ class _ViewIssuedBookState extends State<ViewIssuedBook> {
                                         Text(
                                             "Date Issued: ${DateFormat("d MMM yyyy hh:mm aa").format(suggestionList[i].issueDate)}"),
                                         if (authNotifier.userDetails!.role ==
-                                            'admin')
+                                                'admin' ||
+                                            authNotifier.userDetails!.role ==
+                                                'librarian')
                                           Column(
                                             children: [
                                               SizedBox(
