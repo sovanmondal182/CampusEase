@@ -265,11 +265,12 @@ signOut(AuthNotifier authNotifier, BuildContext context) async {
   await FirebaseAuth.instance.signOut();
 
   authNotifier.setUser(null);
-  Navigator.pushReplacement(
+  Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(builder: (BuildContext context) {
       return const LoginPage();
     }),
+    (route) => false,
   );
 }
 
